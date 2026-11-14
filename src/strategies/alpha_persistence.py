@@ -16,3 +16,4 @@ class AlphaPersistence(Strategy):
         positions: np.ndarray,
     ) -> np.ndarray:
         print("Strategy:", timestamp)
+        return np.zeros_like(positions)

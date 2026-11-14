@@ -13,10 +13,11 @@ print("Returns:", daily_returns.returns)
 pca_model = PCAModel(5, 500, 5)
 factor_model = FactorModel("pca", 5, 100, 1)
 alpha_persistence = AlphaPersistence("pca")
-simulator = Simulator(len(daily_returns.stock_ids), alpha_persistence)
+simulator = Simulator(daily_returns, alpha_persistence, 0.0005)
 engine = Engine(
     daily_returns=daily_returns,
     models=[ModelEntry("pca", pca_model), ModelEntry("factor", factor_model)],
     modules=[simulator],
 )
 engine.run()
+print(simulator.get_history())
