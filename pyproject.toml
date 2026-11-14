@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "econ1750"
+version = "0.1.0"
+dependencies = [
+    "matplotlib==3.11.2",
+    "numpy==2.5.4",
+    "scipy==1.18.1",
+]
+
+[tool.setuptools]
+packages = ["src"]
