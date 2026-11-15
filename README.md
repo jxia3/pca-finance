@@ -1,4 +1,4 @@
-# ECON1750
+# PCA Finance
 
 # Setup
 

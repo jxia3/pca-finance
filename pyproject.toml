@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "econ1750"
+name = "pca-finance"
 version = "0.1.0"
 dependencies = [
     "matplotlib==3.11.2",
