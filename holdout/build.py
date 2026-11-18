@@ -65,6 +65,7 @@ def load_inputs() -> HoldoutData:
 
     assert original_returns.columns.equals(returns.columns)
     assert mapping.permno.is_unique and set(mapping.permno) == set(returns.columns)
+    assert cutoffs.permno.is_unique and cutoffs.permno.isin(returns.columns).all()
     assert returns.index.min() > original_returns.index.max()
     assert returns.index.is_unique and returns.index.is_monotonic_increasing
     assert not np.isinf(returns.to_numpy()).any()
