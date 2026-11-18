@@ -1,0 +1,13 @@
+Final validation
+99 full-universe configurations; 1201 stocks; 6037 daily observations.
+All portfolio histories finite; rebalance gross limits and dollar neutrality verified.
+Maximum non-delayed factor exposure on rebalance dates: 1.515e-11.
+No trades between scheduled rebalances in 5/20-day variants.
+Diagnostic outcomes occur strictly after signal dates; all ten quantiles populated.
+Small-scale end-to-end run: 60 stocks, 21 configurations, report generation passed.
+Additional checks: exact 1/5/20-day label maturity and compounded constant-return labels;
+50 random neutrality, sign and cap checks; scheduled rebalancing/no-trade accounting.
+Earlier checks: future-data perturbation, rolling score arithmetic, OU synthetic recovery,
+original Simulator integration and independent Gaussian-return null simulations.
+Temporary tests are not retained, as requested. No engine/PCA/simulator changes.
+Historical holdout has already been inspected and is not a fresh independent test.

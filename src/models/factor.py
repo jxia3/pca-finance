@@ -7,6 +7,7 @@ from src.models.pca import CorrelationPCA
 
 @dataclass(kw_only=True)
 class ReturnAttribution:
+    betas: np.ndarray
     factor_returns: np.ndarray
     factor_intercept: np.ndarray
     factor_projection: np.ndarray
@@ -65,6 +66,7 @@ class FactorModel(Model):
         residuals = returns[-1] - factor_intercept - factor_projection
 
         return ReturnAttribution(
+            betas=self.coefficients[1:].T,
             factor_returns=factor_returns,
             factor_intercept=factor_intercept,
             factor_projection=factor_projection,
@@ -73,6 +75,7 @@ class FactorModel(Model):
 
     def _empty_attribution(self, num_stocks: int) -> ReturnAttribution:
         return ReturnAttribution(
+            betas=np.full((num_stocks, self.num_components), np.nan, dtype=np.float64),
             factor_returns=np.full(self.num_components, np.nan, dtype=np.float64),
             factor_intercept=np.full(num_stocks, np.nan, dtype=np.float64),
             factor_projection=np.full(num_stocks, np.nan, dtype=np.float64),
