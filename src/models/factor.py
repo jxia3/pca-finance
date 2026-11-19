@@ -11,6 +11,8 @@ class ReturnAttribution:
     factor_intercept: np.ndarray
     factor_projection: np.ndarray
     residuals: np.ndarray
+    betas: np.ndarray
+    residual_variance: np.ndarray
 
 class FactorModel(Model):
     pca_name: str
@@ -20,6 +22,7 @@ class FactorModel(Model):
 
     active_pca: CorrelationPCA | None
     coefficients: np.ndarray | None
+    residual_variance: np.ndarray | None
     staleness: int
 
     def __init__(self, pca_name: str, num_components: int, window: int, recalculate: int) -> None:
@@ -32,6 +35,7 @@ class FactorModel(Model):
 
         self.active_pca = None
         self.coefficients = None
+        self.residual_variance = None
         self.staleness = recalculate
 
     def update(
@@ -54,10 +58,12 @@ class FactorModel(Model):
                 realized_factors,
             ))
             self.coefficients = np.linalg.lstsq(features, returns[-self.window:], rcond=None)[0]
+            fit_residuals = returns[-self.window:] - features @ self.coefficients
+            self.residual_variance = np.sum(fit_residuals ** 2, axis=0) / (self.window - features.shape[1])
             self.active_pca = return_pca
             self.staleness = 0
 
-        assert self.coefficients is not None
+        assert self.coefficients is not None and self.residual_variance is not None
         self.staleness += 1
         factor_returns = returns[-1] @ weights
         factor_intercept = self.coefficients[0]
@@ -69,6 +75,8 @@ class FactorModel(Model):
             factor_intercept=factor_intercept,
             factor_projection=factor_projection,
             residuals=residuals,
+            betas=self.coefficients[1:],
+            residual_variance=self.residual_variance,
         )
 
     def _empty_attribution(self, num_stocks: int) -> ReturnAttribution:
@@ -77,4 +85,6 @@ class FactorModel(Model):
             factor_intercept=np.full(num_stocks, np.nan, dtype=np.float64),
             factor_projection=np.full(num_stocks, np.nan, dtype=np.float64),
             residuals=np.full(num_stocks, np.nan, dtype=np.float64),
+            betas=np.full((self.num_components, num_stocks), np.nan, dtype=np.float64),
+            residual_variance=np.full(num_stocks, np.nan, dtype=np.float64),
         )
