@@ -1,0 +1,566 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "python": "3.12.7",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2",
+  "repeats": 5,
+  "windows": 3,
+  "thread_environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "numpy_config": {
+    "Compilers": {
+      "c": {
+        "name": "msvc",
+        "linker": "link",
+        "version": "19.44.35229",
+        "commands": "cl"
+      },
+      "cython": {
+        "name": "cython",
+        "linker": "cython",
+        "version": "3.3.0",
+        "commands": "cython"
+      },
+      "c++": {
+        "name": "msvc",
+        "linker": "link",
+        "version": "19.44.35229",
+        "commands": "cl"
+      }
+    },
+    "Machine Information": {
+      "host": {
+        "cpu": "x86_64",
+        "family": "x86_64",
+        "endian": "little",
+        "system": "windows"
+      },
+      "build": {
+        "cpu": "x86_64",
+        "family": "x86_64",
+        "endian": "little",
+        "system": "windows"
+      }
+    },
+    "Build Dependencies": {
+      "blas": {
+        "name": "scipy-openblas",
+        "found": true,
+        "version": "0.3.34.106.0",
+        "detection method": "pkgconfig",
+        "include directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-j3umgqti/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include",
+        "lib directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-j3umgqti/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib",
+        "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24",
+        "pc file directory": "D:/a/numpy-release/numpy-release/.openblas"
+      },
+      "lapack": {
+        "name": "scipy-openblas",
+        "found": true,
+        "version": "0.3.34.106.0",
+        "detection method": "pkgconfig",
+        "include directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-j3umgqti/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include",
+        "lib directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-j3umgqti/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib",
+        "openblas configuration": "OpenBLAS 0.3.34.106.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24",
+        "pc file directory": "D:/a/numpy-release/numpy-release/.openblas"
+      }
+    },
+    "Python Information": {
+      "path": "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\build-env-1rr8oud1\\Scripts\\python.exe",
+      "version": "3.12"
+    },
+    "SIMD Extensions": {
+      "baseline": [
+        "X86_V2"
+      ],
+      "found": [
+        "X86_V3"
+      ]
+    }
+  },
+  "data_sha256": "45f7c2bc6439e5da8ef9ed4b204bfe4be2bf5653a3a88e5e79fa5007c322477d",
+  "source_sha256": "2e35a76914e5955ad43f6bb6dc57444192ef3ad84c81f9af81d3e2b4f7da82f0",
+  "git_commit": "35e4b5f745fcf0cb98513fe12ccbe1354f6a22b9",
+  "seed": 1750,
+  "eigensolver_tolerance": 1e-10,
+  "window_end_dates": [
+    "2003-12-24",
+    "2013-12-26",
+    "2023-12-29"
+  ],
+  "acceptance_limits": {
+    "eigenvalue_error": 1e-08,
+    "angle_radians": 1e-06,
+    "relative_residual": 1e-08
+  },
+  "note": "Stock sampling is seeded. The production eigensolver uses its default starting vector. Timings are machine-specific.",
+  "summary": [
+    {
+      "stocks": 100,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.00090230000205338,
+      "iterative_seconds": 0.0012457000048016198,
+      "paired_speedup": 0.7167857369503318,
+      "window_medians": {
+        "dense": [
+          0.00090230000205338,
+          0.0008928999959607609,
+          0.000945500003581401
+        ],
+        "iterative": [
+          0.0012977000005776063,
+          0.0012457000048016198,
+          0.0010196000002906658
+        ]
+      }
+    },
+    {
+      "stocks": 250,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.005551700000069104,
+      "iterative_seconds": 0.002674499999557156,
+      "paired_speedup": 2.1919611150408174,
+      "window_medians": {
+        "dense": [
+          0.005551700000069104,
+          0.00586240000120597,
+          0.005501300001924392
+        ],
+        "iterative": [
+          0.0027942999950028025,
+          0.002674499999557156,
+          0.002227599994512275
+        ]
+      }
+    },
+    {
+      "stocks": 400,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.0161526000010781,
+      "iterative_seconds": 0.004167400002188515,
+      "paired_speedup": 3.823823004867309,
+      "window_medians": {
+        "dense": [
+          0.0161526000010781,
+          0.015935399998852517,
+          0.016189800000574905
+        ],
+        "iterative": [
+          0.00457299999834504,
+          0.004167400002188515,
+          0.003903500000888016
+        ]
+      }
+    },
+    {
+      "stocks": 550,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.030390400002943352,
+      "iterative_seconds": 0.006037400002242066,
+      "paired_speedup": 4.992844600525403,
+      "window_medians": {
+        "dense": [
+          0.030390400002943352,
+          0.03014380000240635,
+          0.03288059999613324
+        ],
+        "iterative": [
+          0.006195499998284504,
+          0.006037400002242066,
+          0.004780600000231061
+        ]
+      }
+    },
+    {
+      "stocks": 700,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.07022019999567419,
+      "iterative_seconds": 0.007847699998819735,
+      "paired_speedup": 10.343705800871874,
+      "window_medians": {
+        "dense": [
+          0.06227709999802755,
+          0.08117430000129389,
+          0.07022019999567419
+        ],
+        "iterative": [
+          0.009229599992977455,
+          0.007847699998819735,
+          0.006595200000447221
+        ]
+      }
+    },
+    {
+      "stocks": 850,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.10011169999779668,
+      "iterative_seconds": 0.01065060000109952,
+      "paired_speedup": 9.909845453443758,
+      "window_medians": {
+        "dense": [
+          0.10554579999734415,
+          0.10011169999779668,
+          0.09971719999884954
+        ],
+        "iterative": [
+          0.01065060000109952,
+          0.01074969999899622,
+          0.009962900003301911
+        ]
+      }
+    },
+    {
+      "stocks": 1000,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.1499413000055938,
+      "iterative_seconds": 0.011111100000562146,
+      "paired_speedup": 13.494730494551195,
+      "window_medians": {
+        "dense": [
+          0.14662610000232235,
+          0.1499413000055938,
+          0.1523790999999619
+        ],
+        "iterative": [
+          0.012491200002841651,
+          0.011111100000562146,
+          0.008805099998426158
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 5,
+      "dense_seconds": 0.2638799999986077,
+      "iterative_seconds": 0.01313069999741856,
+      "paired_speedup": 18.77534756776239,
+      "window_medians": {
+        "dense": [
+          0.2638799999986077,
+          0.2427666000003228,
+          0.27582510000502225
+        ],
+        "iterative": [
+          0.01405460000387393,
+          0.01313069999741856,
+          0.012621099995158147
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 125,
+      "k": 5,
+      "dense_seconds": 0.20551529999647755,
+      "iterative_seconds": 0.005106800002977252,
+      "paired_speedup": 38.85239286538529,
+      "window_medians": {
+        "dense": [
+          0.20551529999647755,
+          0.19841140000062296,
+          0.208768800002872
+        ],
+        "iterative": [
+          0.005732700003136415,
+          0.005106800002977252,
+          0.0050178000019514
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 252,
+      "k": 5,
+      "dense_seconds": 0.2122464000058244,
+      "iterative_seconds": 0.008121899998513982,
+      "paired_speedup": 26.132604445346278,
+      "window_medians": {
+        "dense": [
+          0.21127820000401698,
+          0.2122464000058244,
+          0.22031929999502609
+        ],
+        "iterative": [
+          0.008430900001258124,
+          0.008121899998513982,
+          0.007879500000854023
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 375,
+      "k": 5,
+      "dense_seconds": 0.2191549000053783,
+      "iterative_seconds": 0.010669499999494292,
+      "paired_speedup": 20.602319539627974,
+      "window_medians": {
+        "dense": [
+          0.22009869999601506,
+          0.2111469000010402,
+          0.2191549000053783
+        ],
+        "iterative": [
+          0.010683199994673487,
+          0.010086899994348641,
+          0.010669499999494292
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 625,
+      "k": 5,
+      "dense_seconds": 0.242590999994718,
+      "iterative_seconds": 0.01605790000030538,
+      "paired_speedup": 14.706495710614242,
+      "window_medians": {
+        "dense": [
+          0.22815350000018952,
+          0.242590999994718,
+          0.2493871999977273
+        ],
+        "iterative": [
+          0.01605790000030538,
+          0.016495500000019092,
+          0.013996199995744973
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 750,
+      "k": 5,
+      "dense_seconds": 0.26253929999802494,
+      "iterative_seconds": 0.020363700001325924,
+      "paired_speedup": 12.892514620669646,
+      "window_medians": {
+        "dense": [
+          0.25742120000359137,
+          0.29109369999787305,
+          0.26253929999802494
+        ],
+        "iterative": [
+          0.01971619999676477,
+          0.02404699999897275,
+          0.020363700001325924
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 875,
+      "k": 5,
+      "dense_seconds": 0.31255430000601336,
+      "iterative_seconds": 0.029608099997858517,
+      "paired_speedup": 10.133489173512858,
+      "window_medians": {
+        "dense": [
+          0.31255430000601336,
+          0.3314274000003934,
+          0.27780219999840483
+        ],
+        "iterative": [
+          0.03084369999851333,
+          0.029608099997858517,
+          0.028762100002495572
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 1000,
+      "k": 5,
+      "dense_seconds": 0.276658500006306,
+      "iterative_seconds": 0.02648349999799393,
+      "paired_speedup": 10.141764263647643,
+      "window_medians": {
+        "dense": [
+          0.276658500006306,
+          0.24870040000678273,
+          0.30652919999556616
+        ],
+        "iterative": [
+          0.02648349999799393,
+          0.024522400002751965,
+          0.03627229999983683
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 1,
+      "dense_seconds": 0.19783440000173869,
+      "iterative_seconds": 0.010251600004266948,
+      "paired_speedup": 19.297915173711775,
+      "window_medians": {
+        "dense": [
+          0.20831639999960316,
+          0.19752960000187159,
+          0.19783440000173869
+        ],
+        "iterative": [
+          0.010682600004656706,
+          0.010235799993097316,
+          0.010251600004266948
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 2,
+      "dense_seconds": 0.20826089999900432,
+      "iterative_seconds": 0.010657099999662023,
+      "paired_speedup": 19.72373068904214,
+      "window_medians": {
+        "dense": [
+          0.20090730000083568,
+          0.20826089999900432,
+          0.21233970000321278
+        ],
+        "iterative": [
+          0.010744799998064991,
+          0.010558900001342408,
+          0.010657099999662023
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 3,
+      "dense_seconds": 0.20122180000180379,
+      "iterative_seconds": 0.01066319999517873,
+      "paired_speedup": 18.870676728635345,
+      "window_medians": {
+        "dense": [
+          0.20456900000135647,
+          0.20122180000180379,
+          0.20057380000071134
+        ],
+        "iterative": [
+          0.01302399999985937,
+          0.01066319999517873,
+          0.010549999999057036
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 8,
+      "dense_seconds": 0.20358880000276258,
+      "iterative_seconds": 0.012710599999991246,
+      "paired_speedup": 16.017245448909005,
+      "window_medians": {
+        "dense": [
+          0.20480490000045393,
+          0.20358880000276258,
+          0.20179749999806518
+        ],
+        "iterative": [
+          0.014836199996352661,
+          0.012710599999991246,
+          0.012412700001732446
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 10,
+      "dense_seconds": 0.20005810000293422,
+      "iterative_seconds": 0.01562539999576984,
+      "paired_speedup": 12.803390636853752,
+      "window_medians": {
+        "dense": [
+          0.20059200000105193,
+          0.20005810000293422,
+          0.19867189999786206
+        ],
+        "iterative": [
+          0.016437400001450442,
+          0.01562539999576984,
+          0.013687599996046629
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 15,
+      "dense_seconds": 0.19819209999695886,
+      "iterative_seconds": 0.019647300003271084,
+      "paired_speedup": 9.928234412195708,
+      "window_medians": {
+        "dense": [
+          0.20354650000081165,
+          0.19506299999920884,
+          0.19819209999695886
+        ],
+        "iterative": [
+          0.020782599996891804,
+          0.019647300003271084,
+          0.018901999996160157
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 20,
+      "dense_seconds": 0.2077662000010605,
+      "iterative_seconds": 0.024689999998372514,
+      "paired_speedup": 8.421431954484566,
+      "window_medians": {
+        "dense": [
+          0.19990390000020852,
+          0.20810789999814006,
+          0.2077662000010605
+        ],
+        "iterative": [
+          0.024689999998372514,
+          0.024711699996259995,
+          0.02253509999718517
+        ]
+      }
+    },
+    {
+      "stocks": 1201,
+      "window": 500,
+      "k": 30,
+      "dense_seconds": 0.1936723000035272,
+      "iterative_seconds": 0.03672699999879114,
+      "paired_speedup": 5.590418493469168,
+      "window_medians": {
+        "dense": [
+          0.20531930000288412,
+          0.1936723000035272,
+          0.1936506999991252
+        ],
+        "iterative": [
+          0.03672699999879114,
+          0.03735230000165757,
+          0.03269679999357322
+        ]
+      }
+    }
+  ],
+  "max_eigenvalue_error": 7.901973150022955e-15,
+  "max_angle_radians": 3.5714426185370485e-10,
+  "max_relative_residual": 9.499654290580177e-11
+}
