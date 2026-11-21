@@ -1,0 +1,10 @@
+{
+  "initial_missing": 37336,
+  "final_missing": 36466,
+  "added_returns": 872,
+  "removed_returns": 2,
+  "stocks_with_gaps": 149,
+  "reviewed_cutoffs": 66,
+  "input_archive_sha256": "4442db06435c146c420ca189803610c73cae1b668af7467b9cc31f5092520f06",
+  "output_sha256": "a0c3810597ab4c97219733453f832da5f47ee73b4475acc1b4e239c59bed70b6"
+}

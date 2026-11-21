@@ -1,0 +1,15 @@
+{
+  "missing_cells": 36466,
+  "stocks_with_gaps": 149,
+  "complete_stocks": 1052,
+  "missing_spells": 1003,
+  "resuming_spells": 892,
+  "resuming_stocks": 48,
+  "resuming_missing_cells": 2820,
+  "resuming_median_days": 2.0,
+  "trailing_stocks": 111,
+  "all_missing_stocks": 2,
+  "documented_cutoffs": 66,
+  "missing_at_or_after_cutoff": 23627,
+  "other_missing_cells": 12839
+}

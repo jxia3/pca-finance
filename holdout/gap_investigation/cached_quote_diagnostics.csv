@@ -1,0 +1,7 @@
+stock_id,ticker,missing_cells,missing_with_two_yahoo_closes,cached_source,missing_with_two_dolt_closes,missing_without_two_corroborating_closes,missing_with_corroborating_price_disagreement,missing_with_two_matching_closes,matching_close_gaps_exceeding_50pct_filter
+80168,AGM.A,500,500,raw/recovery/yahoo/AGM.A.json,0,,,,
+84660,AKO.A,308,308,raw/recovery/yahoo/AKO.A.json,0,,,,
+10661,CYAN,395,395,raw/recovery/yahoo/CYAN.json,0,394.0,0.0,1.0,1.0
+10886,DXYN,210,210,raw/recovery/yahoo/DXYN.json,0,210.0,0.0,0.0,0.0
+46340,SFES,402,402,raw/recovery/yahoo/SFES.json,0,402.0,0.0,0.0,0.0
+79702,PTN,133,133,raw/recovery/yahoo/PTN.json,2,,,,

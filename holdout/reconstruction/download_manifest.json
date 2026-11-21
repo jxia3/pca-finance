@@ -1,0 +1,1098 @@
+[
+  {
+    "symbol": "AAME",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAME?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "f6e0a8990018b330257d0006b9a91892a5665a7572fd2822b91188143b82cba0",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "ACH",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ACH?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "6653e211b7e57ebdb1f43a454ced851657d77b3300379a2365c5bc607ab83c04",
+    "observations": 1,
+    "error": null
+  },
+  {
+    "symbol": "AGM-A",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AGM-A?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "744054e8f1d14f15690a715d7a33346e3f5dfd15ace05ed1053d543197fe8e9a",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "AIRT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AIRT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "828df6ac3ada90ab88cb27d458885c4c6ff7914a8c2b23c8b94abc58f55f771a",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "AKO-A",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AKO-A?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "d09d3af51e7fab90b9ab91e2cbcc0266664bfdeecf2f84f07a1b5db302e116a8",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "ALOT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ALOT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "0773550402ad23a2298088f9b946e16e2dcbf731d552b31f2e8b8877ad7efb73",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "AMNB",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMNB?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "AMS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "fc0b0ceba61cd146b73a9a4aac4d57f367a56e23d17dc8f8720e1ac568789213",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "AMWD",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMWD?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "da4ad624a1cddc3ae46ae18615fa2a7dd18268f0eccc48ef27f17e2ee5ef776c",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "ANSS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ANSS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "ARTW",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ARTW?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c024f0fc0dc5ccb0263eb2d88b537f60268dc8c67a7483c44061ab28f2d6497b",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "ATRI",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ATRI?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "AVB",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVB?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "d47bfdda79a19453f0d517c1e9058019f4afacd71df08d740d1f38e9c6aac265",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "AWX",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/AWX?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "8c03e9fc9023230944055dec2601bfd387627ef14ae91715a8a6e7ce5ea45d83",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "B",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/B?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "4b64b2cc4ab2c5c8dc3a3974234d1c43b6c759c6637129b2e404bbe980c0a3ec",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "BKN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BKN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "BOSC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BOSC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "02d83e745d73d26c2c213006a97281760b63062c16d6a4b0c76551b95f5cfc69",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "BPPTU",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BPPTU?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "BRID",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRID?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "ef0400a0c1d19ef7a8260032f52b34cfdca502326c459fab4e36638f8805a41d",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "BRKL",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRKL?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "4e8f45adad5e24e537355dd9b3d58fc5f131ae21fae58c13aa126cb1f8b46bc7",
+    "observations": 95,
+    "error": null
+  },
+  {
+    "symbol": "BZH",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/BZH?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "fc1a38a114750b2db9c4ba8ce89248d8e0bb7bfdce1f6b4fbb4535903f4e4606",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CHN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CHN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "868467763214bd05582387af7a45f753420f773e777888646973b83c662cd25b",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CIF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CIF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "d2cfbb61ff7ef7f1d2b6bcaa451b1c48df881ca83016990b364c52ac2dea27f4",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CLWT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CLWT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "739c2e46cab39f90f0f6572c2cc06ba3546ddf4e2018ae8963063ccc6f4f0626",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "CMA",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CMA?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "6916b248ccad19808efc7f441685dde7294d26c5b6d1b64e4e07a1af0decbd10",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CMU",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CMU?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "3d4f608aef6e3a197a7a9201c429fbdcccc3357140462135341ca2ff8d2aa8b7",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CPE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CPE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "CRD-B",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CRD-B?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "9ef602650fddeda1ca14708c55e5314c2200af5a63d351b646c0474650f00fd5",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "CSGS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CSGS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "7d0461b124aaa0c28707c17e26427a0702a22f5d63219677b8ef03c8dbdd4e89",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CTHR",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CTHR?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "CVLY",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CVLY?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "CWBC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CWBC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "d39cddc870cf7f9d830976fb26aeefdaad12d758fd83ecded9e1c2c055723814",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "CXE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CXE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c53eca0f37da23bb8cec6c766f2d9739fe803688812cf89d0e0428fe8054b442",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CXH",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CXH?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c4e5a78b401c9742dedf98fb2b44f8223b11cc99020004ea8f668213a132e158",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "CYAN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/CYAN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "a13e823ae09cecdbf856b4fdd766027a1c6b4b98b6a97159732d1aa599487fdb",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "DHY",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DHY?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "1a813979bfbddee1908ddf7be903c65637582853486ec32d4e0232346adb52de",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "DISH",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DISH?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "DMF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DMF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "DSWL",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DSWL?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "8a25e82d1acdc2e6fd0a3fb0506f4a754e93255669005a5c814d4090be4afd61",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "DTF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DTF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "e80d1e71b4278e27a4b361283e1cdde3e915f1be597f32264446eac6b7ccbb25",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "DXYN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DXYN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "ba66541f2507aca931d471531532a57df2ca481b71df67e9ca92005d5c7db8e8",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "DYNT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/DYNT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "EDUC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/EDUC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c71315c592ea3fb29448a2d9d54e760e836dfb565f70a333172eebf98a4ed1f6",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "ELSE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ELSE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c0465aea680a5c3b223a5197c56d9c5e68b3f971c5f017f281f20e56524180e1",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "ELTK",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ELTK?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "b93f41b39e268a1af193d56b19862e3ee9b92eff3fdb171524be4a6becd393e3",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "EMKR",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/EMKR?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "ENZ",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ENZ?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "EQS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/EQS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "9bdceabb28d3ca9a27cfad5d2c55521d56c63dcbbe8203708febb111264179d5",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "ESP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ESP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "a3cc04a59eec95c5f86399c8f0d152841473c4a88cec655bb36bf97e1656eaae",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "FARM",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FARM?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "FARO",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FARO?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "FCO",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FCO?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "bbe9d0b277306c635cdbb8a7161e5ca258ead2058e14a13e05b82ddcbe38f87e",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "FDP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FDP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "44d8a6e52db6b23f3428a6ced9a68290bbfd9bf178b76092261d03c9d6c08de1",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "FFIC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FFIC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "6698504e98025a1fd9157ff43ef19e4d0b79803c54951c17ffbefc9701fae582",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "FLIC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FLIC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "FONR",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/FONR?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "80336b4f81da3c08fd2184ce6eee6ff61c2b9322bce81b3b56a9b6eab3e629c7",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "GES",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/GES?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "6efe125daec3aa0cecaeb1d57f015287bf68432b63c38afa7314ffe1698f7fd4",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "GIFI",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/GIFI?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "9be1fec6300bde87b190e8ba3d6d59fe21bd082014da5eed91ee2f84c0772f9b",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "GTIM",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/GTIM?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c8d259f3daac0b29645389998f5aeab9ecbcff565add5853db0ec586cbd9d705",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "HERZ",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HERZ?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c5665e7cb1ba62fb18063885f859b22adb73b5d7605a60d7da9544d26fabd1ec",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "HIBB",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HIBB?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "HIHO",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HIHO?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "309e10171595f93ef4a87741deb6b481fd42621442e60c516419d6ba6a0d1f8f",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "HMNF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HMNF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "HOLX",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HOLX?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "HSII",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HSII?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "583cb8e42159d7e64e770933ed140a983cee4aa9dd8f70f17f3ab08fcfc2b757",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "HTBK",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HTBK?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "90ae603cc77ff53e563dea8f306cf798b5ccbbc7dc16b0af09c05aec0d924ab6",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "HYB",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/HYB?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "b38bfab746fbf0569c17bf280e349933a04e86035b868ee1a290acbdac856b29",
+    "observations": 6,
+    "error": null
+  },
+  {
+    "symbol": "IHT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/IHT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "ec115e2cacc81c5b2571256ec35758e478f34cbb641b00aee3518f0f28ae3d87",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "IMGN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/IMGN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "INTG",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/INTG?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "3090a3ae09c9a5f37e28f1c2d49bcd5bdc680e8a7cafaa55cd2ceca93a706e2e",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "IPG",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/IPG?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "7ecafe3362990dc578a318ec7d48e003503c7e368b8e595cd41b8e8d4e080b00",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "IVAC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/IVAC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "JCTC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/JCTC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "3fcdcc19940d202062323f01b4a11fbd9a5a3b4d35c6eb09aeb600386e6fa5e8",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "JEQ",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/JEQ?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "JNPR",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/JNPR?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "JWN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/JWN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "K",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/K?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "f4455cb47be8ec519bdafd93552215d9ad225ed0832d345b08c420f2a4028e37",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "KEQU",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/KEQU?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "70b56bd52bad459524cfe5af2b25d2f7793e2fbea88b698daa466b02f53897bd",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "KSM",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/KSM?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "KTF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/KTF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "8dacafdf6661b6286d49b1ac5dc952dd6e58d9bc2dec7347fdec3069d2e700b2",
+    "observations": 3,
+    "error": null
+  },
+  {
+    "symbol": "LARK",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/LARK?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "5b1bccc60dd926a1cf724f88e3cdfb67957e825d8fbf5bc9efecc29c098d921a",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "LEG",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/LEG?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c3d135d7a0f5395b9dc34c2d32374bcf45c85536b886dea421c78421fa4e6cad",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "LGF-A",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/LGF-A?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "LGL",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/LGL?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "d49f0490bce740472cb885816959dd93cd2ab3dac5a0d3d7ecfe8eeeaacd4d37",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "LGTY",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/LGTY?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "LXP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/LXP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "a58afcd9b7ba4bbb49b0b525359994f43e431bacab5dddd823f9899137e9006f",
+    "observations": 11,
+    "error": null
+  },
+  {
+    "symbol": "MARPS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MARPS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "ac4fdbe3db879e0832c792b7a281238baadc07d7648cff98d497111bcb4dae4b",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "MCBC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MCBC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MCR",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MCR?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "34feda1f08a14d32ba6eb2740cfd679b13096ea70ae988c5e385e691aa9e3fa4",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "MDC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MDC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MFV",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MFV?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MGIC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MGIC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MHN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MHN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "bd8904f18e496533704ec20d79dfbb240b5126f62e7ea5a1deccd7f08d18bd61",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "MQT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MQT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MRO",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MRO?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MSN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "a0c95bdc2969fc6ae5ce07b3fa8184bcab1b8fd69a24b98252bbf003dbb9059c",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "MTEX",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MTEX?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "1656d51a886fe8e1f108c83c005958a3494b52160e9df90303e896eae3188595",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "MUE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MUE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "3a45cf78226c6060afe7111132df4cd6ed97eb761197230717ff2c4d46606126",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "MVF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MVF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MVT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MVT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "MXE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MXE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "c79b232b9817bba799aa5e4c3be16f213d7ae42811faa8365694123be031110b",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "MYD",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/MYD?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "NAII",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NAII?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "7df372f73bd92c5d657cb83ad4170e1da34cd5d5b888a5a6ddc7c0d20a47e037",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "NATH",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NATH?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "ad2c6ea5c3246cc35b06aab9fdef93515a82998bec669a841c1da49a03920246",
+    "observations": 16,
+    "error": null
+  },
+  {
+    "symbol": "NICK",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NICK?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "NOM",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NOM?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "NQP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NQP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "NSYS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NSYS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "edcb7729b0cdacf84ff36c5ab8133530843401559e64899210d1762503836c96",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "NTZ",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NTZ?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "0a75dba76e2b2421bae44d78eacfe4b4822c247cad60ea367babfd307fa7d090",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "NXC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NXC?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "e3b446133524862e2d53c96cd6b391160162420ebab74dccdf8e6cd916e433da",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "NXN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/NXN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "01102777084c1ba1a1c8fc63a277c32dbc13e770753660882ca422b1c467f0b6",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "ODP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ODP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "2b740495617f49c7b29bafff84b9fb3e9141c065229d63156b94cb82376ac5ff",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "OMCC",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/OMCC?period1=1640995200&period2=1795046400&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "a6465fc6dd37ed6b08d246acbd283f7068f0a850809e6c13510d106a0c5ba0d6",
+    "observations": 1225,
+    "error": null
+  },
+  {
+    "symbol": "PCH",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PCH?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "e6b23e440dd7c3ce135d36f697a3a547f32a632b825d457663616d6ba2e910f3",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "PDCO",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PDCO?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "PRFT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PRFT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "PROV",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PROV?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "246d56dbe47372cfe71acac34083ffccd607906121e69709075e59fc78267a9a",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "PTN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PTN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "92457fb59ab62f4019054595cc0befbecc18d607be201ce46cd87a1ac43a0108",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "PTNT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PTNT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "e7dd7a4c3b2b87121fb0057943ffccfa2092f8ac7909d058088fe1857f0a86b4",
+    "observations": 136,
+    "error": null
+  },
+  {
+    "symbol": "PXD",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/PXD?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "RPT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/RPT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "38835afab4a098c11f84e4778f0cd9aaafea98751cdb61b8169c1a83dafe1fec",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "SALM",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SALM?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "fbc288c33160464312de9a4b379dec1b033806581415ee5b428dafde51028c46",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "SASR",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SASR?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SCS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SCS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SCX",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SCX?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SEE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SEE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "d9824217a5a36c79ac4214802f59d1c6321de681f84bcc0f70e6f5a09f278399",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "SFES",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SFES?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "3ab1dedecf8cb8b7cef93b87861a1f7bd0f1eedcf83b47c88f2ef906ca071e4b",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "SGMA",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SGMA?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SGRP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SGRP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "63ec829eea63a14a836d971bb60753d427ac06a05b47cb4e792cc02fa652125d",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "SKX",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SKX?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SNV",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SNV?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "fe8cce13cb83e5fb7c57d74a21ce1aa2bbf6e2b162726519e50936e101474e27",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "SPNS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPNS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "7eec57cce8be2eac3c9106d818388fac043b22ec240e447b081268850d6a6df6",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "SRCL",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SRCL?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SRDX",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SRDX?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "57f364d13c975ce074fefd63b02f7bf199afb27dcba18eabed60a9f5e1c4372d",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "SRT",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SRT?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SSUP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SSUP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "STKL",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/STKL?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "e4bdd922e33409dac923a7001aac1405cb4500add428a4d25879ceb4028b429a",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "STRM",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/STRM?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SUP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SUP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "SWN",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/SWN?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "TAYD",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/TAYD?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "e71e5d5358c644459e088f5ee5aaa0dec2bdaa51d6b57fa32411fa373ad35494",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "TEF",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/TEF?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "511e669cafa38b1c149f69eed6bbff611a907bd5c6b59716840faa2034073a9c",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "TGI",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/TGI?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "TSRI",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSRI?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "TUPBQ",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/TUPBQ?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "USAP",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/USAP?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "VFL",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/VFL?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "a6af981d1cdc2c0337fb841bef2416dd32cf27d9e2d33fe2b5e3d83820c38088",
+    "observations": 0,
+    "error": null
+  },
+  {
+    "symbol": "WIRE",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/WIRE?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "WVVI",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/WVVI?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "8771acddd3a8be856cde8772971c1050ec000a3e3cd1a1ecf2be9cb62dc7f614",
+    "observations": 1224,
+    "error": null
+  },
+  {
+    "symbol": "X",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/X?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "XOMA",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/XOMA?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "unavailable",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "symbol": "ZEUS",
+    "url": "https://query1.finance.yahoo.com/v8/finance/chart/ZEUS?period1=1640995200&period2=1794960000&interval=1d&events=div%2Csplits",
+    "status": "ok",
+    "sha256": "4b7cfaab34013b95aae1d020025666553c90f1321a13215c2209e8b24c9ade58",
+    "observations": 0,
+    "error": null
+  }
+]

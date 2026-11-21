@@ -1,0 +1,165 @@
+Missing-return investigation, November 20, 2026
+
+Scope
+
+This review examines the retained source archive and official SEC, exchange,
+and issuer records. No new market-price datasets were downloaded. Archived
+scripts were read as text, not executed. The return files, strategy parameters,
+report and saved strategy results remain unchanged.
+
+There are no entirely missing date rows. The file has 723 market dates and
+1,201 stock columns. The issue is 37,336 missing stock-date observations.
+This is a targeted investigation of major gaps and portfolio-relevant cases,
+not a claim that every missing cell has now been explained.
+
+1. Many blanks follow real corporate events
+
+The existing evidence identifies 55 cutoffs, accounting for 18,018 blanks.
+This review identifies 11 additional termination cases: SRT, CPE, AMNB, MDC,
+CVLY, HIBB, EMKR, SASR, JWN, FFIC and PDCO. Their post-event periods account
+for another 5,607 missing cells. Together these categories account for 23,625
+cells, or 63.3% of all blanks. The remaining 13,711 cells are outside these
+reviewed cutoff periods, not necessarily missing trading observations.
+
+For example, SRT stops on January 4, 2024 and ceased trading before the next
+session because of its take-private transaction. AMNB and CPE both stop on
+March 28, 2024, before their April 1 acquisitions. These endpoints make sense.
+The old audit's unresolved category was broader than an actual provider-error
+category. Confirming a merger does not reconstruct its cash/share consideration
+or prove when an investor could have known the last trading date.
+
+Individual dates, interpretations and official sources are in reviewed_events.csv.
+
+2. A missed ticker change is a specific recovery opportunity
+
+NICK's last observed return is September 27, 2024. The issuer announced that
+its name changed to Old Market Capital and its symbol changed to OMCC at the
+September 30 open. All 536 subsequent stock-date cells are blank under the
+old identifier. This strongly indicates an unhandled symbol continuation,
+rather than evidence that the equity disappeared. A verified OMCC series and
+corporate-action bridge are needed before accepting replacement returns.
+
+Source: https://www.sec.gov/Archives/edgar/data/1000045/000095017024109986/nick-ex99_1.htm
+
+3. Exchange delisting does not necessarily mean the stock stopped existing
+
+Official filings confirm OTC continuation for several affected stocks:
+- DYNT: Nasdaq to OTCQB on July 9, 2024. The local series stops July 12.
+- SFES: Nasdaq/SFE to OTCQX/SFES on February 12, 2024. A 219-session gap
+  begins that day, followed by resumed accepted observations.
+- DXYN: Nasdaq suspension and OTC trading from October 3, 2024. Its
+  97-session gap begins exactly at that transition.
+- PTN: NYSE suspension followed by PTNT OTC trading from May 8, 2025,
+  then announced relisting in November. The archive explicitly withheld this
+  interval for ticker and reverse-split reconstruction. Returns resume later.
+- SUP: OTC trading as SSUP from June 25, 2025, exactly when the gap begins.
+  Subsequent merger/settlement events require further reconstruction.
+
+SALM's issuer announcement also anticipated a January 2024 OTC transition.
+These documents establish event context. They do not independently validate
+every subsequent quote or explain every later missing cell.
+
+Sources: reviewed_events.csv, including
+https://www.sec.gov/Archives/edgar/data/29332/000002933225000017/dxyn-20241228.htm
+https://www.sec.gov/Archives/edgar/data/911216/000165495425012641/ptn_8k.htm
+https://www.sec.gov/Archives/edgar/data/95552/000095017025104988/ssup-20250630.htm
+
+4. Some prices exist in the archive but fail the acceptance rules
+
+Across AGM.A, AKO.A, CYAN, DXYN, SFES and PTN, all 1,948 missing return cells
+have current and preceding-session closes in the retained Yahoo response.
+That does not make those closes suitable replacements. The earlier historical
+comparison accepted only 16.4% of AGM.A return differences within five basis
+points, versus the standard 95% threshold. The corresponding figures were
+82.2% for AKO.A, 62.0% for CYAN, 60.8% for DXYN and 68.2% for PTN.
+
+The fallback Dolt prices pass historical checks for these names, with a reviewed
+short-overlap exception for AGM.A. But for AGM.A and AKO.A, none of the remaining
+missing returns has both consecutive closes in the retained Dolt bulk extract.
+Thus usable source coverage is sparse even though another source supplies
+apparently complete prices. A missing close also prevents calculating the next
+session's return. The pipeline intentionally does not bridge multi-session
+price changes or invent zero returns.
+
+For CYAN, DXYN and SFES, later OTC recovery requires two consecutive prices
+corroborated by the retained secondary table. This table lacks the needed pair
+of closes for 394 of CYAN's 395 gaps, all 210 DXYN gaps, and all 402 SFES gaps.
+These are limitations of retained corroborating coverage, not evidence that
+no trade occurred. No new requests were made to those secondary providers.
+
+The remaining CYAN case is December 2, 2025: saved prices rise from 0.35 to
+0.574, a 64% change. Both saved sources agree, but the OTC recovery routine
+requires an absolute daily return no greater than 50%, so this candidate is
+excluded. This is a specific review-filter effect. The observation should be
+reviewed for identity and corporate actions, not automatically accepted.
+
+Local evidence:
+- raw/returns_extension/coverage_and_validation.csv
+- raw/returns_extension/discrepancy_diagnostics.csv
+- raw/returns_extension/bulk_research/dolt_panel/cash_return_validation.csv
+- raw/returns_extension/bulk_research/dolt_panel/reviewed_short_overlap.json
+- raw/returns_extension/bulk_research/dolt_panel/temporary_review_boundaries.json
+- audit/recovery/yahoo_bridge.csv
+- audit/recovery/methodology/recover_otc_tables.py
+All paths above are members of holdout/source_evidence.zip.
+
+5. Temporary gaps are concentrated
+
+Of 924 missing spells, 809 resume, covering 3,146 missing cells. AGM.A, SFES,
+CYAN, AKO.A and DXYN account for 1,795 of these cells, or 57.1%. This helps
+explain why most spells are temporary while most missing cells overall occur
+in long trailing gaps. Counting spells and counting cells answer different
+questions. Neither supports treating every blank as permanent delisting.
+
+6. A separate accepted-data problem needs correction review
+
+Nasdaq gives April 16, 2025 as PDCO's last trading day and says it was halted
+on April 17. The accepted file nevertheless contains zero returns on April 17
+and April 21, attributed to the Defeatbeta bulk archive. These cannot be treated
+as evidence of executable exchange prices. post_event_observations.csv records
+both entries. The existing TB simulation holds and trades PDCO on these dates.
+The records alone do not establish why the vendor retained those values.
+
+Source: https://classic.nasdaqtrader.com/TraderNews.aspx?id=ECA2025-195
+
+IVAC also has a zero return on its March 31 merger date. That case remains
+flagged for exact last-trading-time review rather than assumed erroneous.
+
+7. What the interrupted download does and does not establish
+
+The saved transfer log confirms a connection closed before a bulk ZIP was
+complete. The collection retained complete recovered rows and used additional
+sources to recover observations. This is a real acquisition limitation, but
+the log does not attribute every current blank to that interruption. In
+particular, the diagnosed mergers, ticker changes, OTC gaps and validation
+exclusions cannot be reduced to a single interrupted-download explanation.
+
+Local evidence: raw/recovery/dolt_download.json in source_evidence.zip.
+
+Implications for the saved holdout
+
+Both final frozen pairs holdings now have specific event leads. FFIC, about
+0.985% of final equity, merged into OceanFirst with consideration of 0.85 OCFC
+shares per FFIC share. SUP, about 0.975%, initially continued as SSUP on OTC.
+Freezing both indefinitely therefore omits different economic paths. Neither
+case justifies assuming an observed zero return or a 100% loss.
+
+The existing results remain conditional marks, not final realized P&L. The
+highest-priority repairs are to resolve these two held securities, correct
+the PDCO executable-date boundary, investigate NICK/OMCC continuity, and expand
+the event table. Further quote recovery should use verified security mappings
+and trustworthy data, with corporate actions checked before accepting returns.
+Any repaired-data evaluation should preserve fixed parameters and be recorded
+as a data correction, rather than silently replacing the original run.
+
+Source: https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-362
+
+Reproduction
+
+Run from the repository root:
+  python -m scripts.audit_holdout_gaps
+
+Outputs are summary.json, gap_spells.csv, per_stock.csv,
+cached_quote_diagnostics.csv and post_event_observations.csv. The manually
+reviewed official-source annotations are in reviewed_events.csv. The script
+makes no network requests and does not change source data or run strategies.

@@ -1,0 +1,22 @@
+{
+  "dates": 723,
+  "stocks": 1201,
+  "entirely_missing_date_rows": 0,
+  "missing_cells": 37336,
+  "spells": 924,
+  "resuming_spells": 809,
+  "resuming_cells": 3146,
+  "top_five_resuming_cells": 1795,
+  "top_five_resuming_tickers": [
+    "AGM.A",
+    "SFES",
+    "CYAN",
+    "AKO.A",
+    "DXYN"
+  ],
+  "previously_documented_cutoff_cells": 18018,
+  "additional_termination_cells": 5607,
+  "remaining_cells_outside_these_cutoffs": 13711,
+  "new_termination_cases_reviewed": 11,
+  "scope": "Targeted event review; remaining cells are not all diagnosed. OTC event context does not establish a cause for every later blank."
+}

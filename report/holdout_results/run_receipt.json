@@ -1,0 +1,22 @@
+{
+  "started_utc": "2026-11-21T00:50:09.977757+00:00",
+  "status": "complete",
+  "protocol_sha256": "48bef8da75b5233542e1b1b66a8271b7053699836a259952c4867e85521f6c53",
+  "python": "3.12.7",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "pandas": "3.1.1",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "completed_utc": "2026-11-21T00:50:21.596917+00:00",
+  "output_hashes": {
+    "constant_mark_daily.csv": "a6c64fcb495c8a755ff81c02b52ceaeba2f30eb1b10fb74615e85a531e63f36c",
+    "gap_spells.csv": "273a8935ca5f3e2c03da153e5e953c31e55fab1795851235a2e958313261f0cb",
+    "gap_summary.json": "3cfbd6248399c4242abb5fc3073d76bfe17c4cd4892d820b50ff2868081ece32",
+    "missing_position_marks.csv": "422e1f70470eea13c3694338019a8058865d7626fc845fd7e8a82dd1b8740fc5",
+    "positions_and_trades.npz": "81f252081dce7bfd8758da9f2784f20e2887b864428889a7549467271bbb8b02",
+    "protocol.json": "48bef8da75b5233542e1b1b66a8271b7053699836a259952c4867e85521f6c53",
+    "reviewed_cutoffs.csv": "7fd4d10cd3f9ae000d6acb6bd1ff1e3eed630e52fe2bf55ecd7491a40b0b36de",
+    "summary.csv": "bfa7758f4bd785721db7dba00c5101f728decdfcc6dcf6a56d0a33932fc76d2a",
+    "summary.json": "9d8547bb4698ce0ca47ba7489ebc7f5402d25e8623aeb2960e3ac2eefd4eb92c"
+  }
+}
