@@ -13,6 +13,12 @@ class ReturnAttribution:
     residuals: np.ndarray
     factor_loadings: np.ndarray | None = None  # Components by stock.
 
+    @property
+    def betas(self) -> np.ndarray:
+        if self.factor_loadings is None:
+            return np.full((self.residuals.size, self.factor_returns.size), np.nan)
+        return self.factor_loadings.T
+
 class FactorModel(Model):
     pca_name: str
     num_components: int
