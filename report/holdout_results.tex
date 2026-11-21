@@ -94,28 +94,14 @@ observations freeze held positions at their carried marks.}
 
 \subsection{Limits of the evaluation}
 
-Missing observations affect how much confidence we can place in these
-returns. A stock needs 500 consecutive valid returns to enter estimation.
-If its data becomes unavailable while it is held, we keep its dollar mark
-unchanged and prohibit trading until observations resume. That capital
-remains committed, and the missing interval's return is not recovered.
-By the end of the holdout, frozen gross exposure reaches 14.06\% of
-equity for Treynor--Black and 1.96\% for pairs. Unknown liquidation
-proceeds and terminal payouts could therefore change the results,
-particularly for Treynor--Black, while frozen positions can also weaken
-portfolio neutrality.
+When a held stock's return is unavailable, its dollar mark stays unchanged
+and it cannot trade until observations resume. Final frozen gross exposure
+is 14.06\% of equity for Treynor--Black and 1.96\% for pairs.
+Unobserved price changes and terminal payouts could alter these returns,
+while frozen holdings can weaken portfolio neutrality. This valuation
+uncertainty matters especially for Treynor--Black.
 
 The reported results use corrected data and unchanged strategy parameters.
 Earlier runs of this period were inspected before those corrections, so
 this evaluation should not be treated as a previously unseen test.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{figures/holdout_data_coverage.png}
-\caption{Left: stocks eligible under the trailing 500-day observation rule.
-Right: frozen gross exposure as a percentage of current equity for each
-selected strategy. Frozen holdings retain their dollar marks while returns
-are unavailable, consume portfolio capacity, and may weaken neutrality.
-The eligibility rule uses only observations available through each date.}
-\label{fig:final-holdout-coverage}
-\end{figure}

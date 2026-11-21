@@ -37,7 +37,6 @@ def render():
     frames = [pd.read_csv(DEST / f"{m}_daily.csv") for m in MODES]
     rows = pd.concat(frames)
     summary = json.loads((DEST / "summary.json").read_text())
-    gaps = json.loads((DEST / "gap_summary.json").read_text())
     figures = Path("report/figures")
     figures.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update(
@@ -49,7 +48,7 @@ def render():
     for ax, mode, title in zip(
         axes,
         MODES,
-        ("Selected strategies on reconstructed holdout data",),
+        ("Holdout performance of the selected strategies",),
     ):
         for strategy, color in zip(NAMES, colors):
             g = rows[(rows["mode"] == mode) & (rows.strategy == strategy)]
@@ -72,34 +71,13 @@ def render():
     axes[0].legend(frameon=False, fontsize=8)
     fig.savefig(figures / "holdout_performance.png", dpi=220)
     plt.close(fig)
-    fig, axes = plt.subplots(1, 2, figsize=(10, 3), layout="constrained")
-    for strategy, color in zip(NAMES, colors):
-        g = rows[(rows["mode"] == "constant_mark") & (rows.strategy == strategy)]
-        axes[1].plot(
-            pd.to_datetime(g.date),
-            g.frozen_gross * 100,
-            color=color,
-            label=DISPLAY_NAMES[strategy],
-        )
-    g = frames[0][frames[0].strategy == NAMES[0]]
-    axes[0].plot(pd.to_datetime(g.date), g.eligible, color=colors[0])
-    axes[0].set_ylabel("Eligible stocks")
-    axes[1].set_ylabel("Frozen gross (% of equity)")
-    for ax in axes:
-        ax.grid(axis="y", alpha=0.2)
-        ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
-    axes[1].legend(frameon=False, fontsize=8)
-    fig.savefig(figures / "holdout_data_coverage.png", dpi=220)
-    plt.close(fig)
-    write_section(summary, gaps)
+    write_section(summary)
     with zipfile.ZipFile(
         "report/holdout_overleaf.zip", "w", compression=zipfile.ZIP_DEFLATED
     ) as bundle:
         for name in (
             "holdout_results.tex",
             "figures/holdout_performance.png",
-            "figures/holdout_data_coverage.png",
         ):
             bundle.write(Path("report") / name, name)
     print(
@@ -116,7 +94,7 @@ def render():
     )
 
 
-def write_section(summary, gaps):
+def write_section(summary):
     """Results-only section. Existing report content is never rewritten."""
     table = []
     for s in summary:
@@ -143,9 +121,7 @@ def write_section(summary, gaps):
             ]:
                 replacements[prefix + token] = f"{s[key]:.2%}".replace("%", r"\%")
     section = Path("report/holdout_results.template.tex").read_text(encoding="utf-8")
-    section = section.replace("COMPLETECOUNT", f"{gaps['complete_stocks']:,}").replace(
-        "TABLEROWS", "\n".join(table)
-    )
+    section = section.replace("TABLEROWS", "\n".join(table))
     for token, value in replacements.items():
         section = section.replace(token, value)
     Path("report/holdout_results.tex").write_text(section, encoding="utf-8")
