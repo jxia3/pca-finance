@@ -1,0 +1,264 @@
+\quad
+
+Strategy 3: Residual Mean Reversion Strategy
+
+The underlying strategy for the residual mean reversion strategy has to do with the underlying belief that when stocks move down on d more than what we had predicted from the data from days 1,..., d-1, then we should buy these particular stocks as we believe that the market has undervalues/overreacted to these stocks (and that they have higher relative expected value to assets that have moved as expected in our regression or assets that have moved higher than our prediction from the regression. The difference between this strategy and the Treynor black method is the fact that Treynor Black relies on inspection on the alpha parameter while the residual snapback strategy relies on buying stocks that we believe are relatively undervalued due to an overreaction in the markets.
+
+For Treynor–Black, we have used a 250-day regression window since the estimated alpha from this data directly determines the trading signal and a longer window of data would gives us many more observations and would reduce the influence of a  anomalies in the data. 
+
+However, for residual snapback, the regression serves a different purpose. This regression is supposed to give us a baseline/prior against we need to measure these recent unexpected returns. A shorter window such as a 100-day window lets that baseline adapt more quickly to recent changes in the stock’s factor exposures, while also at the cost of estimates with higher standard devations.  However, due to the short term edge We therefore use 100 days for snapback as a design choice suited to its short-horizon signal.
+\quad
+
+Now, to understand the "signal" of the residual between the actual daily return compared to the regressions predictions, we need to get an understanding of how much of a deviation/size of residual is normal for a particular stock. For example, if a particular stock barely deviates from the regression prediction and then randomly is 5 percent different than what the regression predicts would have a different signal than a stock that on average has a 5 percent deviation from the regression prediction. To do this, we look at the last 60 trading days and fit the regression model to 1 day less than our current day. Then, we calculate the residuals on those 60 days. After we have these residuals, we use these 60 data points to get a sample variance for the residual as well as a sample mean. Then, we examine how the next three days of trading looks like after we have out 100 days of data. After normalizing the average residual by transforming it into a z score, we get a heuristic/z-score statistic for how much the stock has gone down compared to its "fair value." Although "fair value" is not the correct depicition since we have no way of understanding what is a "fair value." 
+
+\[
+\mathrm{Score}_{i,t}
+=
+\frac{\displaystyle\sum_{k=0}^{2}\varepsilon_{i,t-k}}
+     {\sqrt{3}\,\widehat{\sigma}_{i,t}},
+\qquad
+\widehat{\sigma}_{i,t}
+=
+\sqrt{\frac{1}{59}
+\sum_{k=3}^{62}
+\left(\varepsilon_{i,t-k}-\overline{\varepsilon}_{i,t}\right)^2},
+\qquad
+\overline{\varepsilon}_{i,t}
+=
+\frac{1}{60}\sum_{k=3}^{62}\varepsilon_{i,t-k}.
+\]
+
+Note that the numerator here in the score function is the sum of the three errors (the days 1 day 2 day and 3 day after the 100 previous days of regression and the 60 previous days of understanding how our model is calibrated.) A negative value in the error refers to the stock underperformin g the return compared to what our factor model was predicting over those three days. On the other hand, a positive value means that we thought that the market price has "overshot" what the factor model would have predicted. If we assume that the expected value of each of these errors is 0 (the factor model is an unbiased estimator of what the price of a stock should be condicitioned upon the rest of the market prices), then we essentially know that the sum in the numerator is how much the price and the "condiitonal mean disagree." Now, the denominator of the stock is used to "standardize" the error, as we have mentioned earlier. We have estimated summa i,t hat from the previous 60 days of trading data and then we know that the sum of three random variables has a variance that is 3 times a single one, since the standard deviation is sqrt of variance, then we know that the sum of three std devs is equivalent in expansion to sqrt(3) * standard dev which is why we divide by sqrt(3) in the denominator.
+(An assumption that we are making when dividing by sqrt(3) is that the residuals are uncorrelated, which may be a strech given that this "error" is hypothesized to be due to irrational market sentiment, which would likely presist and be correlated throughout the three days. If we were to think about this strategy more, one way to add complexity would be to alter the denominator to match this. However, since this score applied to all of the stocks in our portfolio, it is likely not that important if our signal is supposed to be multiplied by a particular magnitude that is constant/not dependent on our stock (given that a signal is only important as it has relative information, meaning that its used to compare two stocks). 
+
+The second expression is how we have calulated the standard deviation. Hopefully, the average error is ei,t which would mean that we predicted the error well and then we are only dividing by 59 instead of 60 because the expression is sqrt(1/(n-1) * rss) for the sample standard deviation. 
+
+Below here, I have also attached the 60-day residual mean across stocks, so that we can examine if it is true that that the regression model likely is an unbiased conditional estimate of a securities market price:  
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{errors.png}
+    \caption{Enter Caption}
+    \label{fig:}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{erorrs_mean.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}
+
+
+Notice that after examining these figures, they show that the factor model has quite a small average signed error (0) across the stocks. 
+ This suggests that when using the factor exposures and the regression used/fitted until the prior day, the model explains returns without a  tendency to overstate or understate them or understate them on average. 
+
+
+ Trading Sub-Strategies:    
+
+
+\paragraph{Naive residual snapback.}
+
+On the last trading day of each week, we rank stocks by their residual
+scores and select up to 20 stocks with "scores" of -2 or lower. If there are more than 20 stocks that have scores of -2 or lower, then we select the ones that have the lowest scores. If we have n stocks, we would go long in each stock with a proprtion of 1/n for each stock. If there are zero stocks that qualify, then we would hold all of our portfolio in cash. We re-evaluate our portfolio each trading day of the week by looking at the past 3 days, Wednesday throguh firsthand and the recalibrate our portfolio at the end of the week. 
+
+\paragraph{Experimental Factor Hedging on Top of Naive Residual Snapback}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{naive_snapback.png}
+    \caption{The naive}
+    \label{fig:placeholder}
+\end{figure}
+
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{stricter_cutoff.png}
+    \caption{stricter cuttoff}
+    \label{fig:placeholder}
+\end{figure}
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{70percentnaive_30percenthedged.png}
+    \caption{70 percent hedged and 30 percent naive}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{dynamic_volatility.png}
+    \caption{Dynamic Volatility PNL}
+    \label{fig:placeholder}
+\end{figure}
+
+Although the signal may be choosing stocks that are expected to be higher than the market, it can still have exposures to those 5 PCA factors/vectors. For example, our portfolio could be heavily positively exposed to the 2nd principal component, if we have an equal weight long portfolio that is sensitive to these movements, then that would not be ideal. To hedge out our portfolio to these exposures, we can naively start with our selected group of stocks and adjust their weights. 
+
+The fully hedged strategy aims to mitigate this risk by collecting the top 40 eligible stocks that have the "lowest scores" (meaning that they have moved downwards more than what we expect) and set these as our "long candidate space." Then, we take up to 40 stocks with the most positive scores as short candidates. The longs express the fact that we believe some of the candidates have moved too far down and should be worth more (with relation to the rest of the market) and the shorts we have are the stocks that we believe have moved too far up in relation to the other stocks in our portfolio space. We then start with target weights that would allow us to provide 50 percent of our capital to the shorts and 50 percent to the longs. 
+
+%look into the below well
+
+We can denote wt(0) denote these signed target
+weights (which we have naivelly set it to be .5 * 1/(number of long candidates) for each vector entry that corresponds to the stock that has a negative stock and .5 * 1/n(number of short candidates) for a stock that corresponds to a positive score. Now, also let Bt be the matrix whose columns contain the five estimated PCA factor loadings for each selected stock.  Note that the dimension of B is 5 * (number of stocks that are both in the long or short candidate space). 
+
+For any weight
+vector wt, the portfolio's estimated factor exposures are
+Btwt. We choose weights as close as possible to the
+initial targets while imposing factor neutrality and preserving the
+direction of each trade:
+\[
+\begin{aligned}
+\min_{\mathbf{w}_t}\quad &
+    \frac{1}{2}\|\mathbf{w}_t-\mathbf{w}^{(0)}_t\|_2^2 \\
+\text{subject to}\quad &
+    B_t\mathbf{w}_t=\mathbf{0}, \qquad
+    \sum_i |w_{i,t}|=1,\\
+&   w_{i,t}\geq 0 \quad \text{for long candidates},\\
+&   w_{i,t}\leq 0 \quad \text{for short candidates}.
+\end{aligned}
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{fully_hedged.png}
+    \caption{fully hedged portfolio}
+    \label{fig:placeholder}
+\end{figure}
+
+After performing this strategy and keeping all other frameworks from the previous strategy the same, we get the following results: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{fully_hedged.png}
+    \caption{fully hedged portfolio}
+    \label{fig:placeholder}
+\end{figure}
+
+\paragraph{Fixed-weight hybrid residual snapback.}
+Our naive intitial Snapback portfolio gives full weight to (at most) 20 long-only
+rebound signals, while the fully hedged portfolio offsets exposure to the five PCA factors by constructing the weights to meet a Principal component neutral portfolio. Now, what if we were to blend both these portfolios to retain the naive strategies upside (since this portfolio is known to perform better in terms of returns compared to market) while reducing exposure/risk through the hedged portfolio. 
+
+We test whether blending the two
+portfolios can retain some of the naive strategy's upside while
+reducing its exposure to common factor moves.
+
+
+%look into the below more: 
+
+Essentially, we are keeping each of the two strategies exactly the
+same. All we are doing is constructing both portfolios separately
+and then combining their stock weights:
+\[
+    \mathbf{w}_t^{\mathrm{hybrid}}
+    = \lambda\,\mathbf{w}_t^{\mathrm{naive}}
+    + (1-\lambda)\,\mathbf{w}_t^{\mathrm{hedged}}.
+\]
+
+Our parameter that we have the freedom to change is ,
+which determines the mix of the two portfolios in our hybrid model.
+We test =0.30, 0.50, and 0.70. Note that
+wtnaive contains the weights we have determined
+for each stock based on our naive criteria, and
+wthedged contains the weights we have determined
+for each stock based on our hedging criteria.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{50percentnaive_50hedged.png}
+    \caption{50 percent naive and 50 percent hedged}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{30percentnaive.png}
+    \caption{30 percent Naive + 70 percent hedged strategy}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{70percentnaive_30percenthedged.png}
+    \caption{70 percent naive and 30 hedged }
+    \label{fig:placeholder}
+\end{figure}
+
+\paragraph{Volatility-weighted hybrid residual snapback.}
+
+Note that in the fixed-weight hybrid strategies, we are supposed to choose a value of 
+and keep this parameter the same throughout the trading horizon. Note that this may not be the ideal way to construct this strategy. For example, if we are in an uncertain time where stocks will tend to move around a lot, then it is better to have a portfolio that is more hedged to these risks. However, if we believe that stocks have lower volatility and that the tail risk of a particular asset class/sector/principle component dropping sharply in value, we are willing to take a more aggressive holding of stocks. 
+
+We plan on changing this parameter depending on the volatility of the stocks. 
+
+The first thing that we do is we calculate an equal-weight market return by averaging stock returns across our entire csv file for each day. (Essentially we calculate the return of the  equal weight market portfolio). Then, we can also estimate the sample standard deviation of these returns based off a specific set of returns. Thus, to estimate daily market volatility for each date t, we measure the sample standard deviation of these returns over the trailing 30 trading days. Note that this estimate uses only returns that are available by day t. 
+
+After we do this, we let the variable pt[0,1] be the
+resulting historical percentile rank of volatility. For example, if this is the lowest volatility in all of the history, then we would let pt be 0. However, if this was a the highest volatility, then we would let pt be 1. 
+
+We will now use this pt value as the weight of our portfolio that we would like to have in the fully hedged portfolio. In other words, the weight on the naive portfolio is t=1-pt. 
+
+Notice that the following hedged allocation for the weights are: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{volatility_allocation.png}
+    \caption{Weight allocation based off volatility}
+    \label{fig:placeholder}
+\end{figure}
+
+Although this graph looks pretty good, something to notice is that at the beggining of the timeline, we are alternative from 0 percent to 100 percent in the weights. This is because the rank is very sensitive to the few data points that we have. For example, at the beggining of this process we would have a sparse amount of data (for example the first data point is both the lowest and the highest volatility seen yet, so it is hard to factor this information into the model). 
+
+
+To avoid this problem of letting a small number of early observations drive the allocation, we can use a symmetric Laplace smoothing to our weight allocation. 
+Before each weekly re balance, we compare the current estimate of volatility with all earlier 30-day volatility estimates. 
+We define the following variables: nt
+be the number of earlier readings and kt be the number
+below the current reading, with ties counting as 1/2. 
+
+Then, we will add 126 pseudo-readings on each side of our current estimate. This gives us the following weight on the hedged portfolio:
+\[
+    \widetilde p_t = \frac{k_t+126}{n_t+252}.
+\]
+
+Note that now, with no earlier readings, the rule starts at a 50/50 mix. The starting mix receives weight of 252/(nt+252), so its "bias" decreases as more observations accumulate. For example, with 252 earlier readings, a raw volatility percentile of 90\% becomes a hedge weight of 70\%, halfway between the raw percentile and the 50\% starting weight.
+
+The final portfolio allocates $\widetilde p_t$ to the fully hedged
+portfolio and $1-\widetilde p_t$ to the naive portfolio:
+\[
+    \mathbf{w}_t^{\mathrm{dynamic}}
+    =
+    (1-\widetilde p_t)\mathbf{w}_t^{\mathrm{naive}}
+    +
+    \widetilde p_t\mathbf{w}_t^{\mathrm{hedged}}.
+\]
+
+Below is an image depicting the new weight allocation graph: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{updated_vol_weights.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{error_mean_.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}
+
+
+
+
+\end{document}
+
+

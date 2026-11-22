@@ -88,7 +88,7 @@ def covariance_pca(returns: np.ndarray, num_components: int) -> CovariancePCA:
         which="LM",
         tol=1e-10,
     )
-    order = np.argsort(eigenvalues, descending=True)
+    order = np.argsort(-eigenvalues)
 
     return CovariancePCA(
         means=means,

@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 from typing import Any
 import numpy as np
+from scipy.optimize import LinearConstraint, minimize
 from src.data import DailyReturns
 from src.strategies.strategy import Strategy
 
@@ -10,6 +11,7 @@ class ResidualSnapback(Strategy):
     volatility_days = 60
     score_threshold = -2.0
     max_positions = 20
+    max_hedged_positions_per_side = 40
 
     def __init__(
         self,
@@ -64,61 +66,87 @@ class ResidualSnapback(Strategy):
         selected = candidates[ranked[scores[ranked] <= self.score_threshold]]
         if selected.size:
             target[selected] = 1.0 / selected.size
-            if self.dynamic_vol:
-                original_fraction = self._original_fraction_by_date.get(timestamp, 1.0)
-            elif self.hybrid:
-                original_fraction = self.hybrid_parameter
-            elif self.hedge_out_components:
-                original_fraction = 0.0
-            else:
-                original_fraction = 1.0
-            if original_fraction < 1.0:
-                hedged = self._hedged_weights(
-                    target[selected], history[-1].factor_loadings, selected
-                )
-                target[selected] = (
-                    original_fraction * target[selected]
-                    + (1.0 - original_fraction) * hedged
-                )
-        return target
+
+        if self.dynamic_vol:
+            original_fraction = self._original_fraction_by_date.get(timestamp, 0.5)
+        elif self.hybrid:
+            original_fraction = self.hybrid_parameter
+        elif self.hedge_out_components:
+            original_fraction = 0.0
+        else:
+            original_fraction = 1.0
+
+        if original_fraction == 1.0:
+            return target
+        hedged = self._hedged_weights(candidates, scores, history[-1].factor_loadings, target.size)
+        return original_fraction * target + (1.0 - original_fraction) * hedged
 
     def _volatility_allocations(self, daily_returns: DailyReturns) -> dict[np.datetime64, float]:
         window = 30
-        min_history = 252
+        prior_per_side = 126
         allocations = {}
-        if len(daily_returns.dates) < window + min_history:
+        if len(daily_returns.dates) < window:
             return allocations
 
         market_returns = daily_returns.returns.mean(axis=1)
         trailing_returns = np.lib.stride_tricks.sliding_window_view(market_returns, window)
         volatility = trailing_returns.std(axis=1, ddof=1)
         for index, timestamp in enumerate(daily_returns.dates[window - 1:]):
-            if timestamp not in self.rebalance_dates or index < min_history:
+            if timestamp not in self.rebalance_dates:
                 continue
             earlier = volatility[:index]
             current = volatility[index]
             below = np.count_nonzero(earlier < current)
             tied = np.count_nonzero(earlier == current)
             # Give tied readings half weight in the historical percentile rank.
-            hedged_fraction = (below + 0.5 * tied) / index
+            hedged_fraction = (below + 0.5 * tied + prior_per_side) / (
+                index + 2 * prior_per_side
+            )
             allocations[timestamp] = 1.0 - hedged_fraction
         return allocations
 
-    @staticmethod
     def _hedged_weights(
-        weights: np.ndarray, loadings: np.ndarray | None, selected: np.ndarray
+        self, candidates: np.ndarray, scores: np.ndarray,
+        loadings: np.ndarray | None, num_stocks: int,
     ) -> np.ndarray:
-        if loadings is None or not np.all(np.isfinite(loadings[:, selected])):
-            return np.zeros_like(weights)
+        target = np.zeros(num_stocks)
+        if loadings is None:
+            return target
 
-        # Project equal weights onto the null space of the selected stocks' loadings.
-        exposures = loadings[:, selected]
-        _, singular_values, right_vectors = np.linalg.svd(exposures, full_matrices=True)
-        tolerance = np.finfo(exposures.dtype).eps * max(exposures.shape)
-        rank = np.count_nonzero(singular_values > tolerance * singular_values[0])
-        null_space = right_vectors[rank:]
-        hedged = null_space.T @ (null_space @ weights)
-        gross = np.abs(hedged).sum()
-        if gross <= tolerance:
-            return np.zeros_like(weights)
-        return hedged / gross
+        valid = np.isfinite(scores) & np.all(np.isfinite(loadings[:, candidates]), axis=0)
+        candidates, scores = candidates[valid], scores[valid]
+        count = self.max_hedged_positions_per_side
+        long_order = np.argsort(scores, kind="stable")
+        short_order = np.argsort(-scores, kind="stable")
+        longs = candidates[long_order[scores[long_order] < 0][:count]]
+        shorts = candidates[short_order[scores[short_order] > 0][:count]]
+        if not longs.size or not shorts.size:
+            return target
+
+        selected = np.concatenate((longs, shorts))
+        signs = np.repeat([1.0, -1.0], [longs.size, shorts.size])
+        desired = np.repeat([0.5 / longs.size, 0.5 / shorts.size], [longs.size, shorts.size])
+        exposures = loadings[:, selected] * signs
+        _, singular, vectors = np.linalg.svd(exposures, full_matrices=False)
+        tolerance = np.finfo(float).eps * max(exposures.shape) * singular[0]
+        basis = vectors[singular > tolerance]
+        # Optimize nonnegative magnitudes, keeping the score-implied signs fixed.
+        constraints = np.vstack((np.ones(selected.size), basis))
+        rhs = np.zeros(len(constraints))
+        rhs[0] = 1.0
+
+        def objective(magnitudes: np.ndarray) -> tuple[float, np.ndarray]:
+            difference = magnitudes - desired
+            return 0.5 * float(difference @ difference), difference
+
+        solution = minimize(
+            objective, desired, jac=True, method="SLSQP", bounds=[(0, 1)] * selected.size,
+            constraints=LinearConstraint(constraints, rhs, rhs),
+            options={"ftol": 1e-10},
+        )
+        magnitudes = np.clip(solution.x, 0, 1)
+        if solution.success and np.max(np.abs(constraints @ magnitudes - rhs)) <= 1e-8:
+            weights = signs * magnitudes
+            if np.max(np.abs(loadings[:, selected] @ weights)) <= 1e-8:
+                target[selected] = weights
+        return target

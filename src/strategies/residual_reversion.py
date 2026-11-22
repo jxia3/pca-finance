@@ -7,8 +7,7 @@ from src.strategies.strategy import Strategy
 
 
 def neutral_weights(
-    target: np.ndarray, betas: np.ndarray, max_weight: float = 0.02
-) -> np.ndarray:
+    target: np.ndarray, betas: np.ndarray, max_weight: float = 0.02) -> np.ndarray:
     """Project desired weights onto neutrality and sign bounds via a small dual.
 
     Positions may only shrink, preserving eligibility, direction and gross limits.
