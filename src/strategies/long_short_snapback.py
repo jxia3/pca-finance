@@ -27,18 +27,11 @@ class LongShortSnapback(ResidualSnapback):
             return positions
 
         target = np.zeros_like(positions)
-        history = model_outputs[self.factor_name]
-        required_days = self.volatility_days + self.signal_days
-        if len(history) < required_days:
+        scored = self._scores(model_outputs)
+        if scored is None:
             return target
-
-        residuals = np.stack([output.residuals for output in history[-required_days:]])
-        valid = np.flatnonzero(np.all(np.isfinite(residuals), axis=0))
-        volatility = np.std(residuals[:-self.signal_days, valid], axis=0, ddof=1)
-        varying = volatility > 0
-        candidates = valid[varying]
-        recent = residuals[-self.signal_days:, candidates].sum(axis=0)
-        scores = recent / (volatility[varying] * np.sqrt(self.signal_days))
+        candidates, scores = scored
+        history = model_outputs[self.factor_name]
 
         if self.dynamic_vol:
             original_fraction = self._original_fraction_by_date.get(timestamp, 0.5)
@@ -59,6 +52,20 @@ class LongShortSnapback(ResidualSnapback):
                 scores, candidates, history[-1].betas, positions.size
             )
         return target
+
+    def _scores(self, model_outputs: dict[str, Any]) -> tuple[np.ndarray, np.ndarray] | None:
+        # Stocks with a valid score and their scores, None before enough history
+        history = model_outputs[self.factor_name]
+        required_days = self.volatility_days + self.signal_days
+        if len(history) < required_days:
+            return None
+        residuals = np.stack([output.residuals for output in history[-required_days:]])
+        valid = np.flatnonzero(np.all(np.isfinite(residuals), axis=0))
+        volatility = np.std(residuals[:-self.signal_days, valid], axis=0, ddof=1)
+        varying = volatility > 0
+        candidates = valid[varying]
+        recent = residuals[-self.signal_days:, candidates].sum(axis=0)
+        return candidates, recent / (volatility[varying] * np.sqrt(self.signal_days))
 
     def _long_short_weights(
         self, scores: np.ndarray, candidates: np.ndarray, loadings: np.ndarray | None, num_stocks: int
@@ -115,3 +122,21 @@ class LongShortSnapback(ResidualSnapback):
             hedged_fraction = (below + self.pseudo_readings) / (index + 2 * self.pseudo_readings)
             allocations[timestamp] = 1.0 - hedged_fraction
         return allocations
+
+
+class CumulativeSnapback(LongShortSnapback):
+    """Snapback trading rules applied to the cumulative residual score.
+
+    The score is today's running sum of residuals relative to its previous levels (ResidualSignalModel),
+    so a stock that has drifted below the factor model over weeks qualifies even if its last three days
+    were in line with the model.
+    """
+
+    def __init__(self, factor_name: str, signal_name: str, *args: Any, **kwargs: Any) -> None:
+        super().__init__(factor_name, *args, **kwargs)
+        self.signal_name = signal_name
+
+    def _scores(self, model_outputs: dict[str, Any]) -> tuple[np.ndarray, np.ndarray] | None:
+        score = model_outputs[self.signal_name][-1].score
+        candidates = np.flatnonzero(np.isfinite(score))
+        return (candidates, score[candidates]) if candidates.size else None

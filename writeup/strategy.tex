@@ -176,6 +176,13 @@ With no earlier readings the mix starts at 50/50, and the starting mix gets weig
 \label{fig:hedge-allocation}
 \end{figure}
 
+\paragraph{Cumulative residual score.} The snapback score only looks at the last three days. A stock that drifts below the factor model for weeks but then trades in line with it for three days has a snapback score near zero, even though its cumulative shortfall may be large. The cumulative score captures such drifts. We add each day's residual to a running total and compare today's level with its previous 60 levels:
+\[
+    X_{i,t} = X_{i,t-1} + \epsilon_{i,t}, \qquad
+    z_{i,t} = \frac{X_{i,t} - \overline{X}^{(60)}_{i,t}}{s^{(60)}_{i,t}},
+\]
+where $\overline{X}^{(60)}_{i,t}$ and $s^{(60)}_{i,t}$ are the mean and sample standard deviation of $X_{i,t-60}, \dots, X_{i,t-1}$. The 60 days provide the reference level and scale, while the running total itself carries forward from day to day. A negative score means the running total is unusually far below its recent levels, and the hypothesis is again that unusually low levels rise and unusually high levels fall. The two scores are related but distinct: across all stocks and days their correlation is 0.47. We trade the cumulative score in two ways. First, with exactly the snapback rules above (weekly, long only or the 40/40 long-short book, cutoff $\pm 2$), using the same lagged factor model, so the only change is the score. Second, as a \emph{daily rank book}, the version developed on our group's residual-reversion branch: every day it buys the 20\% of stocks with the lowest scores and shorts the 20\% with the highest, with at most 2\% in any stock, then shrinks positions until the book is both dollar and factor neutral. This version uses an unlagged regression refit every five days, as on that branch.
+
 \begin{table}[H]
 \centering
 \caption{Residual snapback variants (out-of-sample, April 2002--2023).}
@@ -196,6 +203,11 @@ Dynamic volatility mix & 0.96 & 1.39 & 11.3\% & 11.9\% & 0.31 & $-27.8\%$ \\
 \multicolumn{7}{l}{\emph{Earlier versions, for comparison}} \\
 Projection hedge of the long picks & 0.83 & 1.23 & 10.2\% & 12.7\% & 0.12 & $-28.7\%$ \\
 Dynamic mix, unsmoothed, projection hedge & 1.00 & 1.33 & 13.4\% & 13.5\% & 0.33 & $-32.8\%$ \\
+\midrule
+\multicolumn{7}{l}{\emph{Cumulative residual score}} \\
+Long only (snapback rules) & 1.18 & 1.36 & 28.9\% & 23.9\% & 1.08 & $-53.2\%$ \\
+Long-short (snapback rules) & 1.76 & 2.36 & 12.6\% & 6.9\% & 0.07 & $-10.4\%$ \\
+Daily rank book & 3.01 & 4.41 & 9.5\% & 3.0\% & 0.05 & $-8.3\%$ \\
 \bottomrule
 \end{tabular}
 \\[4pt]
@@ -207,8 +219,40 @@ The long-only default earns 19.1\% a year, but its Sharpe ratio after fees (0.82
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/snapback_variants.pdf}
-\caption{Residual snapback variants (Table~\ref{tab:snapback-variants}): Sharpe ratio with 5bp fees against market beta. The earlier projection hedge (gray, hollow) and the two market-neutral strategies are shown for reference.}
+\caption{Residual snapback variants (Table~\ref{tab:snapback-variants}): Sharpe ratio with 5bp fees against market beta. Hollow markers are long-short books. The earlier projection hedge (gray) and the two market-neutral strategies are shown for reference. The daily rank book (Sharpe 3.01) is off scale.}
 \label{fig:snapback-variants}
+\end{figure}
+
+Replacing the snapback score with the cumulative score improves both versions substantially, with nothing else changed: the long-only Sharpe ratio after fees rises from 0.82 to 1.18 and the long-short one from 0.76 to 1.76, above pairs trading's 1.17. The cumulative score also trades less (about 80--87 times a year rather than 100), so the long-short version breaks even at 20bp rather than 11bp. Both improvements hold in the 2018--2023 holdout (Table~\ref{tab:delay}). The daily rank book reaches a Sharpe ratio of 3.01 after fees (2.70 from 2004, reproducing the residual-reversion branch's result exactly).
+
+Results this strong call for a check of how they would be executed. All our backtests trade at the closing price of the day the signal is computed. If part of a stock's residual on that day is noise in the closing price, such as a trade at the bid or the ask, the price partly reverts the next day. Trading at that same close then captures a reversal that could not be traded in practice. Table~\ref{tab:delay} repeats each version with every trade executed one day late. The daily rank book collapses from 3.01 to 0.25: almost all of its profit comes from the first day after the signal. The original snapback long-short book falls from 0.76 to 0.16. The weekly cumulative versions are the most robust, keeping a Sharpe ratio of 0.97 (long only) and 1.07 (long-short) when executed a day late. Their edge comes from a reversal that builds over weeks, not from the next day's bounce.
+
+\begin{table}[H]
+\centering
+\caption{Execution delay: Sharpe ratios (5bp fees) when trading at the signal's close and one day later.}
+\label{tab:delay}
+\begin{tabular}{lrrrrr}
+\toprule
+& \multicolumn{2}{c}{Full period} & \multicolumn{2}{c}{At the signal's close} & \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Version & At close & One day late & 2002--2017 & 2018--2023 & Break-even fee \\
+\midrule
+Snapback score, long only & 0.82 & 0.65 & 0.91 & 0.62 & 25bp \\
+Snapback score, long-short & 0.76 & 0.16 & 0.85 & 0.59 & 11bp \\
+Cumulative score, long only & 1.18 & 0.97 & 1.27 & 0.97 & 37bp \\
+Cumulative score, long-short & 1.76 & 1.07 & 2.03 & 1.26 & 20bp \\
+Daily rank book & 3.01 & 0.25 & 3.93 & 1.43 & 16bp \\
+\bottomrule
+\end{tabular}
+\\[4pt]
+\small Each version from its first trade (April 2002). The selection and holdout columns therefore differ slightly from Table~\ref{tab:holdout}, which uses a common period from March 2004.
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/execution_delay.pdf}
+\caption{Execution delay (Table~\ref{tab:delay}): Sharpe ratio with 5bp fees when trading at the signal's close (filled) and one day later (hollow).}
+\label{fig:execution-delay}
 \end{figure}
 
 \begin{figure}[H]
@@ -596,19 +640,42 @@ $s > 3$ & $-18.3$ & $-42.8$ & $-39.4$ & 59,500 \\
 
 \begin{table}[H]
 \centering
-\caption{Return per one standard deviation of signal.}
-\label{tab:calibration-slopes}
-\begin{tabular}{lrrrrrr}
+\caption{Cumulative residual score: mean excess return by score (bp).}
+\label{tab:calibration-cumulative}
+\begin{tabular}{lrrrr}
 \toprule
-& \multicolumn{2}{c}{Treynor--Black} & \multicolumn{2}{c}{Pairs trading} & \multicolumn{2}{c}{Residual snapback} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
-Horizon & Slope & $t$-stat & Slope & $t$-stat & Slope & $t$-stat \\
+Cumulative score $z_i$ & Next 1 day & Next 5 days & Next 20 days & Observations \\
 \midrule
-1 day & 1.1bp & 5.2 & 9.6bp & 13.3 & 6.0bp & 21.6 \\
-5 days & 3.4bp & 3.4 & 19.3bp & 7.3 & 11.4bp & 13.3 \\
-20 days & 7.7bp & 1.8 & 39.0bp & 4.7 & 17.1bp & 10.7 \\
+$z < -3$ & 19.8 & 60.5 & 86.3 & 83,025 \\
+$-3$ to $-2$ & 8.8 & 18.7 & 32.2 & 408,691 \\
+$-2$ to $-1$ & 3.9 & 8.5 & 17.8 & 1,282,369 \\
+$-1$ to $0$ & 0.8 & 1.7 & 4.7 & 1,522,584 \\
+$0$ to $1$ & $-0.7$ & $-2.2$ & $-3.6$ & 1,536,338 \\
+$1$ to $2$ & $-4.2$ & $-8.9$ & $-19.7$ & 1,262,177 \\
+$2$ to $3$ & $-8.5$ & $-19.6$ & $-38.0$ & 397,668 \\
+$z > 3$ & $-19.4$ & $-45.7$ & $-56.9$ & 83,824 \\
 \bottomrule
 \end{tabular}
+\\[4pt]
+\small Same stocks, days and target as Table~\ref{tab:calibration-snap}, using the lagged factor model's residuals. Observations are for the next-day horizon.
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Return per one standard deviation of signal.}
+\label{tab:calibration-slopes}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+& \multicolumn{2}{c}{Treynor--Black} & \multicolumn{2}{c}{Pairs trading} & \multicolumn{2}{c}{Snapback score} & \multicolumn{2}{c}{Cumulative score} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+Horizon & Slope & $t$-stat & Slope & $t$-stat & Slope & $t$-stat & Slope & $t$-stat \\
+\midrule
+1 day & 1.1bp & 5.2 & 9.6bp & 13.3 & 6.0bp & 21.6 & 5.0bp & 18.1 \\
+5 days & 3.4bp & 3.4 & 19.3bp & 7.3 & 11.4bp & 13.3 & 11.1bp & 10.9 \\
+20 days & 7.7bp & 1.8 & 39.0bp & 4.7 & 17.1bp & 10.7 & 20.6bp & 7.4 \\
+\bottomrule
+\end{tabular}}
 \\[4pt]
 \small The pairs slope is per pair spread; the Treynor--Black and snapback slopes are per stock.
 \end{table}
@@ -616,6 +683,8 @@ Horizon & Slope & $t$-stat & Slope & $t$-stat & Slope & $t$-stat \\
 The pairs signal is very well calibrated (Figures~\ref{fig:calibration-tb} and~\ref{fig:calibration-pairs}). Future spread returns fall steadily with the z-score in every bucket and at every horizon, and the relationship is highly significant ($t = 13.3$ at one day). The Treynor--Black signal is significant at short horizons ($t = 5.2$) but only partly monotonic. Its predictive power is concentrated in the stocks it shorts: the highest-alpha decile underperforms strongly and persistently. The lowest-alpha stocks it buys most do not outperform, and at 20 days they underperform. In other words, high past alpha reverses, but very low past alpha does not. The edge also fades with horizon, consistent with the strategy's need for daily rebalancing.
 
 The snapback score is as well calibrated as the pairs signal and the most statistically significant of the three (Figure~\ref{fig:calibration-snap}). Future excess returns fall monotonically across all eight score buckets at every horizon, and the slope has the highest $t$-statistic of any signal (21.6 at one day, still 10.7 at 20 days), helped by the much larger number of observations. Stocks in the buy zone ($s \le -2$) beat the cross-section by 26--47bp over the following week. The relationship is symmetric: stocks with unusually \emph{positive} residuals underperform just as reliably, which is what the fully hedged version's short leg exploits. Because the signal is so well calibrated, the strategy's modest Sharpe ratio comes from how the signal is traded (the market exposure of the long-only version and the heavy turnover), not from the signal itself.
+
+The cumulative score is also monotonic in every bucket at every horizon (Table~\ref{tab:calibration-cumulative}). Its slope is slightly smaller than the snapback score's at one day (5.0bp vs.\ 6.0bp) but larger at 20 days (20.6bp vs.\ 17.1bp), and its most extreme buckets have larger returns ($+60$bp over five days for $z < -3$, against $+47$bp for the snapback score). This fits the execution-delay results: the cumulative score's predictive power lasts longer, so less of it is lost when trading weekly or a day late.
 
 \begin{figure}[H]
 \centering
@@ -634,14 +703,14 @@ The snapback score is as well calibrated as the pairs signal and the most statis
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.65\textwidth]{figures/calibration_snap.pdf}
-\caption{Calibration of residual snapback: next 5-day excess return by snapback score.}
+\caption{Calibration of residual snapback (Tables~\ref{tab:calibration-snap} and~\ref{tab:calibration-cumulative}): next 5-day excess return by snapback score (solid) and by cumulative residual score (hatched).}
 \label{fig:calibration-snap}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.65\textwidth]{figures/calibration_slopes.pdf}
-\caption{Newey--West $t$-statistic of each signal's slope by horizon (Table~\ref{tab:calibration-slopes}). The dashed line marks $t = 2$. The $t$-statistics are comparable across strategies even though the slopes are in different units.}
+\caption{Newey--West $t$-statistic of each signal's slope by horizon (Table~\ref{tab:calibration-slopes}); the cumulative residual score is dashed. The gray dashed line marks $t = 2$. The $t$-statistics are comparable across strategies even though the slopes are in different units.}
 \label{fig:calibration-slopes}
 \end{figure}
 
@@ -769,6 +838,6 @@ $K$ & No fees & 5bp & No fees & No fees & 5bp & No fees \\
 
 \section{Conclusion}
 
-All three PCA strategies are profitable out-of-sample and after transaction costs, but they differ in robustness. Contrarian Treynor--Black shows that estimated alphas reverse rather than persist. It is factor neutral by construction (market beta 0.04) and performs best in crises, but it is concentrated in 2008--09, sensitive to trading costs, and has weakened since 2013. PCA pairs trading is the most robust strategy: it is profitable in 21 of 22 years, well calibrated, insensitive to its parameters, and stronger in the 2018--2023 holdout than before it. Residual snapback has the strongest signal of the three, with stocks that fall well short of the factor model's prediction reliably outperforming over the next one to twenty days. Its implementation leaves much of that signal on the table. The long-only version mostly earns the market return (beta 1.08, the same Sharpe ratio as an equal-weight benchmark), and the fully hedged long-short version, comparable to the other two strategies, has a Sharpe ratio of 1.38 before fees but trades about 100 times a year and gives up almost half of its edge to costs. Both weaken in the holdout, and the hedged version's edge has faded since 2013. Finally, the contrast between in-sample and out-of-sample results shows why rolling estimation matters. Estimating the model on the full sample does not merely inflate performance; for Treynor--Black it reverses the conclusion about which way to trade.
+All three PCA strategies are profitable out-of-sample and after transaction costs, but they differ in robustness. Contrarian Treynor--Black shows that estimated alphas reverse rather than persist. It is factor neutral by construction (market beta 0.04) and performs best in crises, but it is concentrated in 2008--09, sensitive to trading costs, and has weakened since 2013. PCA pairs trading is the most robust strategy: it is profitable in 21 of 22 years, well calibrated, insensitive to its parameters, and stronger in the 2018--2023 holdout than before it. Residual snapback has the strongest signal of the three, with stocks that fall well short of the factor model's prediction reliably outperforming over the next one to twenty days. Its implementation leaves much of that signal on the table. The long-only version mostly earns the market return (beta 1.08, the same Sharpe ratio as an equal-weight benchmark), and the fully hedged long-short version, comparable to the other two strategies, has a Sharpe ratio of 1.38 before fees but trades about 100 times a year and gives up almost half of its edge to costs. Both weaken in the holdout, and the hedged version's edge has faded since 2013. Measuring the shortfall cumulatively rather than over three days helps most: with the same trading rules, the cumulative residual score raises the long-short Sharpe ratio after fees to 1.76 (1.26 in the holdout) and keeps 1.07 when trades are executed a day late. A daily version of the same signal reaches 3.01, but it collapses to 0.25 with a one-day delay. Most of its profit comes from next-day price reversals that a real trader could probably not capture. Finally, the contrast between in-sample and out-of-sample results shows why rolling estimation matters. Estimating the model on the full sample does not merely inflate performance; for Treynor--Black it reverses the conclusion about which way to trade.
 
 \end{document}

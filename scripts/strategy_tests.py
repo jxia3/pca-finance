@@ -3,6 +3,7 @@ import os
 import pickle
 import sys
 from dataclasses import dataclass
+from types import SimpleNamespace
 from typing import Any, Callable
 
 import numpy as np
@@ -15,7 +16,9 @@ from src.models.pairs import PairSignals, PairsModel
 from src.models.pca import CorrelationPCA, PCAModel, correlation_pca
 from src.modules.simulator import PortfolioHistory, Simulator
 from src.strategies.alpha_quintile import AlphaQuintile
-from src.strategies.long_short_snapback import LongShortSnapback
+from src.models.residual_signal import ResidualSignalModel
+from src.strategies.long_short_snapback import CumulativeSnapback, LongShortSnapback
+from src.strategies.residual_reversion import ResidualReversion
 from src.strategies.pairs_trading import PairsTrading
 from src.strategies.residual_snapback import ResidualSnapback
 from src.strategies.strategy import Strategy
@@ -108,6 +111,52 @@ class ResidualRecorder(Strategy):
         self.residuals[self.day] = model_outputs[self.inner.factor_name][-1].residuals
         self.day += 1
         return self.inner.update(timestamp, model_outputs, positions)
+
+class ScoreRecorder(Strategy):
+    inner: Strategy
+    signal_name: str
+    scores: np.ndarray
+    day: int
+
+    # Records the cumulative residual score of every stock on every day for calibration
+    def __init__(self, inner: Strategy, signal_name: str, num_days: int, num_stocks: int) -> None:
+        self.inner = inner
+        self.signal_name = signal_name
+        self.scores = np.full((num_days, num_stocks), np.nan)
+        self.day = 0
+
+    def update(self, timestamp: np.datetime64, model_outputs: dict[str, Any], positions: np.ndarray) -> np.ndarray:
+        self.scores[self.day] = model_outputs[self.signal_name][-1].score
+        self.day += 1
+        return self.inner.update(timestamp, model_outputs, positions)
+
+class Delayed(Strategy):
+    inner: Strategy
+    pending: np.ndarray | None
+
+    # Executes each target one day late: the target chosen at day t's close is traded at day t+1's close
+    def __init__(self, inner: Strategy) -> None:
+        self.inner = inner
+        self.pending = None
+
+    def update(self, timestamp: np.datetime64, model_outputs: dict[str, Any], positions: np.ndarray) -> np.ndarray:
+        # Strategies return positions itself to hold, a held day passes the pending target on and then holds
+        target = self.inner.update(timestamp, model_outputs, positions)
+        result = positions if self.pending is None else self.pending
+        self.pending = None if target is positions else target
+        return result
+
+class StocksByComponents:
+    factor_name: str
+
+    # ResidualReversion expects betas as stocks by components, the merged factor model returns components by stocks
+    def __init__(self, factor_name: str) -> None:
+        self.factor_name = factor_name
+
+    def update(self, timestamp: np.datetime64, returns: np.ndarray, model_outputs: dict[str, Any]) -> SimpleNamespace:
+        output = model_outputs[self.factor_name][-1]
+        return SimpleNamespace(betas=output.betas.T, factor_intercept=output.factor_intercept,
+                               residuals=output.residuals)
 
 class EqualWeightBenchmark(Strategy):
     rebalance_dates: frozenset
@@ -346,7 +395,40 @@ def snapback_job(daily_returns: DailyReturns) -> tuple[list[ModelEntry], dict[st
     # Earlier versions, for comparison: projection hedge of the long picks, raw (unsmoothed) volatility percentile
     strategies["cmp|projection hedge|"] = snapback("lagged", daily_returns, hedged=True, projection=True)
     strategies["cmp|dynamic unsmoothed|"] = snapback("lagged", daily_returns, dynamic=True, projection=True)
-    return snapback_models(), strategies
+    # Cumulative residual score (running sum of residuals vs. its previous 60 levels), snapback trading rules
+    dates = weekly_rebalance_dates(daily_returns.dates)
+    strategies["cmp|cumulative long only|"] = ScoreRecorder(
+        CumulativeSnapback("lagged", "cumulative", dates), "cumulative", num_days, num_stocks)
+    strategies["cmp|cumulative long-short|"] = CumulativeSnapback("lagged", "cumulative", dates,
+                                                                 hedge_out_components=True)
+    models = snapback_models() + [ModelEntry("cumulative", ResidualSignalModel("lagged", 60))]
+    return models, strategies
+
+def delay_job(daily_returns: DailyReturns) -> tuple[list[ModelEntry], dict[str, Strategy]]:
+    # Weekly snapback rules executed one day late, for the snapback and cumulative scores
+    dates = weekly_rebalance_dates(daily_returns.dates)
+    strategies: dict[str, Strategy] = {
+        "cmp|snapback long only delayed|": Delayed(snapback("lagged", daily_returns)),
+        "cmp|snapback long-short delayed|": Delayed(snapback("lagged", daily_returns, hedged=True)),
+        "cmp|cumulative long only delayed|": Delayed(CumulativeSnapback("lagged", "cumulative", dates)),
+        "cmp|cumulative long-short delayed|": Delayed(CumulativeSnapback("lagged", "cumulative", dates,
+                                                                         hedge_out_components=True)),
+    }
+    return snapback_models() + [ModelEntry("cumulative", ResidualSignalModel("lagged", 60))], strategies
+
+def reversion_job(daily_returns: DailyReturns) -> tuple[list[ModelEntry], dict[str, Strategy]]:
+    # The residual-reversion branch's baseline: unlagged regression refit every 5 days, daily 20%/20% rank book
+    models = [
+        ModelEntry("pca", PCAModel(5, PCA_WINDOW, 5)),
+        ModelEntry("factor", FactorModel("pca", 5, SNAPBACK_WINDOW, 5)),
+        ModelEntry("signal", ResidualSignalModel("factor", 60)),
+        ModelEntry("factor_nk", StocksByComponents("factor")),
+    ]
+    strategies: dict[str, Strategy] = {
+        "cmp|daily rank|": ResidualReversion("factor_nk", "signal"),
+        "cmp|daily rank delayed|": Delayed(ResidualReversion("factor_nk", "signal")),
+    }
+    return models, strategies
 
 def snapback_hedged_job(daily_returns: DailyReturns) -> tuple[list[ModelEntry], dict[str, Strategy]]:
     strategies: dict[str, Strategy] = {
@@ -391,11 +473,13 @@ JOBS: dict[str, Callable[[DailyReturns], tuple[list[ModelEntry], dict[str, Strat
     "snapback": snapback_job,
     "snapback_hedged": snapback_hedged_job,
     "snapback_window": snapback_window_job,
+    "reversion": reversion_job,
+    "delay": delay_job,
     **{f"snapk{k}": snapback_k_job(k) for k in K_VALUES},
 }
 # Slowest jobs first so the pool stays busy
 JOB_ORDER = ["pairs_model", "k20", "k15", "base", "pca_window", "k10", "k8", "alpha_window", "k5", "k3", "k2", "k1",
-             "development", "snapback", "snapback_hedged", "snapback_window", *(f"snapk{k}" for k in reversed(K_VALUES))]
+             "development", "reversion", "delay", "snapback", "snapback_hedged", "snapback_window", *(f"snapk{k}" for k in reversed(K_VALUES))]
 
 def run_job(job: str) -> dict[str, Any]:
     daily_returns = data.load_daily_returns()
@@ -418,6 +502,8 @@ def run_job(job: str) -> dict[str, Any]:
             output["pair_z_scores"] = strategy.z_scores
         elif isinstance(strategy, ResidualRecorder):
             output["snapback_residuals"] = strategy.residuals
+        elif isinstance(strategy, ScoreRecorder):
+            output["cumulative_scores"] = strategy.scores
     print(f"finished {job}", flush=True)
     return output
 
@@ -621,6 +707,14 @@ def report(results: dict[str, Any], daily_returns: DailyReturns) -> str:
         "Fully hedged snapback (long-short)": "snaph|base|",
         "Earlier version: projection hedge of the long picks": "cmp|projection hedge|",
         "Earlier version: dynamic mix, unsmoothed, projection hedge": "cmp|dynamic unsmoothed|",
+        "Cumulative score, long only": "cmp|cumulative long only|",
+        "Cumulative score, long-short": "cmp|cumulative long-short|",
+        "Cumulative score, daily 20%/20% rank book (residual-reversion branch)": "cmp|daily rank|",
+        "Same, executed one day late": "cmp|daily rank delayed|",
+        "Snapback long only, one day late": "cmp|snapback long only delayed|",
+        "Snapback long-short, one day late": "cmp|snapback long-short delayed|",
+        "Cumulative long only, one day late": "cmp|cumulative long only delayed|",
+        "Cumulative long-short, one day late": "cmp|cumulative long-short delayed|",
     }
     rows = []
     for label, name in variants.items():
@@ -651,6 +745,17 @@ def report(results: dict[str, Any], daily_returns: DailyReturns) -> str:
     positions = [len(s.growth) - s.start for s in hedged]
     out.append(f"Hedged runs trade from day {hedged[0].start} (long-short) and {hedged[1].start} (projection), "
                f"{positions[0]} and {positions[1]} days.\n")
+
+    rank = series["cmp|daily rank|"]
+    window = daily_returns.dates >= np.datetime64("2004-01-01")
+    after = window[1:] if len(window) > len(rank.growth) else window
+    out.append(f"Daily rank book from 2004-01-01, as on the residual-reversion branch: Sharpe (5bp) "
+               f"{sharpe(net_returns(rank, TRADE_FEE, after)):.2f}, "
+               f"turnover {np.mean(rank.turnover[rank.start:]):.1%} a day. For each variant, Sharpe 2002-"
+               f"{HOLDOUT_START - 1} / {HOLDOUT_START}-2023 (5bp): " + "; ".join(
+                   f"{label} {sharpe(net_returns(series[name], TRADE_FEE, selection)):.2f} / "
+                   f"{sharpe(net_returns(series[name], TRADE_FEE, holdout)):.2f}"
+                   for label, name in variants.items()) + "\n")
 
     out.append("## 1. Regime robustness\n")
     for key, label in names.items():
@@ -777,6 +882,22 @@ def report(results: dict[str, Any], daily_returns: DailyReturns) -> str:
     out.append(table(["Snapback score"] + [f"Next {h}d (bp)" for h in horizons], bucket_rows))
     out.append("\nThe strategy buys up to 20 of the lowest scores at or below -2, so returns should fall as the score rises.\n")
     out.append(table(["Horizon (days)", "Excess return per 1 s.d. of signal", "t-stat (Newey-West)"], slope_rows) + "\n")
+
+    out.append("### Cumulative residual score\n")
+    out.append("Signal = minus the cumulative residual score (today's running sum of lagged-model residuals relative to "
+               "its previous 60 levels), every stock and day. Same buckets and target as the snapback score.\n")
+    bucket_rows = [[label] for label in Z_LABELS]
+    slope_rows = []
+    for h in horizons:
+        buckets, slopes = snapback_calibration(results["cumulative_scores"], log_prices, h)
+        slope_rows.append([h, f"{np.mean(slopes) * 1e4:.2f}bp", f"{newey_west_t(slopes, h):.1f}"])
+        for index, selected in enumerate(buckets):
+            bucket_rows[index].append(f"{np.mean(selected) * 1e4:.1f} (n={len(selected):,})")
+    out.append(table(["Cumulative score"] + [f"Next {h}d (bp)" for h in horizons], bucket_rows) + "\n")
+    out.append(table(["Horizon (days)", "Excess return per 1 s.d. of signal", "t-stat (Newey-West)"], slope_rows) + "\n")
+    both = np.isfinite(scores) & np.isfinite(results["cumulative_scores"])
+    out.append(f"Correlation of the two scores across all stock-days: "
+               f"{np.corrcoef(scores[both], results['cumulative_scores'][both])[0, 1]:.2f}.\n")
 
     out.append("## 5. Holdout\n")
     out.append(f"Choices are made using only 2002-{HOLDOUT_START - 1}, then evaluated once on {HOLDOUT_START}-2023 "

@@ -14,6 +14,14 @@ Each variant from its own first trade (April 2002) to December 2023. Market beta
 | Fully hedged snapback (long-short) | 0.76 | 1.38 | 6.1% | 8.2% | 0.06 | -21.5% |
 | Earlier version: projection hedge of the long picks | 0.83 | 1.23 | 10.2% | 12.7% | 0.12 | -28.7% |
 | Earlier version: dynamic mix, unsmoothed, projection hedge | 1.00 | 1.33 | 13.4% | 13.5% | 0.33 | -32.8% |
+| Cumulative score, long only | 1.18 | 1.36 | 28.9% | 23.9% | 1.08 | -53.2% |
+| Cumulative score, long-short | 1.76 | 2.36 | 12.6% | 6.9% | 0.07 | -10.4% |
+| Cumulative score, daily 20%/20% rank book (residual-reversion branch) | 3.01 | 4.41 | 9.5% | 3.0% | 0.05 | -8.3% |
+| Same, executed one day late | 0.25 | 1.84 | 0.7% | 2.7% | 0.04 | -11.7% |
+| Snapback long only, one day late | 0.65 | 0.87 | 13.7% | 24.1% | 1.06 | -72.9% |
+| Snapback long-short, one day late | 0.16 | 0.83 | 0.9% | 7.6% | 0.04 | -22.0% |
+| Cumulative long only, one day late | 0.97 | 1.16 | 22.2% | 23.4% | 1.07 | -58.0% |
+| Cumulative long-short, one day late | 1.07 | 1.74 | 6.7% | 6.2% | 0.06 | -9.4% |
 | Contrarian Treynor-Black |  |  |  |  | 0.04 |  |
 | PCA pairs trading |  |  |  |  | 0.02 |  |
 
@@ -30,6 +38,8 @@ Each variant from its own first trade (April 2002) to December 2023. Market beta
 | Std of snapback score | 1.08 |
 
 Hedged runs trade from day 565 (long-short) and 565 (projection), 5472 and 5472 days.
+
+Daily rank book from 2004-01-01, as on the residual-reversion branch: Sharpe (5bp) 2.70, turnover 34.2% a day. For each variant, Sharpe 2002-2017 / 2018-2023 (5bp): Equal-weight benchmark (weekly) 0.91 / 0.61; Default snapback (long only) 0.91 / 0.62; Stricter cutoff (score <= -2.5) 0.60 / 0.83; Hybrid, 70% unhedged 0.97 / 0.66; Hybrid, 50% unhedged 1.01 / 0.69; Hybrid, 30% unhedged 1.05 / 0.71; Dynamic volatility mix 1.15 / 0.51; Fully hedged snapback (long-short) 0.85 / 0.59; Earlier version: projection hedge of the long picks 0.94 / 0.53; Earlier version: dynamic mix, unsmoothed, projection hedge 1.16 / 0.55; Cumulative score, long only 1.27 / 0.97; Cumulative score, long-short 2.03 / 1.26; Cumulative score, daily 20%/20% rank book (residual-reversion branch) 3.93 / 1.43; Same, executed one day late 0.35 / 0.07; Snapback long only, one day late 0.77 / 0.39; Snapback long-short, one day late 0.20 / 0.08; Cumulative long only, one day late 1.05 / 0.78; Cumulative long-short, one day late 1.27 / 0.69
 
 ## 1. Regime robustness
 
@@ -348,6 +358,29 @@ The strategy buys up to 20 of the lowest scores at or below -2, so returns shoul
 | 1 | 5.96bp | 21.6 |
 | 5 | 11.38bp | 13.3 |
 | 20 | 17.06bp | 10.7 |
+
+### Cumulative residual score
+
+Signal = minus the cumulative residual score (today's running sum of lagged-model residuals relative to its previous 60 levels), every stock and day. Same buckets and target as the snapback score.
+
+| Cumulative score | Next 1d (bp) | Next 5d (bp) | Next 20d (bp) |
+|---|---|---|---|
+| z < -3 | 19.8 (n=83,025) | 60.5 (n=83,005) | 86.3 (n=82,834) |
+| -3 to -2 | 8.8 (n=408,691) | 18.7 (n=408,432) | 32.2 (n=407,307) |
+| -2 to -1 | 3.9 (n=1,282,369) | 8.5 (n=1,281,384) | 17.8 (n=1,277,825) |
+| -1 to 0 | 0.8 (n=1,522,584) | 1.7 (n=1,521,492) | 4.7 (n=1,517,447) |
+| 0 to 1 | -0.7 (n=1,536,338) | -2.2 (n=1,535,160) | -3.6 (n=1,530,913) |
+| 1 to 2 | -4.2 (n=1,262,177) | -8.9 (n=1,261,204) | -19.7 (n=1,257,597) |
+| 2 to 3 | -8.5 (n=397,668) | -19.6 (n=397,396) | -38.0 (n=396,343) |
+| z > 3 | -19.4 (n=83,824) | -45.7 (n=83,799) | -56.9 (n=83,591) |
+
+| Horizon (days) | Excess return per 1 s.d. of signal | t-stat (Newey-West) |
+|---|---|---|
+| 1 | 5.01bp | 18.1 |
+| 5 | 11.12bp | 10.9 |
+| 20 | 20.55bp | 7.4 |
+
+Correlation of the two scores across all stock-days: 0.47.
 
 ## 5. Holdout
 

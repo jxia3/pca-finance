@@ -159,12 +159,20 @@ def calibration(key: str, results: dict[str, Any], log_prices: np.ndarray) -> No
         axes.set_xlabel("Signal decile (1 = most shorted, 10 = most bought)")
         axes.set_ylabel("Next 5-day excess return (bp)")
     elif key == "snap":
-        buckets, _ = snapback_calibration(snapback_scores(results["snapback_residuals"]), log_prices, 5)
-        axes.bar(np.arange(len(buckets)), [np.mean(bucket) * 1e4 for bucket in buckets], width=0.6,
-                 color=COLORS[key], zorder=3)
-        axes.set_xticks(np.arange(len(buckets)))
+        # Snapback score (solid) and cumulative residual score (hatched), same buckets
+        positions = np.arange(len(Z_LABELS))
+        for offset, scores, label, hatched in (
+            (-0.2, snapback_scores(results["snapback_residuals"]), "Snapback score", False),
+            (0.2, results["cumulative_scores"], "Cumulative residual score", True),
+        ):
+            buckets, _ = snapback_calibration(scores, log_prices, 5)
+            axes.bar(positions + offset, [np.mean(bucket) * 1e4 for bucket in buckets], width=0.36,
+                     color="white" if hatched else COLORS[key], edgecolor=COLORS[key] if hatched else "white",
+                     hatch="////" if hatched else None, linewidth=1.0 if hatched else 0.8, label=label, zorder=3)
+        axes.set_xticks(positions)
         axes.set_xticklabels([label.replace("z ", "").replace(" to ", " to\n") for label in Z_LABELS], fontsize=7.5)
-        axes.set_xlabel("Snapback score (buys at or below -2)")
+        axes.legend(loc="upper right", fontsize=8)
+        axes.set_xlabel("Score (buys at or below -2)")
         axes.set_ylabel("Next 5-day excess return (bp)")
     else:
         buckets, _ = pair_calibration(results, log_prices, 1)
@@ -326,11 +334,13 @@ def snapback_variants(series: dict[str, Series], market: np.ndarray) -> None:
         ("snap|base|", "Long only (default)", COLORS["snap"], True, (6, 4)),
         ("snap|score threshold|-2.5", "Stricter cutoff", COLORS["snap"], True, (6, -4)),
         ("snap|hedge mix|70% unhedged", "70% long only", COLORS["snap"], True, (6, 2)),
-        ("snap|hedge mix|50% unhedged", "50% long only", COLORS["snap"], True, (6, 2)),
-        ("snap|hedge mix|30% unhedged", "30% long only", COLORS["snap"], True, (6, 2)),
+        ("snap|hedge mix|50% unhedged", "50% long only", COLORS["snap"], True, (6, 8)),
+        ("snap|hedge mix|30% unhedged", "30% long only", COLORS["snap"], True, (4, 9)),
         ("snap|hedge mix|dynamic", "Dynamic mix", COLORS["snap"], True, (-8, 8)),
         ("snaph|base|", "Fully hedged (long-short)", COLORS["snap"], False, (8, -8)),
         ("cmp|projection hedge|", "Earlier hedge (projection)", MUTED, False, (10, 0)),
+        ("cmp|cumulative long only|", "Cumulative score, long only", COLORS["snap"], True, (-8, 0)),
+        ("cmp|cumulative long-short|", "Cumulative score, long-short", COLORS["snap"], False, (10, 0)),
         ("tb|base|", "Treynor-Black", COLORS["tb"], True, (6, 11)),
         ("pairs|base|", "Pairs trading", COLORS["pairs"], True, (6, -4)),
     )
@@ -342,8 +352,15 @@ def snapback_variants(series: dict[str, Series], market: np.ndarray) -> None:
                   markeredgecolor="white" if filled else color, markeredgewidth=1.5, zorder=3)
         axes.annotate(label, (beta, value), xytext=offset, textcoords="offset points",
                       ha="left" if offset[0] > 0 else "right", va="center", color=SECONDARY, fontsize=7.5)
+    # The daily rank book is far above the rest, drawn as an off-scale marker at the top edge
+    rank = series["cmp|daily rank|"]
+    beta, value = market_beta(rank, market), sharpe(net_returns(rank, TRADE_FEE))
+    axes.plot(beta, 1.88, "^", markersize=8, color="white", markeredgecolor=COLORS["snap"], markeredgewidth=1.5,
+              zorder=3, clip_on=False)
+    axes.annotate(f"Daily rank book ({value:.2f}, off scale)", (beta, 1.88), xytext=(10, 0),
+                  textcoords="offset points", va="center", color=SECONDARY, fontsize=7.5)
     axes.set_xlim(-0.1, 1.35)
-    axes.set_ylim(0.5, 1.3)
+    axes.set_ylim(0.5, 1.9)
     axes.set_xlabel("Market beta (vs. equal-weighted universe)")
     axes.set_ylabel("Sharpe ratio, 5bp fees")
     axes.set_title("Residual snapback variants: Sharpe ratio vs. market exposure")
@@ -400,12 +417,16 @@ def calibration_slopes(results: dict[str, Any], log_prices: np.ndarray) -> None:
     figure, axes = plt.subplots(figsize=(4.8, 3.0))
     axes.axhline(2.0, color=BASELINE, linewidth=0.9, linestyle=(0, (3, 2)), zorder=1)
     axes.text(0.85, 2.0, "t = 2", ha="left", va="bottom", color=MUTED, fontsize=8)
+    signals["cumulative"] = lambda h: snapback_calibration(results["cumulative_scores"], log_prices, h)[1]
+    labels = {**STRATEGIES, "snap": "Snapback score", "cumulative": "Cumulative score"}
     for key, slopes in signals.items():
         values = [newey_west_t(slopes(h), h) for h in horizons]
-        axes.plot(horizons, values, color=COLORS[key], linewidth=2, marker="o", markersize=6,
-                  markeredgecolor="white", markeredgewidth=1.5, zorder=3)
-        axes.annotate(STRATEGIES[key], (horizons[-1], values[-1]), xytext=(6, 0), textcoords="offset points",
-                      va="center", color=SECONDARY, fontsize=8)
+        dashed = key == "cumulative"
+        axes.plot(horizons, values, color=COLORS["snap" if dashed else key], linewidth=2, marker="o", markersize=6,
+                  linestyle=(0, (4, 2)) if dashed else "-", markerfacecolor="white" if dashed else None,
+                  markeredgecolor=COLORS["snap"] if dashed else "white", markeredgewidth=1.5, zorder=3)
+        axes.annotate(labels[key], (horizons[-1], values[-1]), xytext=(6, -6 if dashed else 3),
+                      textcoords="offset points", va="center", color=SECONDARY, fontsize=8)
     axes.set_xscale("log")
     axes.set_xticks(horizons)
     axes.set_xticklabels([f"{h}d" for h in horizons])
@@ -463,6 +484,40 @@ def holdout(series: dict[str, Series], dates: np.ndarray) -> None:
     axes.set_title("Selection period vs. holdout")
     period_legend(axes, (f"2002-{HOLDOUT_START - 1}", f"{HOLDOUT_START}-2023 (holdout)"), "upper right")
     save(figure, "holdout")
+
+def execution_delay(series: dict[str, Series]) -> None:
+    # Execution delay table: Sharpe with 5bp fees when trading at the signal's close vs. one day later
+    rows = (
+        ("Snapback score, long only", "snap|base|", "cmp|snapback long only delayed|"),
+        ("Snapback score, long-short", "snaph|base|", "cmp|snapback long-short delayed|"),
+        ("Cumulative score, long only", "cmp|cumulative long only|", "cmp|cumulative long only delayed|"),
+        ("Cumulative score, long-short", "cmp|cumulative long-short|", "cmp|cumulative long-short delayed|"),
+        ("Daily rank book", "cmp|daily rank|", "cmp|daily rank delayed|"),
+    )[::-1]
+    figure, axes = plt.subplots(figsize=(6.0, 2.6))
+    color = COLORS["snap"]
+    for position, (label, on_time, late) in enumerate(rows):
+        now, later = (sharpe(net_returns(series[name], TRADE_FEE)) for name in (on_time, late))
+        axes.plot([later, now], [position, position], color=color, linewidth=1.2, alpha=0.5, zorder=2)
+        axes.plot(now, position, "o", markersize=7, color=color, markeredgecolor="white", markeredgewidth=1.5,
+                  zorder=4)
+        axes.plot(later, position, "o", markersize=7, color="white", markeredgecolor=color, markeredgewidth=1.5,
+                  zorder=3)
+        axes.annotate(f"{now:.2f}", (now, position), xytext=(8, 0), textcoords="offset points", va="center",
+                      color=SECONDARY, fontsize=8)
+    axes.set_yticks(np.arange(len(rows)))
+    axes.set_yticklabels([row[0] for row in rows], fontsize=8)
+    axes.grid(axis="y", visible=False)
+    axes.set_xlim(0.0, 3.4)
+    axes.set_ylim(-0.6, len(rows) - 0.4)
+    axes.set_xlabel("Sharpe ratio, 5bp fees")
+    axes.set_title("Residual snapback: executing one day late")
+    handles = [Line2D([], [], marker="o", linestyle="", markersize=7, markerfacecolor=SECONDARY,
+                      markeredgecolor="white", markeredgewidth=1.5),
+               Line2D([], [], marker="o", linestyle="", markersize=7, markerfacecolor="white",
+                      markeredgecolor=SECONDARY, markeredgewidth=1.5)]
+    axes.legend(handles, ("At the signal's close", "One day late"), loc="upper right", fontsize=8)
+    save(figure, "execution_delay")
 
 def residual_means(results: dict[str, Any], dates: np.ndarray) -> None:
     # Is the lagged factor model unbiased? Each stock's trailing 60-day mean residual, summarized across stocks
@@ -522,6 +577,7 @@ def main() -> None:
     calibration_slopes(results, log_prices)
     holdout(series, daily_returns.dates)
     residual_means(results, daily_returns.dates)
+    execution_delay(series)
     hedge_allocation(daily_returns)
 
 if __name__ == "__main__":
