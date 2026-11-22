@@ -1,0 +1,44 @@
+Paste main-cleaned.tex into main.tex and framework-cleaned.tex into framework.tex. Keep existing image files and paths. No script is required.
+
+main.tex: PASS. Active prose and mathematics match in sequence after the listed wording/reference edits and formatting normalization. All table/figure contents match, allowing relocation and sizing. Archived blocks recover exactly.
+
+framework.tex: PASS. Active prose and mathematics match in sequence after the listed wording/reference edits and formatting normalization. All table/figure contents match, allowing relocation and sizing. Archived blocks recover exactly.
+
+Both files compile together: 47 pages. No overfull boxes or unresolved references. Hyperref reports a harmless math-in-bookmark warning for the original K heading.
+
+Wording, heading and reference changes:
+PCA, explained -> Principal component analysis
+PCA in general -> PCA illustrated with basketball statistics
+From PCA to the Factor Model -> From PCA to the factor model
+Questions 1-6 -> PCA results: Questions 1--6
+Trading Strategies -> Trading strategies
+Strategy Testing -> Strategy testing
+tease out the fundamentals, i.e. principal components, of these correlations -> identify the principal components of these correlations
+Because PCA on stock returns are slightly more involved/complicated we'll first explain PCA with a simpler example: Basketball statistics. -> Because PCA on stock returns is slightly more involved, we first explain it with basketball statistics.
+three dimensional graph -> three-dimensional graph
+variance of of the scores -> variance of the scores
+PC1 complains -> PC1 explains
+typical of  centers -> typical of centers
+The driving factor behind such a dynamic is likely -> This pattern likely reflects
+The direction in Figure 2 is arbitrary. Which directions do we really care most about? This is where PCA comes into play—it finds -> The direction in Figure 2 is arbitrary. PCA finds
+What do these PCs actually represent? It's up to us to interpret them. We might want to look at the weights (which we call \emph{loadings} in PCA): -> We interpret these components by looking at their weights (called \emph{loadings} in PCA):
+Its implementation leaves much of that signal on the table. -> Its implementation captures only part of that signal.
+Finally, the contrast between in-sample and out-of-sample -> The contrast between in-sample and out-of-sample
+\subsection{PCA on our stock returns} -> \subsection{PCA on our stock returns}
+\label{sec:stock-pca}
+\section{Trading strategies} -> \section{Trading strategies}
+\label{sec:strategies}
+Section 1.2
+ -> Section~\ref{sec:stock-pca}
+
+Section~2 describes -> Section~\ref{sec:framework} describes
+Section~3 builds -> Section~\ref{sec:strategies} builds
+Figure 1 shows -> Figure~\ref{fig:bball-cloud} shows
+Figure 2 is arbitrary -> Figure~\ref{fig:bball-recipe} is arbitrary
+Figure 3b lets -> Figure~\ref{fig:bball-axes}b lets
+Figure 3. -> Figure~\ref{fig:bball-axes}.
+From Table 1, -> From Table~\ref{tab:primer-four},
+Cool sidenote: PCA optimization -> Computational efficiency of PCA
+Backtesting Framework and Methodology -> Backtesting framework and methodology
+
+All numeric table cells remain unchanged. Planning notes, assignment prompts 7--12, and the earlier post-conclusion residual draft are preserved as comments. Research claims were not independently revalidated.

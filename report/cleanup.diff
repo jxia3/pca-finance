@@ -1,0 +1,1785 @@
+--- original-report/main.tex
++++ main-cleaned.tex
+@@ -9,6 +9,27 @@
+ \usepackage{booktabs}
+ \usepackage{array}
+ 
++% Consistent body size; compact captions and flexible floats.
++\usepackage[T1]{fontenc}
++\usepackage{microtype}
++\usepackage{caption}
++\usepackage{adjustbox}
++\usepackage[section]{placeins}
++\captionsetup{font=small,labelfont=bf,skip=6pt}
++\setlength{\textfloatsep}{12pt plus 3pt minus 2pt}
++\setlength{\floatsep}{10pt plus 2pt minus 2pt}
++\setlength{\intextsep}{10pt plus 2pt minus 2pt}
++\setlength{\emergencystretch}{2em}
++\renewcommand{\topfraction}{0.9}
++\renewcommand{\bottomfraction}{0.8}
++\renewcommand{\textfraction}{0.1}
++\renewcommand{\floatpagefraction}{0.7}
++\setcounter{topnumber}{3}
++\setcounter{bottomnumber}{2}
++\setcounter{totalnumber}{5}
++\AtBeginEnvironment{table}{\small}
++\raggedbottom
++
+ \renewcommand{\rmdefault}{ptm}
+ \pagestyle{fancy}
+ \fancyhf{}
+@@ -21,45 +42,49 @@
+ 
+ \begin{document}
+ 
+-\begin{enumerate}
+-    \item Basic explanation of PCA, and the math foundations showing it is the eigenvectors of the covariance matrix. Then translate to the factor model from paper
+-    \item Directly answer each of the questions? And also put figures. We also need to answer them in an interesting way rather than just literally answering what the text is, i.e. the proportion of variance explained over time changes, and we can make a plot showing that. Some kind of more in depth analysis per question. Showing how much the components change over time, and also does removing outliers affect the calculated components.
+-    \item Explaining the methodology of the strategy framework we developed.
+-    \item Describe each strategy, what the intuition is, and what the results are.
+-\end{enumerate}
+-
+-Strategy testing:
+-\begin{enumerate}
+-    \item Regime robustness, how well does it perform in each year and is one mega year carrying it.
+-    \item Parameter sensitivity: if we vary the parameters, then does the strategy remain profitable.
+-    \item Trading costs, showing how much it trades vs. the returns and how much of the edge is taken up by trading costs.
+-    \item Calibration: fitting a regression on the signal and the target is the actual observed return over the next holding period. A well-calibrated strategy shows that this is actually an increasing relationship.
+-    \item Holdout: test holdout, because it is better than claiming we got 400\% returns. Spencer will clown us if we do this.
+-    \item To answer the last question, sweep the strategies with different K values.
+-\end{enumerate}
+-
+-\begin{itemize}
+-    \item Jerry: write about the strategy framework (answers how we set up question 7, and also question 11), find the holdout data
+-    \item Kayla: strategy testing on pairs trading and Treynor-Black
+-    \item Daniel: residual mean reversion strategy 
+-    \item Sameer: Write up 1-6 and then reexamine to rewrite in more interesting ways, plots, etc...
+-    \item Owen: Basic explanation of PCA w/ math foundations, formatting
+-\end{itemize}
+-\newpage
+-
+-\section{PCA, explained}
+-Principal component analysis is a method of dimensionality reduction. For this project, we consider daily trading data for 1201 stocks over 24 years. Many stocks' returns are correlated, and we want to tease out the fundamentals, i.e. principal components, of these correlations. By finding the principal components, we can split out stock returns into two essential parts: a "shared part" representing how a stock reacted to common factors, and a "factor neutral" part representing everything else, which we can trade on. 
+-\subsection{PCA in general}
+-Because PCA on stock returns are slightly more involved/complicated we'll first explain PCA with a simpler example: Basketball statistics.
++% BEGIN ARCHIVED: Planning notes and assignments
++% ARCHIVE \begin{enumerate}
++% ARCHIVE     \item Basic explanation of PCA, and the math foundations showing it is the eigenvectors of the covariance matrix. Then translate to the factor model from paper
++% ARCHIVE     \item Directly answer each of the questions? And also put figures. We also need to answer them in an interesting way rather than just literally answering what the text is, i.e. the proportion of variance explained over time changes, and we can make a plot showing that. Some kind of more in depth analysis per question. Showing how much the components change over time, and also does removing outliers affect the calculated components.
++% ARCHIVE     \item Explaining the methodology of the strategy framework we developed.
++% ARCHIVE     \item Describe each strategy, what the intuition is, and what the results are.
++% ARCHIVE \end{enumerate}
++% ARCHIVE 
++% ARCHIVE Strategy testing:
++% ARCHIVE \begin{enumerate}
++% ARCHIVE     \item Regime robustness, how well does it perform in each year and is one mega year carrying it.
++% ARCHIVE     \item Parameter sensitivity: if we vary the parameters, then does the strategy remain profitable.
++% ARCHIVE     \item Trading costs, showing how much it trades vs. the returns and how much of the edge is taken up by trading costs.
++% ARCHIVE     \item Calibration: fitting a regression on the signal and the target is the actual observed return over the next holding period. A well-calibrated strategy shows that this is actually an increasing relationship.
++% ARCHIVE     \item Holdout: test holdout, because it is better than claiming we got 400\% returns. Spencer will clown us if we do this.
++% ARCHIVE     \item To answer the last question, sweep the strategies with different K values.
++% ARCHIVE \end{enumerate}
++% ARCHIVE 
++% ARCHIVE \begin{itemize}
++% ARCHIVE     \item Jerry: write about the strategy framework (answers how we set up question 7, and also question 11), find the holdout data
++% ARCHIVE     \item Kayla: strategy testing on pairs trading and Treynor-Black
++% ARCHIVE     \item Daniel: residual mean reversion strategy 
++% ARCHIVE     \item Sameer: Write up 1-6 and then reexamine to rewrite in more interesting ways, plots, etc...
++% ARCHIVE     \item Owen: Basic explanation of PCA w/ math foundations, formatting
++% ARCHIVE \end{itemize}
++% ARCHIVE \newpage
++% ARCHIVE 
++% END ARCHIVED: Planning notes and assignments
++\section{Principal component analysis}
++Principal component analysis is a method of dimensionality reduction. For this project, we consider daily trading data for 1201 stocks over 24 years. Many stocks' returns are correlated, and we want to identify the principal components of these correlations. By finding the principal components, we can split out stock returns into two essential parts: a "shared part" representing how a stock reacted to common factors, and a "factor neutral" part representing everything else, which we can trade on. 
++\subsection{PCA illustrated with basketball statistics}
++Because PCA on stock returns is slightly more involved, we first explain it with basketball statistics.
+ 
+ Let there be $T$ total players in our basketball league and we record $N$ statistics. Here, we'll track points, rebounds, and assists per game, so $N = 3$. To perform PCA, we first need to standardize our data by measuring each statistic relative to the league average in standard deviations. Let $y_{i,t}$ be player $t$'s actual number for statistic $i$; then
+-$$x_{i,t}=\frac{y_{i,t}-\bar{y}_i}{\sigma_i}$$
++\[
++x_{i,t}=\frac{y_{i,t}-\bar{y}_i}{\sigma_i}
++\]
+ where $\bar{y}_i$ is the average of statistic $i$ across all $T$ players and $\sigma_i$ is its standard deviation. Each player is then described by a three-dimensional vector:
+ \[
+ x_t=(x_{1,t},\,x_{2,t},\,x_{3,t})=(\text{points},\ \text{rebounds},\ \text{assists}).
+ \]
+-We can then plot each $x_t$ in $N$-dimensional space with each axis corresponding to each variable. Here, $N=3$, so we'll plot a three dimensional graph:
+-\begin{figure}[H]
++We can then plot each $x_t$ in $N$-dimensional space with each axis corresponding to each variable. Here, $N=3$, so we'll plot a three-dimensional graph:
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.45\linewidth]{basketball_cloud.pdf}
+     \caption{\textbf{Players as points.} Each point is one of 400 simulated
+@@ -68,14 +93,14 @@
+     the text.}
+     \label{fig:bball-cloud}
+ \end{figure}
+-Figure 1 shows that these points form a cloud. This cloud is stretched based on correlation, and it's most stretched in the direction where all three variables rise together. 
++Figure~\ref{fig:bball-cloud} shows that these points form a cloud. This cloud is stretched based on correlation, and it's most stretched in the direction where all three variables rise together. 
+ 
+ PCA defines direction as a vector of weights $v=(v[1],\dots,v[N])$ of length one, $\sum_i v[i]^2=1$. 
+ How far player $t$ lies along that direction is the player's \emph{score}:
+ \[
+ s_t=v^\top x_t=\sum_{i=1}^{N}v[i]\,x_{i,t}.
+ \]
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.55\linewidth]{basketball_recipe.pdf}
+     \caption{\textbf{A recipe and a score.} The arrow is the recipe
+@@ -84,9 +109,9 @@
+     his score, $s_t\approx1.5$.}
+     \label{fig:bball-recipe}
+ \end{figure}
+-The direction in Figure 2 is arbitrary. Which directions do we really care most about? This is where PCA comes into play—it finds the directions (eigenvectors) of the covariance matrix that maximize the spread of player scores along it, which we call "principal components." 
+-
+-The spread of the cloud along $v$ is the variance of of the scores across players, 
++The direction in Figure~\ref{fig:bball-recipe} is arbitrary. PCA finds the directions (eigenvectors) of the covariance matrix that maximize the spread of player scores along it, which we call "principal components." 
++
++The spread of the cloud along $v$ is the variance of the scores across players, 
+ \[
+ \operatorname{Var}(s_t)=v^\top\Sigma v,
+ \]
+@@ -106,7 +131,7 @@
+ v^\top\Sigma v=\lambda .
+ \]
+ This process gives us the cloud's eigenvectors (and their corresponding eigenvalues):
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=\linewidth]{basketball_axes.pdf}
+     \caption{\textbf{The principal components of the cloud.} (a) The
+@@ -117,17 +142,17 @@
+     direction with the least spread.}
+     \label{fig:bball-axes}
+ \end{figure}
+-By convention, we name principal components in decreasing order of their eigenvalues. PC1 is the eigenvector with the largest eigenvalue, PC2 is the orthogonal eigenvector with the most remaining spread among those whose scores are uncorrelated with PC1's, and so on, which you can see in Figure 3. 
+-What do these PCs actually represent? It's up to us to interpret them. We might want to look at the weights (which we call \emph{loadings} in PCA):
++By convention, we name principal components in decreasing order of their eigenvalues. PC1 is the eigenvector with the largest eigenvalue, PC2 is the orthogonal eigenvector with the most remaining spread among those whose scores are uncorrelated with PC1's, and so on, which you can see in Figure~\ref{fig:bball-axes}. 
++We interpret these components by looking at their weights (called \emph{loadings} in PCA):
+ \[
+ v_1=(0.66,\,0.53,\,0.53),\qquad
+ v_2=(0.00,\,0.71,\,-0.71),\qquad
+ v_3=(0.75,\,-0.46,\,-0.47),
+ \]
+ with eigenvalues $\lambda_1=2.03$, $\lambda_2=0.75$ and $\lambda_3=0.21$.
+-Since all of PC1's loadings are positive, players with a high PC1 score are above average in points/rebounds/assists. The driving factor behind such a dynamic is likely "minutes played." PC2 ignores points, weights rebounds positively, and assists negatively, so players with a high PC2 score rebound a lot but don't pass often, which is typical of  centers; low PC2 players are the opposite, typical of guards (Figure 3b lets us see this more easily). 
+-\newpage
+-The eigenvalues say how much each component "matters." After standardization, each statistic has variance 1, so the total variance of the cloud is $N = 3$, which the eigenvalues sum to. Each component's share of the total variance is $\lambda_k/N$, meaning PC1 complains $68\%$ of how players differ, PC2 $25\%$, and PC3 $7\%$. Because PC3 represents such a small relative share, we are probably able to drop it and not lose much information. This is how PCA enables \emph{dimensionality reduction}—if we had dozens of variables in our data as opposed to just three, we'd only have to keep a small share of components and we'd lose very little. 
++Since all of PC1's loadings are positive, players with a high PC1 score are above average in points/rebounds/assists. This pattern likely reflects "minutes played." PC2 ignores points, weights rebounds positively, and assists negatively, so players with a high PC2 score rebound a lot but don't pass often, which is typical of centers; low PC2 players are the opposite, typical of guards (Figure~\ref{fig:bball-axes}b lets us see this more easily). 
++% Page break removed; allow natural pagination.
++The eigenvalues say how much each component "matters." After standardization, each statistic has variance 1, so the total variance of the cloud is $N = 3$, which the eigenvalues sum to. Each component's share of the total variance is $\lambda_k/N$, meaning PC1 explains $68\%$ of how players differ, PC2 $25\%$, and PC3 $7\%$. Because PC3 represents such a small relative share, we are probably able to drop it and not lose much information. This is how PCA enables \emph{dimensionality reduction}—if we had dozens of variables in our data as opposed to just three, we'd only have to keep a small share of components and we'd lose very little. 
+ 
+ Nothing here depends on having three statistics. With $N$ variables, each
+ observation is a point in $N$-dimensional space, $\Sigma$ is an $N\times N$
+@@ -138,13 +163,16 @@
+ eigenvalue is still how much spread it captures, and keeping only the first
+ $K$ components still compresses $N$ numbers into $K$. In our stock data, the
+ ``players'' become trading days and the ``statistics'' become 1,201 stocks,
+-so each day is a point in 1,201 dimensions. Section 1.2
++so each day is a point in 1,201 dimensions. Section~\ref{sec:stock-pca}
+ applies the same steps to that cloud.
+ \subsection{PCA on our stock returns}
++\label{sec:stock-pca}
+ In the dataset we later analyze in our report, our variables are stocks where $N = 1201$, and our observations are trading days where $T = 6037$. Each day is a point in $1201$ dimensions, and the directions in which the cloud is stretched represent patterns of correlated stock movement.
+ 
+ To perform PCA on this dataset, we first standardize returns like we did before. The rationale is that if  "Stock A" was twice as volatile as "Stock B" but both had very correlated movement, A would dominate the loadings in PCA just because its swings are bigger. We standardize with 
+-$$z_{i,t}=\frac{r_{i,t}-\bar{r}_i}{\bar{\sigma}_i}$$
++\[
++z_{i,t}=\frac{r_{i,t}-\bar{r}_i}{\bar{\sigma}_i}
++\]
+ so each stock's return is mean zero and variance one (you might recognize these as "z-scores.") We then create a covariance matrix of standardized returns (= correlation matrix), which we'll call $C$:
+ \[
+ \operatorname{Cov}(z_i,z_j)=\frac{\operatorname{Cov}(r_i,r_j)}{\bar\sigma_i\,\bar\sigma_j}=\rho_{ij}.
+@@ -157,7 +185,7 @@
+ v_2=\tfrac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix},\ \lambda_2=1-\rho=0.35.
+ \]
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=\linewidth]{figures/primer_two_stocks.pdf}
+     \caption{\textbf{PCA on two stocks.} Each point is one trading day
+@@ -170,11 +198,12 @@
+     \label{fig:primer-two-stocks}
+ \end{figure}
+ If we add in two oil producers (Exxon Mobil/XOM and Occidental Petroleum/OXY), we can see how PCA starts to find broader trends:
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{PCA run on four stocks alone: two utilities and two oil producers.}
+ \label{tab:primer-four}
+ \setlength{\tabcolsep}{5pt}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrrrl}
+ \toprule
+ & \multicolumn{4}{c}{Loadings $v_k[i]$} & & & \\
+@@ -187,19 +216,21 @@
+ PC4 & 0.03 & $-0.17$ & 0.73 & $-0.66$ & 0.262 & 6.5\% & XOM vs.\ OXY \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Daily returns, 2000--2023, standardized. 
+ \end{table}
+-From Table 1, we might deduce that PC1 explains "general market movement," PC2 explains "sector-specific movement," and PC3/PC4 explain "sector-specific gaps" between industries. 
+-\newpage
++From Table~\ref{tab:primer-four}, we might deduce that PC1 explains "general market movement," PC2 explains "sector-specific movement," and PC3/PC4 explain "sector-specific gaps" between industries. 
++% Page break removed; allow natural pagination.
+ With all 1201 stocks, each trading day is a point in 1201 dimensions and each component is a list of 1201 loadings. This table would be too large to work with, so we've done PCA across the full sample and listed the first five principal components: 
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{The first five principal components of all 1,201 stocks.}
+ \label{tab:primer-full}
+ \small
+ \setlength{\tabcolsep}{4pt}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lr >{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{3.2cm}}
+ \toprule
+ Component & Share & Largest positive loadings & Largest negative loadings & Reads as \\
+@@ -215,12 +246,13 @@
+ PC5 & 1.4\% & XOM, EOG, OXY, DVN (oil producers) & VTN, NAD, VGM, MYD (municipal bond funds) & Oil vs.\ bonds \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Full-sample PCA on standardized daily returns, 2000--2023. Each
+ component is oriented so its largest loading is positive, as in Q2.
+ \end{table}
+ The main difference from basketball is how much the components explain; before, PC1 and PC2 together explained $93\%$ of how players differ. On the full set of stocks, it takes 70 components to explain half of the variance (Q1). 
+-\subsection{From PCA to the Factor Model}
++\subsection{From PCA to the factor model}
+ To trade on the components, and to split each stock's return into a
+ shared and an idiosyncratic part, the assignment turns them into
+ portfolios, factor returns and a regression. Questions 2--6 do this on
+@@ -247,10 +279,11 @@
+ stock moves one standard deviation, each contributes equally, just as in
+ the PCA.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Same loading, different volatility (illustrative).}
+ \label{tab:primer-vol}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrr}
+ \toprule
+ Stock & Loading $v$ & Daily $\bar\sigma$ & $v/\bar\sigma$ & Share of gross & Contribution on a $+1\bar\sigma$ day \\
+@@ -260,6 +293,7 @@
+ Z & 0.58 & 1.5\% & 0.39 & 31\% & $0.39\times1.5=0.58$ \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \end{table}
+ 
+ \paragraph{Factor returns (Q3).} A factor's return is how its
+@@ -313,11 +347,12 @@
+ spread each explains. The directions are the eigenvectors of the
+ correlation matrix, and the spread along each is its eigenvalue.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{The same PCA in two settings.}
+ \label{tab:primer-map}
+ \small
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{>{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{5.2cm} >{\raggedright\arraybackslash}p{5.6cm}}
+ \toprule
+ & Basketball & Stocks \\
+@@ -334,6 +369,7 @@
+ The leftover & Mostly noise, dropped & The idiosyncratic part, traded \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \end{table}
+ 
+ For basketball, two components describe players almost completely. For
+@@ -342,14 +378,14 @@
+ movement. That is what makes PCA useful for trading: it lets us strip the
+ shared part out of each stock's return and look at what is left. The
+ answers to Questions 1--6 below carry out each step on our data.
+-Section~2 describes how we estimate the model as time moves forward
+-without using future information, and Section~3 builds three strategies
++Section~\ref{sec:framework} describes how we estimate the model as time moves forward
++without using future information, and Section~\ref{sec:strategies} builds three strategies
+ on the idiosyncratic part.
+ 
+ 
+ 
+-\newpage
+-\section{Questions 1-6}
++% Page break removed; allow natural pagination.
++\section{PCA results: Questions 1--6}
+ \begin{enumerate}
+ \item Using stock returns at the daily (or monthly) level, perform a principal
+ component analysis (PCA) on daily (monthly) stock returns. Feel free to refer
+@@ -359,7 +395,6 @@
+ some diagnostic tests). (\emph{Hint:} what preprocessing should you do
+ before performing a PCA, and why?)
+ 
+-\answer
+ \answer
+ We performed principal component analysis (PCA) on daily returns for
+ 1,201 stocks over 6,037 trading days from January 3, 2000, through
+@@ -387,7 +422,7 @@
+ fit for our main results to identify shared movements across stocks on
+ a common volatility scale.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.85\linewidth]{figures/q1_explained_variance.png}
+     \caption{\textbf{Explained variance from PCA on daily stock returns.}
+@@ -448,7 +483,7 @@
+ be prominent in the standardized component and receive a smaller
+ position in the eigenportfolio because of its return volatility.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.85\linewidth]{figures/q2_eigenportfolios.png}
+     \caption{\textbf{Largest positions in the five PCA eigenportfolios.}
+@@ -506,7 +541,7 @@
+ 2008, while PC4 peaked in May 2020. These values are in factor units
+ under the scaling above.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.85\linewidth]{figures/q3_factor_volatility.png}
+     \caption{\textbf{Rolling volatility of the five PCA factor returns.}
+@@ -543,7 +578,7 @@
+ occurs in the window ending July 7, 2021, when PC1 tracked the broad
+ market substantially less closely than it did over the full sample.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.85\linewidth]{figures/q4_pc1_market.png}
+     \caption{\textbf{PC1 and the U.S. market return.}
+@@ -589,7 +624,7 @@
+ full sample. The out-of-sample backtest tests whether the alpha
+ ranking predicts future returns.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.85\linewidth]{figures/q5_stock_alphas.png}
+     \caption{\textbf{Estimated daily stock alphas.}
+@@ -638,7 +673,7 @@
+ benchmarks, while others capture patterns in this stock universe
+ that the three standard factors explain very little of.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+     \centering
+     \includegraphics[width=0.85\linewidth]
+         {figures/q6_pca_vs_standard_factors.png}
+@@ -649,68 +684,72 @@
+     \label{fig:q6-pca-vs-standard-factors}
+ \end{figure}
+ 
+-\item Construct a trading strategy based on your estimate of $\alpha_i$.
+-If you are totally out of ideas, one thing would be to sort the stocks
+-based on your estimates of $\alpha_i$, go long stocks in the top quintile
+-of alpha, go short stocks in the bottom quintile of alpha. A trading
+-strategy should consist of how much of each stock $i$ to hold (can be
+-negative) at any point in time $t$. Note that if you put weights $w_{i,t}$
+-on stock $i$ at time $t$, your returns $r_{\mathrm{port},t+1}$ is given by
+-$\sum_i w_{i,t}\cdot r_{i,t+1}$.
+-
+-\begin{itemize}
+-    \item Feel free to be more entrepreneurial/creative in this section.
+-    \item Make sure your trading strategy is not based on future returns,
+-    e.g.\ you go long stocks that will move up tomorrow.
+-\end{itemize}
+-
+-\item Visualize / report the cumulative returns of the trading strategy.
+-Let $r_{\mathrm{port},t}$ be the returns of your trading strategy for
+-time $t$.
+-
+-\item Compute the Sharpe ratio of your trading strategy.
+-
+-\item Compute the information ratio of your trading strategy:
+-
+-\begin{itemize}
+-    \item Formally, run the regression:
+-    $r_{\mathrm{port},t}=\alpha+\beta r_{\mathrm{mkt},t}$.
+-    Your reference return (for the information ratio) should be
+-    $\beta\cdot r_{\mathrm{mkt},t}$.
+-    \item Is your strategy market neutral?
+-\end{itemize}
+-
+-\item Note that you have estimated the PCA using the entire sample.
+-Thus, your estimates of your trading performance should be somewhat
+-positively biased. Now, repeat your exercise, where you simulate a
+-trading strategy across time, where you a) estimate your factors only
+-based on data in the past (so at 2015 January, you construct your
+-PCAs using data up to 2015 January), and then construct a trading
+-strategy, and see how this strategy performs. A simple starting point
+-is to estimate $\alpha_i$s using data prior to 2015, and assume
+-$\alpha_i$s stay fixed afterwards. Of course, you can also update your
+-$\alpha_i$ estimates every day/month when you roll forward. Be very
+-clear how you avoided the look-ahead bias.
+-
+-\item Why stop at $K=5$? Across multiple values of $K$, re-do all of
+-the above exercises. Which $K$ seems to work best? Is there a
+-significant difference between in-sample assessments (one where you
+-estimate the factors based on all the data) and out-sample assessments
+-(one where you estimate the factors only based on data available at
+-the time and roll forward)? Discuss.
++% BEGIN ARCHIVED: Assignment prompts 7--12; answered in the following sections
++% ARCHIVE \item Construct a trading strategy based on your estimate of $\alpha_i$.
++% ARCHIVE If you are totally out of ideas, one thing would be to sort the stocks
++% ARCHIVE based on your estimates of $\alpha_i$, go long stocks in the top quintile
++% ARCHIVE of alpha, go short stocks in the bottom quintile of alpha. A trading
++% ARCHIVE strategy should consist of how much of each stock $i$ to hold (can be
++% ARCHIVE negative) at any point in time $t$. Note that if you put weights $w_{i,t}$
++% ARCHIVE on stock $i$ at time $t$, your returns $r_{\mathrm{port},t+1}$ is given by
++% ARCHIVE $\sum_i w_{i,t}\cdot r_{i,t+1}$.
++% ARCHIVE 
++% ARCHIVE \begin{itemize}
++% ARCHIVE     \item Feel free to be more entrepreneurial/creative in this section.
++% ARCHIVE     \item Make sure your trading strategy is not based on future returns,
++% ARCHIVE     e.g.\ you go long stocks that will move up tomorrow.
++% ARCHIVE \end{itemize}
++% ARCHIVE 
++% ARCHIVE \item Visualize / report the cumulative returns of the trading strategy.
++% ARCHIVE Let $r_{\mathrm{port},t}$ be the returns of your trading strategy for
++% ARCHIVE time $t$.
++% ARCHIVE 
++% ARCHIVE \item Compute the Sharpe ratio of your trading strategy.
++% ARCHIVE 
++% ARCHIVE \item Compute the information ratio of your trading strategy:
++% ARCHIVE 
++% ARCHIVE \begin{itemize}
++% ARCHIVE     \item Formally, run the regression:
++% ARCHIVE     $r_{\mathrm{port},t}=\alpha+\beta r_{\mathrm{mkt},t}$.
++% ARCHIVE     Your reference return (for the information ratio) should be
++% ARCHIVE     $\beta\cdot r_{\mathrm{mkt},t}$.
++% ARCHIVE     \item Is your strategy market neutral?
++% ARCHIVE \end{itemize}
++% ARCHIVE 
++% ARCHIVE \item Note that you have estimated the PCA using the entire sample.
++% ARCHIVE Thus, your estimates of your trading performance should be somewhat
++% ARCHIVE positively biased. Now, repeat your exercise, where you simulate a
++% ARCHIVE trading strategy across time, where you a) estimate your factors only
++% ARCHIVE based on data in the past (so at 2015 January, you construct your
++% ARCHIVE PCAs using data up to 2015 January), and then construct a trading
++% ARCHIVE strategy, and see how this strategy performs. A simple starting point
++% ARCHIVE is to estimate $\alpha_i$s using data prior to 2015, and assume
++% ARCHIVE $\alpha_i$s stay fixed afterwards. Of course, you can also update your
++% ARCHIVE $\alpha_i$ estimates every day/month when you roll forward. Be very
++% ARCHIVE clear how you avoided the look-ahead bias.
++% ARCHIVE 
++% ARCHIVE \item Why stop at $K=5$? Across multiple values of $K$, re-do all of
++% ARCHIVE the above exercises. Which $K$ seems to work best? Is there a
++% ARCHIVE significant difference between in-sample assessments (one where you
++% ARCHIVE estimate the factors based on all the data) and out-sample assessments
++% ARCHIVE (one where you estimate the factors only based on data available at
++% ARCHIVE the time and roll forward)? Discuss.
++% END ARCHIVED: Assignment prompts 7--12; answered in the following sections
+ \end{enumerate}
+ 
+-\small
++\begingroup\small
+ \noindent\textbf{Reference.}
+ Kelly, B., Pruitt, S., and Su, Y. (2018).
+ \emph{Characteristics Are Covariances: A Unified Model of Risk and Return.}
+ October 15 working paper. \href{https://ssrn.com/abstract=3032013}{SSRN 3032013}.
+-
+-\newpage
++\par\endgroup
++
++% Page break removed; allow natural pagination.
+ 
+ \input{framework}
+ 
+-\section{Trading Strategies}
++\section{Trading strategies}
++\label{sec:strategies}
+ 
+ We build three strategies on top of the PCA factor model. The first, a \emph{contrarian factor-neutral Treynor--Black portfolio}, trades directly on the estimated alphas $\alpha_i$. The second, \emph{PCA pairs trading}, uses the principal component loadings to find pairs of economically similar stocks and trades the convergence of their prices. The third, \emph{residual snapback}, buys stocks whose recent returns fell far short of what the factor model predicted, betting that the overreaction reverses.
+ 
+@@ -744,10 +783,11 @@
+ 
+ \paragraph{Scaling and trading.} Weights are scaled so gross exposure is $\sum_i |w_i| = 1$ (50\% long, 50\% short), and the portfolio is rebalanced daily.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Development of the strategy (out-of-sample, 2002--2023, 5bp fees unless stated).}
+ \label{tab:development}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrr}
+ \toprule
+ Strategy & Sharpe & Sharpe (no fees) & Return & Market beta \\
+@@ -759,38 +799,39 @@
+ \textbf{Contrarian Treynor--Black, factor-hedged} & \textbf{0.85} & \textbf{1.31} & 2.5\% & 0.04 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \end{table}
+ 
+ Each design choice helps. Reversing the sign turns a losing strategy into a profitable one. Weighting by $\alpha_i / \sigma^2(\epsilon_i)$ improves on equal weights. The factor hedge leaves the return almost unchanged (2.5\% vs.\ 2.4\%) but lowers volatility from 3.2\% to 2.9\% and market beta from 0.07 to 0.04: it removes unrewarded factor risk without sacrificing alpha. Market beta is measured against an equal-weighted average of all stocks in the universe.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.85\textwidth]{figures/development_tb.pdf}
+ \caption{Development of the strategy (Table~\ref{tab:development}): Sharpe ratio of each step with 5bp fees (filled) and without fees (hollow).}
+ \label{fig:development-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/cumulative_returns_tb.pdf}
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/cumulative_returns_tb.pdf}
+ \caption{Growth of \$1 invested in Contrarian Treynor--Black, with and without 5bp transaction costs. Shaded regions mark the 2008--09 financial crisis and the 2020 COVID crash.}
+ \label{fig:cumulative-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/cumulative_returns_pairs.pdf}
++\subsection{Strategy 2: PCA pairs trading}
++
++\paragraph{Pair selection.} Every 21 trading days, we describe each stock by its loadings on the $K$ principal components, $\ell_i = (v_1[i]\sqrt{\lambda_1}, \dots, v_K[i]\sqrt{\lambda_K})$. We then greedily match the closest stocks in this space, keeping the 50 best non-overlapping pairs. Because the two stocks in a pair have nearly identical factor exposure, the spread between them is approximately factor neutral and driven mostly by stock-specific news.
++
++\paragraph{Trading rule.} For each pair $(i, j)$, we track the log price ratio $\log(P_i / P_j)$ over the previous 60 days and compute its z-score $z$. When $z < -2$ we buy $i$ and short $j$; when $z > 2$ we do the reverse. We close the position once $|z| < 0.5$. Each pair is allocated a fixed $1/50$ of capital, so idle pairs hold cash.
++
++Even though no industry data is used, the selected pairs are economically sensible: utilities (WEC/DUK, ATO/NI), natural gas producers (EQT/CNX), tower REITs (AMT/SBAC) and apartment REITs (EQR/MAA). The principal components recover industry structure from returns alone.
++
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/cumulative_returns_pairs.pdf}
+ \caption{Growth of \$1 invested in PCA pairs trading, with and without 5bp transaction costs. Shaded regions mark the 2008--09 financial crisis and the 2020 COVID crash.}
+ \label{fig:cumulative-pairs}
+ \end{figure}
+-
+-\subsection{Strategy 2: PCA pairs trading}
+-
+-\paragraph{Pair selection.} Every 21 trading days, we describe each stock by its loadings on the $K$ principal components, $\ell_i = (v_1[i]\sqrt{\lambda_1}, \dots, v_K[i]\sqrt{\lambda_K})$. We then greedily match the closest stocks in this space, keeping the 50 best non-overlapping pairs. Because the two stocks in a pair have nearly identical factor exposure, the spread between them is approximately factor neutral and driven mostly by stock-specific news.
+-
+-\paragraph{Trading rule.} For each pair $(i, j)$, we track the log price ratio $\log(P_i / P_j)$ over the previous 60 days and compute its z-score $z$. When $z < -2$ we buy $i$ and short $j$; when $z > 2$ we do the reverse. We close the position once $|z| < 0.5$. Each pair is allocated a fixed $1/50$ of capital, so idle pairs hold cash.
+-
+-Even though no industry data is used, the selected pairs are economically sensible: utilities (WEC/DUK, ATO/NI), natural gas producers (EQT/CNX), tower REITs (AMT/SBAC) and apartment REITs (EQR/MAA). The principal components recover industry structure from returns alone.
+ 
+ \subsection{Strategy 3: Residual snapback}
+ \label{sec:snapback}
+@@ -817,10 +858,11 @@
+ 
+ \paragraph{Checking the assumptions.} Both assumptions can be tested on the residuals themselves (Table~\ref{tab:residuals}). If the lagged model were biased, a negative residual sum could reflect the model's own error rather than a genuine shortfall. It is not biased: the mean residual across all stocks and days is $-0.003$bp per day ($t = -0.02$). The average across stocks of each stock's 60-day mean residual stays within a few basis points of zero throughout 2002--2023, including 2008--09 and 2020 (Figure~\ref{fig:residual-means}). Individual stocks' 60-day means spread about $\pm 25$bp per day (10th to 90th percentile), no wider than sampling noise alone would produce: with a typical daily residual volatility of 1.8\%, a 60-day mean has a standard error of about 23bp. One might expect the second assumption to fail in the other direction: if overreaction persists for several days, residuals would be positively correlated and $\sqrt{3}$ would understate the spread of their sum. In fact residuals are slightly \emph{negatively} correlated (median lag-1 autocorrelation $-0.03$), so a three-day sum varies about 5\% less than $\sqrt{3}$ assumes. The reversal the strategy bets on already begins within the three days. The $\sqrt{3}$ scaling is therefore close to right. Because it applies to every stock alike, a small error in it would mainly change how many stocks pass the $-2$ cutoff, not which stocks rank lowest. Across all stocks and days the scores have a standard deviation of 1.08, slightly above 1, because $\hat\sigma_{i,t}$ is estimated from only 60 days and residuals have fat tails.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Residual diagnostics: lagged factor model, every stock and trading day, April 2002--2023.}
+ \label{tab:residuals}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lr}
+ \toprule
+ Measure & Value \\
+@@ -834,11 +876,12 @@
+ Standard deviation of the snapback score & 1.08 \\
+ \bottomrule
+ \end{tabular}
+-\end{table}
+-
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/residual_means.pdf}
++\end{adjustbox}
++\end{table}
++
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/residual_means.pdf}
+ \caption{Residual diagnostics (Table~\ref{tab:residuals}): each stock's trailing 60-day mean residual from the lagged factor model. The line is the average across stocks, the band the 10th to 90th percentile.}
+ \label{fig:residual-means}
+ \end{figure}
+@@ -868,9 +911,9 @@
+ \]
+ With no earlier readings the mix starts at 50/50, and the starting mix gets weight $252 / (n_t + 252)$, which shrinks as readings accumulate. For example, with 252 earlier readings a raw percentile of 90\% becomes a hedged weight of 70\%. When trading begins in 2002 about 470 readings are available, so the smoothing pulls the raw percentile about a third of the way towards 50\%; by 2023 the pull is about 4\% (Figure~\ref{fig:hedge-allocation}). An earlier version used the raw percentile and stayed fully long-only until 252 readings had accumulated; we keep it as a comparison row.
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/hedge_allocation.pdf}
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/hedge_allocation.pdf}
+ \caption{Dynamic volatility mix: share of the portfolio in the fully hedged book at each weekly rebalance, using the smoothed percentile $\tilde p_t$ (dark) and the raw percentile of the earlier version (light).}
+ \label{fig:hedge-allocation}
+ \end{figure}
+@@ -882,10 +925,11 @@
+ \]
+ where $\overline{X}^{(60)}_{i,t}$ and $s^{(60)}_{i,t}$ are the mean and sample standard deviation of $X_{i,t-60}, \dots, X_{i,t-1}$. The 60 days provide the reference level and scale, while the running total itself carries forward from day to day. A negative score means the running total is unusually far below its recent levels, and the hypothesis is again that unusually low levels rise and unusually high levels fall. The two scores are related but distinct: across all stocks and days their correlation is 0.47. We trade the cumulative score in two ways. First, with exactly the snapback rules above (weekly, long only or the 40/40 long-short book, cutoff $\pm 2$), using the same lagged factor model, so the only change is the score. Second, as a \emph{daily rank book}, the version developed on our group's residual-reversion branch: every day it buys the 20\% of stocks with the lowest scores and shorts the 20\% with the highest, with at most 2\% in any stock, then shrinks positions until the book is both dollar and factor neutral. This version uses an unlagged regression refit every five days, as on that branch.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Residual snapback variants (out-of-sample, April 2002--2023).}
+ \label{tab:snapback-variants}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrrr}
+ \toprule
+ Variant & Sharpe & Sharpe (no fees) & Return & Volatility & Market beta & Max drawdown \\
+@@ -909,13 +953,14 @@
+ Daily rank book & 3.01 & 4.41 & 9.5\% & 3.0\% & 0.05 & $-8.3\%$ \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small 5bp fees unless stated. The benchmark holds every stock in equal weights, rebalanced weekly. Market beta is measured against the equal-weighted universe, as in Table~\ref{tab:development}.
+ \end{table}
+ 
+ The long-only default earns 19.1\% a year, but its Sharpe ratio after fees (0.82) only matches the equal-weight benchmark: most of its return and nearly all of its risk come from the market (beta 1.08). Regressing its daily returns on the market leaves an alpha of 3.6\% a year with 14.0\% residual volatility, an information ratio of 0.26. Hedging removes the market: the fully hedged long-short version has beta 0.06 and a market-adjusted alpha of 5.3\% a year with 8.2\% residual volatility (information ratio 0.65, close to Treynor--Black's 0.64 and below pairs trading's 1.05). Before fees its Sharpe ratio (1.38) is well above the long-only version's (1.03), but it trades as much as the long-only version on a smaller return, so after fees it falls to 0.76. Compared with the earlier projection hedge, the long-short book has lower risk (8.2\% vs.\ 12.7\% volatility, $-21.5\%$ vs.\ $-28.7\%$ drawdown) and a higher Sharpe ratio before fees (1.38 vs.\ 1.23), but a lower one after fees (0.76 vs.\ 0.83) and less alpha (5.3\% vs.\ 8.6\%). The hybrids and the dynamic mix have the highest Sharpe ratios after fees (0.87--0.96) because the long-only and hedged returns are imperfectly correlated. The mixes were chosen with the full sample in view; Section~\ref{sec:holdout} checks them out-of-sample. Because the long-only default is what the strategy was designed as, and the fully hedged version is the one comparable to the two market-neutral strategies, we test both throughout.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.75\textwidth]{figures/snapback_variants.pdf}
+ \caption{Residual snapback variants (Table~\ref{tab:snapback-variants}): Sharpe ratio with 5bp fees against market beta. Hollow markers are long-short books. The earlier projection hedge (gray) and the two market-neutral strategies are shown for reference. The daily rank book (Sharpe 3.01) is off scale.}
+@@ -926,10 +971,11 @@
+ 
+ Results this strong call for a check of how they would be executed. All our backtests trade at the closing price of the day the signal is computed. If part of a stock's residual on that day is noise in the closing price, such as a trade at the bid or the ask, the price partly reverts the next day. Trading at that same close then captures a reversal that could not be traded in practice. Table~\ref{tab:delay} repeats each version with every trade executed one day late. The daily rank book collapses from 3.01 to 0.25: almost all of its profit comes from the first day after the signal. The original snapback long-short book falls from 0.76 to 0.16. The weekly cumulative versions are the most robust, keeping a Sharpe ratio of 0.97 (long only) and 1.07 (long-short) when executed a day late. Their edge comes from a reversal that builds over weeks, not from the next day's bounce.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Execution delay: Sharpe ratios (5bp fees) when trading at the signal's close and one day later.}
+ \label{tab:delay}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrr}
+ \toprule
+ & \multicolumn{2}{c}{Full period} & \multicolumn{2}{c}{At the signal's close} & \\
+@@ -943,20 +989,21 @@
+ Daily rank book & 3.01 & 0.25 & 3.93 & 1.43 & 16bp \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Each version from its first trade (April 2002). The selection and holdout columns therefore differ slightly from Table~\ref{tab:holdout}, which uses a common period from March 2004.
+ \end{table}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.85\textwidth]{figures/execution_delay.pdf}
+ \caption{Execution delay (Table~\ref{tab:delay}): Sharpe ratio with 5bp fees when trading at the signal's close (filled) and one day later (hollow).}
+ \label{fig:execution-delay}
+ \end{figure}
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/cumulative_returns_snap.pdf}
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/cumulative_returns_snap.pdf}
+ \caption{Growth of \$1 invested in residual snapback (long only and fully hedged) and the equal-weight benchmark, with 5bp transaction costs, on a log scale. Shaded regions mark the 2008--09 financial crisis and the 2020 COVID crash.}
+ \label{fig:cumulative-snap}
+ \end{figure}
+@@ -969,16 +1016,17 @@
+ 
+ \paragraph{Survivorship bias.} Every stock in the sample trades continuously from 2000 to 2023, so the universe consists of firms that survived the full period. Firms that failed or were acquired are missing. This likely flatters all three strategies, since buying a stock after a fall never ends in a delisting in this sample. Residual snapback is the most exposed, because buying stocks right after unusually large drops is its entire signal. This is a limitation of the data, not of the strategy code.
+ 
+-\section{Strategy Testing}
++\section{Strategy testing}
+ 
+ We test all three strategies along six dimensions, reporting residual snapback in both its long-only and fully hedged forms. Unless stated otherwise, all results are out-of-sample, from January 2002 (April 2002 for snapback) to December 2023.
+ 
+ \subsection{Regime robustness}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Annual returns and Sharpe ratios.}
+ \label{tab:yearly}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrrr}
+ \toprule
+ & \multicolumn{3}{c}{Contrarian Treynor--Black} & \multicolumn{3}{c}{PCA pairs trading} \\
+@@ -1009,14 +1057,16 @@
+ 2023 & $-0.8\%$ & $-2.1\%$ & $-0.22$ & 2.2\% & 1.6\% & 1.05 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Returns and Sharpe ratios are without fees unless marked 5bp.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Annual returns and Sharpe ratios: residual snapback.}
+ \label{tab:yearly-snap}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrrr}
+ \toprule
+ & \multicolumn{3}{c}{Long only} & \multicolumn{3}{c}{Fully hedged} \\
+@@ -1047,15 +1097,17 @@
+ 2023 & 31.9\% & 25.3\% & 1.49 & 1.3\% & $-3.7\%$ & 0.21 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Returns and Sharpe ratios are without fees unless marked 5bp. 2002 starts in April.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Concentration and stability of returns.}
+ \label{tab:regime}
+ \resizebox{\textwidth}{!}{%
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lcccc}
+ \toprule
+ & & & \multicolumn{2}{c}{Residual snapback} \\
+@@ -1070,37 +1122,38 @@
+ Sharpe 2002--2012 / 2013--2023 (5bp) & 1.41 / 0.32 & 1.18 / 1.16 & 0.86 / 0.78 & 1.06 / 0.45 \\
+ Maximum drawdown (no fees / 5bp) & $-5.2\%$ / $-6.1\%$ & $-3.6\%$ / $-3.9\%$ & $-54.6\%$ / $-58.5\%$ & $-19.6\%$ / $-21.5\%$ \\
+ \bottomrule
+-\end{tabular}}
++\end{tabular}
++\end{adjustbox}}
+ \end{table}
+ 
+ No single year carries any of the strategies, but they differ markedly (Figures~\ref{fig:cumulative-tb}--\ref{fig:annual-snap}). Treynor--Black earns its best returns in crises: in 2008 it gained 15.6\% while the market fell 27\%, followed by 23.4\% in 2009 and 8.1\% in 2020. These are periods of panic selling and overreaction, when betting on reversal should pay. However, 2008--09 account for 43\% of its total profit, and its Sharpe ratio after fees fell from 1.41 in 2002--2012 to 0.32 in 2013--2023. Pairs trading is far more stable: profitable in 21 of 22 years, no more than 28\% of profit from any two years, and an essentially identical Sharpe ratio in both halves of the sample.
+ 
+ Residual snapback has the least concentrated profits of the three: its best two years supply only about a quarter of the total. But it behaves very differently in crises. Long-only snapback lost 19.1\% in 2007 while the market rose 2\%, and 24.6\% in 2008, then gained 94\% in 2009. Buying the stocks that have just fallen hardest means catching falling knives in a sustained sell-off, and the long-only version carries the full market drawdown on top ($-58.5\%$ peak to trough, versus $-53\%$ for the benchmark). The fully hedged version behaves more like Treynor--Black: 2008 (25.7\%) and 2009 (27.1\%) are its two best years, and it cuts the maximum drawdown to $-21.5\%$. But its edge has faded: its Sharpe ratio after fees fell from 1.06 in 2002--2012 to 0.45 in 2013--2023, the second-largest decline after Treynor--Black's. Since 2013 it has lost money after fees in 2015, 2019 and 2023 and earned less than 2.5\% in 2013, 2014 and 2017.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=\textwidth]{figures/regime_stability.pdf}
+ \caption{Concentration and stability of returns (Table~\ref{tab:regime}). Left: share of total profit (no fees) earned in each strategy's best two years. Right: Sharpe ratio with 5bp fees in 2002--2012 (hollow) and 2013--2023 (filled).}
+ \label{fig:regime-stability}
+ \end{figure}
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/annual_returns_tb.pdf}
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/annual_returns_tb.pdf}
+ \caption{Annual returns of Contrarian Treynor--Black (no fees).}
+ \label{fig:annual-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/annual_returns_pairs.pdf}
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/annual_returns_pairs.pdf}
+ \caption{Annual returns of PCA pairs trading (no fees).}
+ \label{fig:annual-pairs}
+ \end{figure}
+ 
+-\begin{figure}[H]
+-\centering
+-\includegraphics[width=\textwidth]{figures/annual_returns_snap.pdf}
++\begin{figure}[!htbp]
++\centering
++\includegraphics[width=0.88\linewidth]{figures/annual_returns_snap.pdf}
+ \caption{Annual returns of residual snapback, long only (solid) and fully hedged (hatched), no fees. 2002 starts in April.}
+ \label{fig:annual-snap}
+ \end{figure}
+@@ -1109,10 +1162,11 @@
+ 
+ We vary one parameter at a time around the defaults. Because a 1000-day PCA window needs four years of history, all variants are compared over a common period: December 2003 onward for Treynor--Black and pairs trading, and March 2004 onward for residual snapback, whose lagged model and residual history need a few more months. The selection and holdout columns split this period into a selection period (through 2017) and a holdout period (2018--2023); see Section~\ref{sec:holdout}.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Parameter sensitivity: contrarian Treynor--Black.}
+ \label{tab:sensitivity-tb}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{llrrrrr}
+ \toprule
+ Parameter & Value & Sharpe & Sharpe (5bp) & Return (5bp) & Selection & Holdout \\
+@@ -1127,14 +1181,16 @@
+ & 5 & 1.27 & 0.80 & 2.3\% & 1.06 & 0.41 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Defaults: alpha window 250 days, PCA window 500 days, score cap 3. Selection and holdout columns include 5bp fees.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Parameter sensitivity: PCA pairs trading.}
+ \label{tab:sensitivity-pairs}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{llrrrrr}
+ \toprule
+ Parameter & Value & Sharpe & Sharpe (5bp) & Return (5bp) & Selection & Holdout \\
+@@ -1157,14 +1213,16 @@
+ Selection method & correlation & 1.89 & 1.35 & 1.6\% & 1.37 & 1.33 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Defaults: entry 2, exit 0.5, spread window 60 days, 50 pairs, re-selection every 21 days, PCA window 500 days, selection by PCA loadings.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Parameter sensitivity: residual snapback (Sharpe ratios, 5bp fees).}
+ \label{tab:sensitivity-snap}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{llrrrrrr}
+ \toprule
+ & & \multicolumn{3}{c}{Long only} & \multicolumn{3}{c}{Fully hedged} \\
+@@ -1192,6 +1250,7 @@
+ & dynamic & 0.88 & 1.06 & 0.51 & & & \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Defaults: 3 signal days, 60-day volatility window, threshold $-2$, up to 20 positions, weekly rebalancing, 100-day regression window, PCA window 500 days. The fully hedged version takes up to twice the maximum positions on each side (40 by default). Common period March 2004--2023.
+ \end{table}
+@@ -1200,21 +1259,21 @@
+ 
+ Residual snapback stays profitable after fees under every variant (Figure~\ref{fig:sensitivity-snap}). For the long-only version the model choices (regression window, PCA window) matter little; the hedged version is more sensitive to the regression window, falling to 0.56 with a 60-day window, presumably because noisier betas make the factor hedge less accurate. The signal design matters more. A one-day signal is the best variant in both versions (1.04 long only, 1.46 hedged), again pointing to very short-term reversal. Stricter thresholds lower the Sharpe ratio in both versions, plausibly because fewer stocks qualify and the portfolio is more concentrated, although for the long-only version they did better in the holdout. A 20-day volatility window gives a noisy estimate of $\hat\sigma_{i,t}$ and is the weakest choice for the long-only version. The hedged version's results move more between periods: its holdout Sharpe ratios range from 0.20 (threshold $-3$) to 1.40 (five signal days, which was among the worst variants in the selection period).
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.7\textwidth]{figures/parameter_sensitivity_snap.pdf}
+ \caption{Sharpe ratio (5bp fees) of residual snapback for each parameter variant, long only (filled) and fully hedged (hollow). The vertical line marks the long-only default. Hedge mixes apply only to the long-only version.}
+ \label{fig:sensitivity-snap}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.7\textwidth]{figures/parameter_sensitivity_tb.pdf}
+ \caption{Sharpe ratio (5bp fees) of Contrarian Treynor--Black for each parameter variant. The vertical line marks the default settings.}
+ \label{fig:sensitivity-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.7\textwidth]{figures/parameter_sensitivity_pairs.pdf}
+ \caption{Sharpe ratio (5bp fees) of PCA pairs trading for each parameter variant. The vertical line marks the default settings.}
+@@ -1223,10 +1282,11 @@
+ 
+ \subsection{Trading costs}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Turnover and the cost of trading.}
+ \label{tab:costs}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lcccc}
+ \toprule
+ & & & \multicolumn{2}{c}{Residual snapback} \\
+@@ -1247,27 +1307,28 @@
+ Sharpe at 20bp & $-0.57$ & 0.32 & 0.21 & $-1.05$ \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \end{table}
+ 
+ Figures~\ref{fig:fees-tb}--\ref{fig:fees-snap} show how each strategy's Sharpe ratio falls with costs. Treynor--Black rebalances daily and turns over its portfolio 28 times a year, so costs take about a third of its edge, and it stops being profitable at around 14bp per trade. Pairs trading holds each position until the spread converges, halving turnover. It loses only a fifth of its edge to costs and survives fees up to about 26bp.
+ 
+ Residual snapback trades by far the most. Its holdings change almost completely every week, for a turnover of about 100 times a year, and fees cost 5\% a year at 5bp. The long-only version appears to survive this well (break-even 25bp), but only because its gross return includes the market, which costs nothing to trade. The fully hedged version, whose return is the strategy's own edge, loses 45\% of that edge at 5bp and breaks even at about 11bp, below Treynor--Black's 14bp. Trading costs are the main reason its Sharpe ratio of 1.38 before fees, close to pairs trading's 1.45, shrinks to 0.76.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/fee_sensitivity_tb.pdf}
+ \caption{Sharpe ratio of Contrarian Treynor--Black as a function of the transaction cost per dollar traded.}
+ \label{fig:fees-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/fee_sensitivity_pairs.pdf}
+ \caption{Sharpe ratio of PCA pairs trading as a function of the transaction cost per dollar traded.}
+ \label{fig:fees-pairs}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/fee_sensitivity_snap.pdf}
+ \caption{Sharpe ratio of residual snapback, long only (solid) and fully hedged (dashed), as a function of the transaction cost per dollar traded.}
+@@ -1278,10 +1339,11 @@
+ 
+ To check that each signal predicts returns in the intended direction, we compare the signal on day $t$ with realized returns over the next $h$ days. For each day, we regress the realized return on the cross-sectionally standardized signal. Table~\ref{tab:calibration-slopes} reports the average slope with Newey--West $t$-statistics to account for overlapping horizons.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Treynor--Black: mean excess return by signal decile (bp).}
+ \label{tab:calibration-tb}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrrrrrrr}
+ \toprule
+ Horizon & D1 & D2 & D3 & D4 & D5 & D6 & D7 & D8 & D9 & D10 \\
+@@ -1291,14 +1353,16 @@
+ 20 days & $-34.4$ & $-17.4$ & $-0.5$ & 2.1 & 14.2 & 22.1 & 10.0 & 6.9 & 3.4 & $-6.1$ \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small D1 is the decile the strategy shorts most (highest alpha), D10 the decile it buys most. Excess return is relative to the cross-sectional average.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Pairs trading: mean change in the pair's log price ratio by spread z-score (bp).}
+ \label{tab:calibration-pairs}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrr}
+ \toprule
+ Spread z-score & Next 1 day & Next 5 days & Next 20 days & Observations \\
+@@ -1313,12 +1377,14 @@
+ $z > 3$ & $-59.7$ & $-143.8$ & $-267.5$ & 2,036 \\
+ \bottomrule
+ \end{tabular}
+-\end{table}
+-
+-\begin{table}[H]
++\end{adjustbox}
++\end{table}
++
++\begin{table}[!htbp]
+ \centering
+ \caption{Residual snapback: mean excess return by snapback score (bp).}
+ \label{tab:calibration-snap}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrr}
+ \toprule
+ Snapback score $s_i$ & Next 1 day & Next 5 days & Next 20 days & Observations \\
+@@ -1333,14 +1399,16 @@
+ $s > 3$ & $-18.3$ & $-42.8$ & $-39.4$ & 59,500 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Every stock on every trading day, not only the stocks and weeks the strategy trades. Excess return is relative to the cross-sectional average. The strategy buys at $s \le -2$.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Cumulative residual score: mean excess return by score (bp).}
+ \label{tab:calibration-cumulative}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrr}
+ \toprule
+ Cumulative score $z_i$ & Next 1 day & Next 5 days & Next 20 days & Observations \\
+@@ -1355,15 +1423,17 @@
+ $z > 3$ & $-19.4$ & $-45.7$ & $-56.9$ & 83,824 \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Same stocks, days and target as Table~\ref{tab:calibration-snap}, using the lagged factor model's residuals. Observations are for the next-day horizon.
+ \end{table}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Return per one standard deviation of signal.}
+ \label{tab:calibration-slopes}
+ \resizebox{\textwidth}{!}{%
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{lrrrrrrrr}
+ \toprule
+ & \multicolumn{2}{c}{Treynor--Black} & \multicolumn{2}{c}{Pairs trading} & \multicolumn{2}{c}{Snapback score} & \multicolumn{2}{c}{Cumulative score} \\
+@@ -1374,7 +1444,8 @@
+ 5 days & 3.4bp & 3.4 & 19.3bp & 7.3 & 11.4bp & 13.3 & 11.1bp & 10.9 \\
+ 20 days & 7.7bp & 1.8 & 39.0bp & 4.7 & 17.1bp & 10.7 & 20.6bp & 7.4 \\
+ \bottomrule
+-\end{tabular}}
++\end{tabular}
++\end{adjustbox}}
+ \\[4pt]
+ \small The pairs slope is per pair spread; the Treynor--Black and snapback slopes are per stock.
+ \end{table}
+@@ -1385,28 +1456,28 @@
+ 
+ The cumulative score is also monotonic in every bucket at every horizon (Table~\ref{tab:calibration-cumulative}). Its slope is slightly smaller than the snapback score's at one day (5.0bp vs.\ 6.0bp) but larger at 20 days (20.6bp vs.\ 17.1bp), and its most extreme buckets have larger returns ($+60$bp over five days for $z < -3$, against $+47$bp for the snapback score). This fits the execution-delay results: the cumulative score's predictive power lasts longer, so less of it is lost when trading weekly or a day late.
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/calibration_tb.pdf}
+ \caption{Calibration of Contrarian Treynor--Black: next 5-day excess return by signal decile.}
+ \label{fig:calibration-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/calibration_pairs.pdf}
+ \caption{Calibration of PCA pairs trading: next-day change in the pair log price ratio by spread z-score.}
+ \label{fig:calibration-pairs}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/calibration_snap.pdf}
+ \caption{Calibration of residual snapback (Tables~\ref{tab:calibration-snap} and~\ref{tab:calibration-cumulative}): next 5-day excess return by snapback score (solid) and by cumulative residual score (hatched).}
+ \label{fig:calibration-snap}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/calibration_slopes.pdf}
+ \caption{Newey--West $t$-statistic of each signal's slope by horizon (Table~\ref{tab:calibration-slopes}); the cumulative residual score is dashed. The gray dashed line marks $t = 2$. The $t$-statistics are comparable across strategies even though the slopes are in different units.}
+@@ -1418,10 +1489,11 @@
+ 
+ To check that our design choices are not overfit, we treat 2018--2023 as a holdout. Any choice is made using only 2002--2017 data and then evaluated once on the holdout.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Selection period vs.\ holdout (Sharpe ratios, 5bp fees).}
+ \label{tab:holdout}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{llrr}
+ \toprule
+ Strategy & Choice & 2002--2017 & 2018--2023 \\
+@@ -1443,11 +1515,12 @@
+ Following alpha (no fees) & Sign check & $-1.63$ & $-0.77$ \\
+ \bottomrule
+ \end{tabular}
++\end{adjustbox}
+ \\[4pt]
+ \small Default, best-setting and hedge-mix rows use the common period of the parameter variants, starting December 2003 (March 2004 for snapback). Best-$K$ rows start in 2002, so the $K = 5$ row differs slightly from the default row.
+ \end{table}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.85\textwidth]{figures/holdout.pdf}
+ \caption{Selection period vs.\ holdout (Table~\ref{tab:holdout}): Sharpe ratio with 5bp fees in 2002--2017 (hollow) and in the 2018--2023 holdout (filled). The no-fee sign check is omitted.}
+@@ -1462,10 +1535,11 @@
+ 
+ Finally, we re-run all three strategies for $K \in \{1, 2, 3, 5, 8, 10, 15, 20\}$, both out-of-sample and in-sample. In the in-sample version, the PCA and the alphas are estimated once on the full 2000--2023 sample and then traded over the same period, which introduces look-ahead bias. For residual snapback, the in-sample version computes each day's residual from the full-sample coefficients.
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Sharpe ratios by number of factors $K$.}
+ \label{tab:k}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{rrrrrrrr}
+ \toprule
+ & \multicolumn{4}{c}{Treynor--Black} & \multicolumn{3}{c}{Pairs trading} \\
+@@ -1484,26 +1558,28 @@
+ 20 & 1.66 & 0.96 & $-3.42$ & 3.42 & 1.60 & 1.18 & 2.15 \\
+ \bottomrule
+ \end{tabular}
+-\end{table}
+-
+-\begin{figure}[H]
++\end{adjustbox}
++\end{table}
++
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/k_sweep_tb.pdf}
+ \caption{Sharpe ratio (no fees) of Contrarian Treynor--Black by number of factors $K$, out-of-sample vs.\ in-sample. The in-sample version follows alpha rather than trading against it.}
+ \label{fig:k-tb}
+ \end{figure}
+ 
+-\begin{figure}[H]
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/k_sweep_pairs.pdf}
+ \caption{Sharpe ratio (no fees) of PCA pairs trading by number of factors $K$, out-of-sample vs.\ in-sample.}
+ \label{fig:k-pairs}
+ \end{figure}
+ 
+-\begin{table}[H]
++\begin{table}[!htbp]
+ \centering
+ \caption{Sharpe ratios by number of factors $K$: residual snapback.}
+ \label{tab:k-snap}
++\begin{adjustbox}{max width=\linewidth}
+ \begin{tabular}{rrrrrrr}
+ \toprule
+ & \multicolumn{3}{c}{Long only} & \multicolumn{3}{c}{Fully hedged} \\
+@@ -1522,9 +1598,10 @@
+ 20 & 0.98 & 0.77 & 1.12 & 0.46 & $-0.21$ & 1.97 \\
+ \bottomrule
+ \end{tabular}
+-\end{table}
+-
+-\begin{figure}[H]
++\end{adjustbox}
++\end{table}
++
++\begin{figure}[!htbp]
+ \centering
+ \includegraphics[width=0.65\textwidth]{figures/k_sweep_snap.pdf}
+ \caption{Sharpe ratio (no fees) of residual snapback by number of factors $K$, out-of-sample vs.\ in-sample, long only (left) and fully hedged (right).}
+@@ -1537,315 +1614,318 @@
+ 
+ \section{Conclusion}
+ 
+-All three PCA strategies are profitable out-of-sample and after transaction costs, but they differ in robustness. Contrarian Treynor--Black shows that estimated alphas reverse rather than persist. It is factor neutral by construction (market beta 0.04) and performs best in crises, but it is concentrated in 2008--09, sensitive to trading costs, and has weakened since 2013. PCA pairs trading is the most robust strategy: it is profitable in 21 of 22 years, well calibrated, insensitive to its parameters, and stronger in the 2018--2023 holdout than before it. Residual snapback has the strongest signal of the three, with stocks that fall well short of the factor model's prediction reliably outperforming over the next one to twenty days. Its implementation leaves much of that signal on the table. The long-only version mostly earns the market return (beta 1.08, the same Sharpe ratio as an equal-weight benchmark), and the fully hedged long-short version, comparable to the other two strategies, has a Sharpe ratio of 1.38 before fees but trades about 100 times a year and gives up almost half of its edge to costs. Both weaken in the holdout, and the hedged version's edge has faded since 2013. Measuring the shortfall cumulatively rather than over three days helps most: with the same trading rules, the cumulative residual score raises the long-short Sharpe ratio after fees to 1.76 (1.26 in the holdout) and keeps 1.07 when trades are executed a day late. A daily version of the same signal reaches 3.01, but it collapses to 0.25 with a one-day delay. Most of its profit comes from next-day price reversals that a real trader could probably not capture. Finally, the contrast between in-sample and out-of-sample results shows why rolling estimation matters. Estimating the model on the full sample does not merely inflate performance; for Treynor--Black it reverses the conclusion about which way to trade.
+-
+-
+-\quad
+-
+-Strategy 3: Residual Mean Reversion Strategy
+-
+-The underlying strategy for the residual mean reversion strategy has to do with the underlying belief that when stocks move down on d more than what we had predicted from the data from days 1,..., d-1, then we should buy these particular stocks as we believe that the market has undervalues/overreacted to these stocks (and that they have higher relative expected value to assets that have moved as expected in our regression or assets that have moved higher than our prediction from the regression. The difference between this strategy and the Treynor black method is the fact that Treynor Black relies on inspection on the alpha parameter while the residual snapback strategy relies on buying stocks that we believe are relatively undervalued due to an overreaction in the markets.
+-
+-For Treynor–Black, we have used a 250-day regression window since the estimated alpha from this data directly determines the trading signal and a longer window of data would gives us many more observations and would reduce the influence of a  anomalies in the data. 
+-
+-However, for residual snapback, the regression serves a different purpose. This regression is supposed to give us a baseline/prior against we need to measure these recent unexpected returns. A shorter window such as a 100-day window lets that baseline adapt more quickly to recent changes in the stock’s factor exposures, while also at the cost of estimates with higher standard devations.  However, due to the short term edge We therefore use 100 days for snapback as a design choice suited to its short-horizon signal.
+-\quad
+-
+-Now, to understand the "signal" of the residual between the actual daily return compared to the regressions predictions, we need to get an understanding of how much of a deviation/size of residual is normal for a particular stock. For example, if a particular stock barely deviates from the regression prediction and then randomly is 5 percent different than what the regression predicts would have a different signal than a stock that on average has a 5 percent deviation from the regression prediction. To do this, we look at the last 60 trading days and fit the regression model to 1 day less than our current day. Then, we calculate the residuals on those 60 days. After we have these residuals, we use these 60 data points to get a sample variance for the residual as well as a sample mean. Then, we examine how the next three days of trading looks like after we have out 100 days of data. After normalizing the average residual by transforming it into a z score, we get a heuristic/z-score statistic for how much the stock has gone down compared to its "fair value." Although "fair value" is not the correct depicition since we have no way of understanding what is a "fair value." 
+-
+-\[
+-\mathrm{Score}_{i,t}
+-=
+-\frac{\displaystyle\sum_{k=0}^{2}\varepsilon_{i,t-k}}
+-     {\sqrt{3}\,\widehat{\sigma}_{i,t}},
+-\qquad
+-\widehat{\sigma}_{i,t}
+-=
+-\sqrt{\frac{1}{59}
+-\sum_{k=3}^{62}
+-\left(\varepsilon_{i,t-k}-\overline{\varepsilon}_{i,t}\right)^2},
+-\qquad
+-\overline{\varepsilon}_{i,t}
+-=
+-\frac{1}{60}\sum_{k=3}^{62}\varepsilon_{i,t-k}.
+-\]
+-
+-Note that the numerator here in the score function is the sum of the three errors (the days 1 day 2 day and 3 day after the 100 previous days of regression and the 60 previous days of understanding how our model is calibrated.) A negative value in the error refers to the stock underperforming the return compared to what our factor model was predicting over those three days. On the other hand, a positive value means that we thought that the market price has "overshot" what the factor model would have predicted. If we assume that the expected value of each of these errors is 0 (the factor model is an unbiased estimator of what the price of a stock should be condicitioned upon the rest of the market prices), then we essentially know that the sum in the numerator is how much the price and the "condiitonal mean disagree." Now, the denominator of the stock is used to "standardize" the error, as we have mentioned earlier. We have estimated summa i,t hat from the previous 60 days of trading data and then we know that the sum of three random variables has a variance that is 3 times a single one, since the standard deviation is sqrt of variance, then we know that the sum of three std devs is equivalent in expansion to sqrt(3) * standard dev which is why we divide by sqrt(3) in the denominator.
+-(An assumption that we are making when dividing by sqrt(3) is that the residuals are uncorrelated, which may be a strech given that this "error" is hypothesized to be due to irrational market sentiment, which would likely presist and be correlated throughout the three days. If we were to think about this strategy more, one way to add complexity would be to alter the denominator to match this. However, since this score applied to all of the stocks in our portfolio, it is likely not that important if our signal is supposed to be multiplied by a particular magnitude that is constant/not dependent on our stock (given that a signal is only important as it has relative information, meaning that its used to compare two stocks). 
+-
+-The second expression is how we have calulated the standard deviation. Hopefully, the average error is ei,t which would mean that we predicted the error well and then we are only dividing by 59 instead of 60 because the expression is sqrt(1/(n-1) * rss) for the sample standard deviation. 
+-
+-Below here, I have also attached the 60-day residual mean across stocks, so that we can examine if it is true that that the regression model likely is an unbiased conditional estimate of a securities market price:  
+-
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{errors.png}
+-    \caption{Enter Caption}
+-    \label{fig:}
+-\end{figure}
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{erorrs_mean.png}
+-    \caption{Enter Caption}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-
+-Notice that after examining these figures, they show that the factor model has quite a small average signed error (0) across the stocks. 
+- This suggests that when using the factor exposures and the regression used/fitted until the prior day, the model explains returns without a  tendency to overstate or understate them or understate them on average. 
+-
+-
+- Trading Sub-Strategies:    
+-
+-
+-\paragraph{Naive residual snapback.}
+-
+-On the last trading day of each week, we rank stocks by their residual
+-scores and select up to 20 stocks with "scores" of -2 or lower. If there are more than 20 stocks that have scores of -2 or lower, then we select the ones that have the lowest scores. If we have n stocks, we would go long in each stock with a proprtion of 1/n for each stock. If there are zero stocks that qualify, then we would hold all of our portfolio in cash. We re-evaluate our portfolio each trading day of the week by looking at the past 3 days, Wednesday throguh firsthand and the recalibrate our portfolio at the end of the week. 
+-
+-\paragraph{Experimental Factor Hedging on Top of Naive Residual Snapback}
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{naive_snapback.png}
+-    \caption{The naive}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-
+-
+-
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{stricter_cutoff.png}
+-    \caption{stricter cuttoff}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-
+-
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{70percentnaive_30percenthedged.png}
+-    \caption{70 percent hedged and 30 percent naive}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-
+-
+-Although the signal may be choosing stocks that are expected to be higher than the market, it can still have exposures to those 5 PCA factors/vectors. For example, our portfolio could be heavily positively exposed to the 2nd principal component, if we have an equal weight long portfolio that is sensitive to these movements, then that would not be ideal. To hedge out our portfolio to these exposures, we can naively start with our selected group of stocks and adjust their weights. 
+-
+-The fully hedged strategy aims to mitigate this risk by collecting the top 40 eligible stocks that have the "lowest scores" (meaning that they have moved downwards more than what we expect) and set these as our "long candidate space." Then, we take up to 40 stocks with the most positive scores as short candidates. The longs express the fact that we believe some of the candidates have moved too far down and should be worth more (with relation to the rest of the market) and the shorts we have are the stocks that we believe have moved too far up in relation to the other stocks in our portfolio space. We then start with target weights that would allow us to provide 50 percent of our capital to the shorts and 50 percent to the longs. 
+-
+-%look into the below well
+-
+-We can denote wt(0) denote these signed target
+-weights (which we have naivelly set it to be .5 * 1/(number of long candidates) for each vector entry that corresponds to the stock that has a negative stock and .5 * 1/n(number of short candidates) for a stock that corresponds to a positive score. Now, also let Bt be the matrix whose columns contain the five estimated PCA factor loadings for each selected stock.  Note that the dimension of B is 5 * (number of stocks that are both in the long or short candidate space). 
+-
+-For any weight
+-vector wt, the portfolio's estimated factor exposures are
+-Btwt. We choose weights as close as possible to the
+-initial targets while imposing factor neutrality and preserving the
+-direction of each trade:
+-\[
+-\begin{aligned}
+-\min_{\mathbf{w}_t}\quad &
+-    \frac{1}{2}\|\mathbf{w}_t-\mathbf{w}^{(0)}_t\|_2^2 \\
+-\text{subject to}\quad &
+-    B_t\mathbf{w}_t=\mathbf{0}, \qquad
+-    \sum_i |w_{i,t}|=1,\\
+-&   w_{i,t}\geq 0 \quad \text{for long candidates},\\
+-&   w_{i,t}\leq 0 \quad \text{for short candidates}.
+-\end{aligned}
+-\]
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{fully_hedged.png}
+-    \caption{fully hedged portfolio}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-After performing this strategy and keeping all other frameworks from the previous strategy the same, we get the following results: 
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{fully_hedged.png}
+-    \caption{fully hedged portfolio}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-\paragraph{Fixed-weight hybrid residual snapback.}
+-Our naive intitial Snapback portfolio gives full weight to (at most) 20 long-only
+-rebound signals, while the fully hedged portfolio offsets exposure to the five PCA factors by constructing the weights to meet a Principal component neutral portfolio. Now, what if we were to blend both these portfolios to retain the naive strategies upside (since this portfolio is known to perform better in terms of returns compared to market) while reducing exposure/risk through the hedged portfolio. 
+-
+-We test whether blending the two
+-portfolios can retain some of the naive strategy's upside while
+-reducing its exposure to common factor moves.
+-
+-
+-%look into the below more: 
+-
+-Essentially, we are keeping each of the two strategies exactly the
+-same. All we are doing is constructing both portfolios separately
+-and then combining their stock weights:
+-\[
+-    \mathbf{w}_t^{\mathrm{hybrid}}
+-    = \lambda\,\mathbf{w}_t^{\mathrm{naive}}
+-    + (1-\lambda)\,\mathbf{w}_t^{\mathrm{hedged}}.
+-\]
+-
+-Our parameter that we have the freedom to change is ,
+-which determines the mix of the two portfolios in our hybrid model.
+-We test =0.30, 0.50, and 0.70. Note that
+-wtnaive contains the weights we have determined
+-for each stock based on our naive criteria, and
+-wthedged contains the weights we have determined
+-for each stock based on our hedging criteria.
+-
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{50percentnaive_50hedged.png}
+-    \caption{50 percent naive and 50 percent hedged}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{30percentnaive.png}
+-    \caption{30 percent Naive + 70 percent hedged strategy}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{70percentnaive_30percenthedged.png}
+-    \caption{70 percent naive and 30 hedged }
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-\paragraph{Volatility-weighted hybrid residual snapback.}
+-
+-Note that in the fixed-weight hybrid strategies, we are supposed to choose a value of 
+-and keep this parameter the same throughout the trading horizon. Note that this may not be the ideal way to construct this strategy. For example, if we are in an uncertain time where stocks will tend to move around a lot, then it is better to have a portfolio that is more hedged to these risks. However, if we believe that stocks have lower volatility and that the tail risk of a particular asset class/sector/principal component dropping sharply in value, we are willing to take a more aggressive holding of stocks. 
+-
+-We plan on changing this parameter depending on the volatility of the stocks. 
+-
+-The first thing that we do is we calculate an equal-weight market return by averaging stock returns across our entire csv file for each day. (Essentially we calculate the return of the  equal weight market portfolio). Then, we can also estimate the sample standard deviation of these returns based off a specific set of returns. Thus, to estimate daily market volatility for each date t, we measure the sample standard deviation of these returns over the trailing 30 trading days. Note that this estimate uses only returns that are available by day t. 
+-
+-After we do this, we let the variable pt[0,1] be the
+-resulting historical percentile rank of volatility. For example, if this is the lowest volatility in all of the history, then we would let pt be 0. However, if this was a the highest volatility, then we would let pt be 1. 
+-
+-We will now use this pt value as the weight of our portfolio that we would like to have in the fully hedged portfolio. In other words, the weight on the naive portfolio is t=1-pt. 
+-
+-Notice that the following hedged allocation for the weights are: 
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{volatility_allocation.png}
+-    \caption{Weight allocation based off volatility}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-Although this graph looks pretty good, something to notice is that at the beggining of the timeline, we are alternative from 0 percent to 100 percent in the weights. This is because the rank is very sensitive to the few data points that we have. For example, at the beggining of this process we would have a sparse amount of data (for example the first data point is both the lowest and the highest volatility seen yet, so it is hard to factor this information into the model). 
+-
+-
+-To avoid this problem of letting a small number of early observations drive the allocation, we can use a symmetric Laplace smoothing to our weight allocation. 
+-Before each weekly re balance, we compare the current estimate of volatility with all earlier 30-day volatility estimates. 
+-We define the following variables: nt
+-be the number of earlier readings and kt be the number
+-below the current reading, with ties counting as 1/2. 
+-
+-Then, we will add 126 pseudo-readings on each side of our current estimate. This gives us the following weight on the hedged portfolio:
+-\[
+-    \widetilde p_t = \frac{k_t+126}{n_t+252}.
+-\]
+-
+-Note that now, with no earlier readings, the rule starts at a 50/50 mix. The starting mix receives weight of 252/(nt+252), so its "bias" decreases as more observations accumulate. For example, with 252 earlier readings, a raw volatility percentile of 90\% becomes a hedge weight of 70\%, halfway between the raw percentile and the 50\% starting weight.
+-
+-The final portfolio allocates $\widetilde p_t$ to the fully hedged
+-portfolio and $1-\widetilde p_t$ to the naive portfolio:
+-\[
+-    \mathbf{w}_t^{\mathrm{dynamic}}
+-    =
+-    (1-\widetilde p_t)\mathbf{w}_t^{\mathrm{naive}}
+-    +
+-    \widetilde p_t\mathbf{w}_t^{\mathrm{hedged}}.
+-\]
+-
+-Below is an image depicting the new weight allocation graph: 
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{updated_vol_weights.png}
+-    \caption{Enter Caption}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-Implementing this strategy, we get the following results: 
+-
+-\begin{figure}[H]
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{dynamic_volatility.png}
+-    \caption{Dynamic Volatility PNL}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-\subsection{Cumulative residual reversion}
+-
+-The Residual Snapback strategy that we have been working on looks for stocks that have underperformed their
+-estimated factor exposures over the last three trading days. 
+-
+-
+-However, what if a stock is underperforming for a while and is drifting away from the market price, but then trades in line with the market for the three days that we are examining? 
+-
+-In this case, the Snapback score could be very close to zero but the sum of all the culmulative residuals could be quite low. 
+-
+-%hello 
+-The PCA factors that we have recieved are estimated from a previous past 500 day windw while the regression that we are fitting on has been trained over the past 100 days. A day's residual $\varepsilon_{i,t}$ is the difference between the stock's realized
+-return and the return explained by the fitted factor model (as discussed above in our naive strategy/the ones the followed).
+-
+-For this strategy, we add every single daily residual to a total sum:
+-\[
+-    X_{i,t} = X_{i,t-1} + \varepsilon_{i,t}.
+-\]
+-
+-Then, we compare the residual with how the residual has normally looked over the past 60 days (similar to how we have also normalized the residuals). 
+-\[
+-    z_{i,t}
+-    =
+-    \frac{X_{i,t}-\overline{X}_{i,t}^{(60)}}
+-         {s_{i,t}^{(60)}}.
+-\]
+-\begin{figure}
+-    \centering
+-    \includegraphics[width=0.5\linewidth]{msft_residual_reversion.png}
+-    \caption{Enter Caption}
+-    \label{fig:placeholder}
+-\end{figure}
+-
+-Essentially, the way that the portfolio is made is we rank the stocks by their scores (as we have normally done for the other methods) and we buy the lowest-scoring 20\% and short the highest-scoring 20\%. This is slightly different than the naive method since we are account for a percent change rather than a strict cuttoff that we had in the naive method. 
+-
+-
+-Note that similar to the PCA factor neutral (fully hedged) strategy, we will ensure that our portfolio has zero estimated exposure to any of the 5 pca factors. We also want zero dollar exposure as well. So, the following two constraints is what we are up against: 
+-\[
+-    \mathbf{1}^{\top}\mathbf{w}_t=0,
+-    \qquad B_t\mathbf{w}_t=\mathbf{0},
+-\]
+-where the columns of $B_t$ contain the selected stocks' factor
+-loadings. The adjustment can shrink a position to zero while
+-preserving its direction. Individual weights are capped at 2\%
+-in absolute value. The neutrality constraints can leave some
+-capital unallocated, so gross exposure can fall below 100\%.
+-The backtest applies the current day's returns to existing
+-positions before placing the new trades.
+-
+-
+-
+-
+-
++All three PCA strategies are profitable out-of-sample and after transaction costs, but they differ in robustness. Contrarian Treynor--Black shows that estimated alphas reverse rather than persist. It is factor neutral by construction (market beta 0.04) and performs best in crises, but it is concentrated in 2008--09, sensitive to trading costs, and has weakened since 2013. PCA pairs trading is the most robust strategy: it is profitable in 21 of 22 years, well calibrated, insensitive to its parameters, and stronger in the 2018--2023 holdout than before it. Residual snapback has the strongest signal of the three, with stocks that fall well short of the factor model's prediction reliably outperforming over the next one to twenty days. Its implementation captures only part of that signal. The long-only version mostly earns the market return (beta 1.08, the same Sharpe ratio as an equal-weight benchmark), and the fully hedged long-short version, comparable to the other two strategies, has a Sharpe ratio of 1.38 before fees but trades about 100 times a year and gives up almost half of its edge to costs. Both weaken in the holdout, and the hedged version's edge has faded since 2013. Measuring the shortfall cumulatively rather than over three days helps most: with the same trading rules, the cumulative residual score raises the long-short Sharpe ratio after fees to 1.76 (1.26 in the holdout) and keeps 1.07 when trades are executed a day late. A daily version of the same signal reaches 3.01, but it collapses to 0.25 with a one-day delay. Most of its profit comes from next-day price reversals that a real trader could probably not capture. The contrast between in-sample and out-of-sample results shows why rolling estimation matters. Estimating the model on the full sample does not merely inflate performance; for Treynor--Black it reverses the conclusion about which way to trade.
++
++
++% BEGIN ARCHIVED: Earlier residual-strategy draft; integrated treatment is in Section 4
++% ARCHIVE 
++% ARCHIVE \quad
++% ARCHIVE 
++% ARCHIVE Strategy 3: Residual Mean Reversion Strategy
++% ARCHIVE 
++% ARCHIVE The underlying strategy for the residual mean reversion strategy has to do with the underlying belief that when stocks move down on d more than what we had predicted from the data from days 1,..., d-1, then we should buy these particular stocks as we believe that the market has undervalues/overreacted to these stocks (and that they have higher relative expected value to assets that have moved as expected in our regression or assets that have moved higher than our prediction from the regression. The difference between this strategy and the Treynor black method is the fact that Treynor Black relies on inspection on the alpha parameter while the residual snapback strategy relies on buying stocks that we believe are relatively undervalued due to an overreaction in the markets.
++% ARCHIVE 
++% ARCHIVE For Treynor–Black, we have used a 250-day regression window since the estimated alpha from this data directly determines the trading signal and a longer window of data would gives us many more observations and would reduce the influence of a  anomalies in the data. 
++% ARCHIVE 
++% ARCHIVE However, for residual snapback, the regression serves a different purpose. This regression is supposed to give us a baseline/prior against we need to measure these recent unexpected returns. A shorter window such as a 100-day window lets that baseline adapt more quickly to recent changes in the stock’s factor exposures, while also at the cost of estimates with higher standard devations.  However, due to the short term edge We therefore use 100 days for snapback as a design choice suited to its short-horizon signal.
++% ARCHIVE \quad
++% ARCHIVE 
++% ARCHIVE Now, to understand the "signal" of the residual between the actual daily return compared to the regressions predictions, we need to get an understanding of how much of a deviation/size of residual is normal for a particular stock. For example, if a particular stock barely deviates from the regression prediction and then randomly is 5 percent different than what the regression predicts would have a different signal than a stock that on average has a 5 percent deviation from the regression prediction. To do this, we look at the last 60 trading days and fit the regression model to 1 day less than our current day. Then, we calculate the residuals on those 60 days. After we have these residuals, we use these 60 data points to get a sample variance for the residual as well as a sample mean. Then, we examine how the next three days of trading looks like after we have out 100 days of data. After normalizing the average residual by transforming it into a z score, we get a heuristic/z-score statistic for how much the stock has gone down compared to its "fair value." Although "fair value" is not the correct depicition since we have no way of understanding what is a "fair value." 
++% ARCHIVE 
++% ARCHIVE \[
++% ARCHIVE \mathrm{Score}_{i,t}
++% ARCHIVE =
++% ARCHIVE \frac{\displaystyle\sum_{k=0}^{2}\varepsilon_{i,t-k}}
++% ARCHIVE      {\sqrt{3}\,\widehat{\sigma}_{i,t}},
++% ARCHIVE \qquad
++% ARCHIVE \widehat{\sigma}_{i,t}
++% ARCHIVE =
++% ARCHIVE \sqrt{\frac{1}{59}
++% ARCHIVE \sum_{k=3}^{62}
++% ARCHIVE \left(\varepsilon_{i,t-k}-\overline{\varepsilon}_{i,t}\right)^2},
++% ARCHIVE \qquad
++% ARCHIVE \overline{\varepsilon}_{i,t}
++% ARCHIVE =
++% ARCHIVE \frac{1}{60}\sum_{k=3}^{62}\varepsilon_{i,t-k}.
++% ARCHIVE \]
++% ARCHIVE 
++% ARCHIVE Note that the numerator here in the score function is the sum of the three errors (the days 1 day 2 day and 3 day after the 100 previous days of regression and the 60 previous days of understanding how our model is calibrated.) A negative value in the error refers to the stock underperforming the return compared to what our factor model was predicting over those three days. On the other hand, a positive value means that we thought that the market price has "overshot" what the factor model would have predicted. If we assume that the expected value of each of these errors is 0 (the factor model is an unbiased estimator of what the price of a stock should be condicitioned upon the rest of the market prices), then we essentially know that the sum in the numerator is how much the price and the "condiitonal mean disagree." Now, the denominator of the stock is used to "standardize" the error, as we have mentioned earlier. We have estimated summa i,t hat from the previous 60 days of trading data and then we know that the sum of three random variables has a variance that is 3 times a single one, since the standard deviation is sqrt of variance, then we know that the sum of three std devs is equivalent in expansion to sqrt(3) * standard dev which is why we divide by sqrt(3) in the denominator.
++% ARCHIVE (An assumption that we are making when dividing by sqrt(3) is that the residuals are uncorrelated, which may be a strech given that this "error" is hypothesized to be due to irrational market sentiment, which would likely presist and be correlated throughout the three days. If we were to think about this strategy more, one way to add complexity would be to alter the denominator to match this. However, since this score applied to all of the stocks in our portfolio, it is likely not that important if our signal is supposed to be multiplied by a particular magnitude that is constant/not dependent on our stock (given that a signal is only important as it has relative information, meaning that its used to compare two stocks). 
++% ARCHIVE 
++% ARCHIVE The second expression is how we have calulated the standard deviation. Hopefully, the average error is ei,t which would mean that we predicted the error well and then we are only dividing by 59 instead of 60 because the expression is sqrt(1/(n-1) * rss) for the sample standard deviation. 
++% ARCHIVE 
++% ARCHIVE Below here, I have also attached the 60-day residual mean across stocks, so that we can examine if it is true that that the regression model likely is an unbiased conditional estimate of a securities market price:  
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{errors.png}
++% ARCHIVE     \caption{Enter Caption}
++% ARCHIVE     \label{fig:}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{erorrs_mean.png}
++% ARCHIVE     \caption{Enter Caption}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE Notice that after examining these figures, they show that the factor model has quite a small average signed error (0) across the stocks. 
++% ARCHIVE  This suggests that when using the factor exposures and the regression used/fitted until the prior day, the model explains returns without a  tendency to overstate or understate them or understate them on average. 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE  Trading Sub-Strategies:    
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE \paragraph{Naive residual snapback.}
++% ARCHIVE 
++% ARCHIVE On the last trading day of each week, we rank stocks by their residual
++% ARCHIVE scores and select up to 20 stocks with "scores" of -2 or lower. If there are more than 20 stocks that have scores of -2 or lower, then we select the ones that have the lowest scores. If we have n stocks, we would go long in each stock with a proprtion of 1/n for each stock. If there are zero stocks that qualify, then we would hold all of our portfolio in cash. We re-evaluate our portfolio each trading day of the week by looking at the past 3 days, Wednesday throguh firsthand and the recalibrate our portfolio at the end of the week. 
++% ARCHIVE 
++% ARCHIVE \paragraph{Experimental Factor Hedging on Top of Naive Residual Snapback}
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{naive_snapback.png}
++% ARCHIVE     \caption{The naive}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{stricter_cutoff.png}
++% ARCHIVE     \caption{stricter cuttoff}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{70percentnaive_30percenthedged.png}
++% ARCHIVE     \caption{70 percent hedged and 30 percent naive}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE Although the signal may be choosing stocks that are expected to be higher than the market, it can still have exposures to those 5 PCA factors/vectors. For example, our portfolio could be heavily positively exposed to the 2nd principal component, if we have an equal weight long portfolio that is sensitive to these movements, then that would not be ideal. To hedge out our portfolio to these exposures, we can naively start with our selected group of stocks and adjust their weights. 
++% ARCHIVE 
++% ARCHIVE The fully hedged strategy aims to mitigate this risk by collecting the top 40 eligible stocks that have the "lowest scores" (meaning that they have moved downwards more than what we expect) and set these as our "long candidate space." Then, we take up to 40 stocks with the most positive scores as short candidates. The longs express the fact that we believe some of the candidates have moved too far down and should be worth more (with relation to the rest of the market) and the shorts we have are the stocks that we believe have moved too far up in relation to the other stocks in our portfolio space. We then start with target weights that would allow us to provide 50 percent of our capital to the shorts and 50 percent to the longs. 
++% ARCHIVE 
++% ARCHIVE %look into the below well
++% ARCHIVE 
++% ARCHIVE We can denote wt(0) denote these signed target
++% ARCHIVE weights (which we have naivelly set it to be .5 * 1/(number of long candidates) for each vector entry that corresponds to the stock that has a negative stock and .5 * 1/n(number of short candidates) for a stock that corresponds to a positive score. Now, also let Bt be the matrix whose columns contain the five estimated PCA factor loadings for each selected stock.  Note that the dimension of B is 5 * (number of stocks that are both in the long or short candidate space). 
++% ARCHIVE 
++% ARCHIVE For any weight
++% ARCHIVE vector wt, the portfolio's estimated factor exposures are
++% ARCHIVE Btwt. We choose weights as close as possible to the
++% ARCHIVE initial targets while imposing factor neutrality and preserving the
++% ARCHIVE direction of each trade:
++% ARCHIVE \[
++% ARCHIVE \begin{aligned}
++% ARCHIVE \min_{\mathbf{w}_t}\quad &
++% ARCHIVE     \frac{1}{2}\|\mathbf{w}_t-\mathbf{w}^{(0)}_t\|_2^2 \\
++% ARCHIVE \text{subject to}\quad &
++% ARCHIVE     B_t\mathbf{w}_t=\mathbf{0}, \qquad
++% ARCHIVE     \sum_i |w_{i,t}|=1,\\
++% ARCHIVE &   w_{i,t}\geq 0 \quad \text{for long candidates},\\
++% ARCHIVE &   w_{i,t}\leq 0 \quad \text{for short candidates}.
++% ARCHIVE \end{aligned}
++% ARCHIVE \]
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{fully_hedged.png}
++% ARCHIVE     \caption{fully hedged portfolio}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE After performing this strategy and keeping all other frameworks from the previous strategy the same, we get the following results: 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{fully_hedged.png}
++% ARCHIVE     \caption{fully hedged portfolio}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE \paragraph{Fixed-weight hybrid residual snapback.}
++% ARCHIVE Our naive intitial Snapback portfolio gives full weight to (at most) 20 long-only
++% ARCHIVE rebound signals, while the fully hedged portfolio offsets exposure to the five PCA factors by constructing the weights to meet a Principal component neutral portfolio. Now, what if we were to blend both these portfolios to retain the naive strategies upside (since this portfolio is known to perform better in terms of returns compared to market) while reducing exposure/risk through the hedged portfolio. 
++% ARCHIVE 
++% ARCHIVE We test whether blending the two
++% ARCHIVE portfolios can retain some of the naive strategy's upside while
++% ARCHIVE reducing its exposure to common factor moves.
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE %look into the below more: 
++% ARCHIVE 
++% ARCHIVE Essentially, we are keeping each of the two strategies exactly the
++% ARCHIVE same. All we are doing is constructing both portfolios separately
++% ARCHIVE and then combining their stock weights:
++% ARCHIVE \[
++% ARCHIVE     \mathbf{w}_t^{\mathrm{hybrid}}
++% ARCHIVE     = \lambda\,\mathbf{w}_t^{\mathrm{naive}}
++% ARCHIVE     + (1-\lambda)\,\mathbf{w}_t^{\mathrm{hedged}}.
++% ARCHIVE \]
++% ARCHIVE 
++% ARCHIVE Our parameter that we have the freedom to change is ,
++% ARCHIVE which determines the mix of the two portfolios in our hybrid model.
++% ARCHIVE We test =0.30, 0.50, and 0.70. Note that
++% ARCHIVE wtnaive contains the weights we have determined
++% ARCHIVE for each stock based on our naive criteria, and
++% ARCHIVE wthedged contains the weights we have determined
++% ARCHIVE for each stock based on our hedging criteria.
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{50percentnaive_50hedged.png}
++% ARCHIVE     \caption{50 percent naive and 50 percent hedged}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{30percentnaive.png}
++% ARCHIVE     \caption{30 percent Naive + 70 percent hedged strategy}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{70percentnaive_30percenthedged.png}
++% ARCHIVE     \caption{70 percent naive and 30 hedged }
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE \paragraph{Volatility-weighted hybrid residual snapback.}
++% ARCHIVE 
++% ARCHIVE Note that in the fixed-weight hybrid strategies, we are supposed to choose a value of 
++% ARCHIVE and keep this parameter the same throughout the trading horizon. Note that this may not be the ideal way to construct this strategy. For example, if we are in an uncertain time where stocks will tend to move around a lot, then it is better to have a portfolio that is more hedged to these risks. However, if we believe that stocks have lower volatility and that the tail risk of a particular asset class/sector/principal component dropping sharply in value, we are willing to take a more aggressive holding of stocks. 
++% ARCHIVE 
++% ARCHIVE We plan on changing this parameter depending on the volatility of the stocks. 
++% ARCHIVE 
++% ARCHIVE The first thing that we do is we calculate an equal-weight market return by averaging stock returns across our entire csv file for each day. (Essentially we calculate the return of the  equal weight market portfolio). Then, we can also estimate the sample standard deviation of these returns based off a specific set of returns. Thus, to estimate daily market volatility for each date t, we measure the sample standard deviation of these returns over the trailing 30 trading days. Note that this estimate uses only returns that are available by day t. 
++% ARCHIVE 
++% ARCHIVE After we do this, we let the variable pt[0,1] be the
++% ARCHIVE resulting historical percentile rank of volatility. For example, if this is the lowest volatility in all of the history, then we would let pt be 0. However, if this was a the highest volatility, then we would let pt be 1. 
++% ARCHIVE 
++% ARCHIVE We will now use this pt value as the weight of our portfolio that we would like to have in the fully hedged portfolio. In other words, the weight on the naive portfolio is t=1-pt. 
++% ARCHIVE 
++% ARCHIVE Notice that the following hedged allocation for the weights are: 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{volatility_allocation.png}
++% ARCHIVE     \caption{Weight allocation based off volatility}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE Although this graph looks pretty good, something to notice is that at the beggining of the timeline, we are alternative from 0 percent to 100 percent in the weights. This is because the rank is very sensitive to the few data points that we have. For example, at the beggining of this process we would have a sparse amount of data (for example the first data point is both the lowest and the highest volatility seen yet, so it is hard to factor this information into the model). 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE To avoid this problem of letting a small number of early observations drive the allocation, we can use a symmetric Laplace smoothing to our weight allocation. 
++% ARCHIVE Before each weekly re balance, we compare the current estimate of volatility with all earlier 30-day volatility estimates. 
++% ARCHIVE We define the following variables: nt
++% ARCHIVE be the number of earlier readings and kt be the number
++% ARCHIVE below the current reading, with ties counting as 1/2. 
++% ARCHIVE 
++% ARCHIVE Then, we will add 126 pseudo-readings on each side of our current estimate. This gives us the following weight on the hedged portfolio:
++% ARCHIVE \[
++% ARCHIVE     \widetilde p_t = \frac{k_t+126}{n_t+252}.
++% ARCHIVE \]
++% ARCHIVE 
++% ARCHIVE Note that now, with no earlier readings, the rule starts at a 50/50 mix. The starting mix receives weight of 252/(nt+252), so its "bias" decreases as more observations accumulate. For example, with 252 earlier readings, a raw volatility percentile of 90\% becomes a hedge weight of 70\%, halfway between the raw percentile and the 50\% starting weight.
++% ARCHIVE 
++% ARCHIVE The final portfolio allocates $\widetilde p_t$ to the fully hedged
++% ARCHIVE portfolio and $1-\widetilde p_t$ to the naive portfolio:
++% ARCHIVE \[
++% ARCHIVE     \mathbf{w}_t^{\mathrm{dynamic}}
++% ARCHIVE     =
++% ARCHIVE     (1-\widetilde p_t)\mathbf{w}_t^{\mathrm{naive}}
++% ARCHIVE     +
++% ARCHIVE     \widetilde p_t\mathbf{w}_t^{\mathrm{hedged}}.
++% ARCHIVE \]
++% ARCHIVE 
++% ARCHIVE Below is an image depicting the new weight allocation graph: 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{updated_vol_weights.png}
++% ARCHIVE     \caption{Enter Caption}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE Implementing this strategy, we get the following results: 
++% ARCHIVE 
++% ARCHIVE \begin{figure}[H]
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{dynamic_volatility.png}
++% ARCHIVE     \caption{Dynamic Volatility PNL}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE \subsection{Cumulative residual reversion}
++% ARCHIVE 
++% ARCHIVE The Residual Snapback strategy that we have been working on looks for stocks that have underperformed their
++% ARCHIVE estimated factor exposures over the last three trading days. 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE However, what if a stock is underperforming for a while and is drifting away from the market price, but then trades in line with the market for the three days that we are examining? 
++% ARCHIVE 
++% ARCHIVE In this case, the Snapback score could be very close to zero but the sum of all the culmulative residuals could be quite low. 
++% ARCHIVE 
++% ARCHIVE %hello 
++% ARCHIVE The PCA factors that we have recieved are estimated from a previous past 500 day windw while the regression that we are fitting on has been trained over the past 100 days. A day's residual $\varepsilon_{i,t}$ is the difference between the stock's realized
++% ARCHIVE return and the return explained by the fitted factor model (as discussed above in our naive strategy/the ones the followed).
++% ARCHIVE 
++% ARCHIVE For this strategy, we add every single daily residual to a total sum:
++% ARCHIVE \[
++% ARCHIVE     X_{i,t} = X_{i,t-1} + \varepsilon_{i,t}.
++% ARCHIVE \]
++% ARCHIVE 
++% ARCHIVE Then, we compare the residual with how the residual has normally looked over the past 60 days (similar to how we have also normalized the residuals). 
++% ARCHIVE \[
++% ARCHIVE     z_{i,t}
++% ARCHIVE     =
++% ARCHIVE     \frac{X_{i,t}-\overline{X}_{i,t}^{(60)}}
++% ARCHIVE          {s_{i,t}^{(60)}}.
++% ARCHIVE \]
++% ARCHIVE \begin{figure}
++% ARCHIVE     \centering
++% ARCHIVE     \includegraphics[width=0.5\linewidth]{msft_residual_reversion.png}
++% ARCHIVE     \caption{Enter Caption}
++% ARCHIVE     \label{fig:placeholder}
++% ARCHIVE \end{figure}
++% ARCHIVE 
++% ARCHIVE Essentially, the way that the portfolio is made is we rank the stocks by their scores (as we have normally done for the other methods) and we buy the lowest-scoring 20\% and short the highest-scoring 20\%. This is slightly different than the naive method since we are account for a percent change rather than a strict cuttoff that we had in the naive method. 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE Note that similar to the PCA factor neutral (fully hedged) strategy, we will ensure that our portfolio has zero estimated exposure to any of the 5 pca factors. We also want zero dollar exposure as well. So, the following two constraints is what we are up against: 
++% ARCHIVE \[
++% ARCHIVE     \mathbf{1}^{\top}\mathbf{w}_t=0,
++% ARCHIVE     \qquad B_t\mathbf{w}_t=\mathbf{0},
++% ARCHIVE \]
++% ARCHIVE where the columns of $B_t$ contain the selected stocks' factor
++% ARCHIVE loadings. The adjustment can shrink a position to zero while
++% ARCHIVE preserving its direction. Individual weights are capped at 2\%
++% ARCHIVE in absolute value. The neutrality constraints can leave some
++% ARCHIVE capital unallocated, so gross exposure can fall below 100\%.
++% ARCHIVE The backtest applies the current day's returns to existing
++% ARCHIVE positions before placing the new trades.
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% ARCHIVE 
++% END ARCHIVED: Earlier residual-strategy draft; integrated treatment is in Section 4
+ \end{document}
+--- original-report/framework.tex
++++ framework-cleaned.tex
+@@ -1,4 +1,4 @@
+-\section{Backtesting Framework and Methodology}
++\section{Backtesting framework and methodology}
+ \label{sec:framework}
+ 
+ We evaluate strategies through a daily simulation that updates model
+@@ -104,7 +104,7 @@
+     \label{fig:framework-walkforward}
+ \end{figure}
+ 
+-\subsection{Cool sidenote: PCA optimization}
++\subsection{Computational efficiency of PCA}
+ 
+ Rolling PCA requires repeatedly fitting the model as the window advances,
+ which becomes slow when we test many parameter settings. Our basic
