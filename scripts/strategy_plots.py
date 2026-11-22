@@ -229,9 +229,10 @@ def parameter_sensitivity(key: str, series: dict[str, Series], dates: np.ndarray
     default = next(row[4] for row in ordered if not row[0])
     positions = np.arange(len(ordered))
 
-    figure, axes = plt.subplots(figsize=(5.0, 0.24 * len(ordered) + 1.1))
+    # Compact rows and a shared x range (every variant lies between 0.3 and 1.5) so the three charts compare directly
+    figure, axes = plt.subplots(figsize=(4.4, 0.155 * len(ordered) + 0.75))
     axes.axvline(default, color=COLORS[key], linewidth=0.9, alpha=0.4, zorder=1)
-    axes.plot([row[4] for row in ordered], positions, "o", markersize=6.5, color=COLORS[key],
+    axes.plot([row[4] for row in ordered], positions, "o", markersize=5.5, color=COLORS[key],
               markeredgecolor="white", markeredgewidth=1.5, zorder=3, label=LONG_LABEL if key == "snap" else None)
     hedged_values = []
     if key == "snap":
@@ -239,23 +240,23 @@ def parameter_sensitivity(key: str, series: dict[str, Series], dates: np.ndarray
         for row in ordered:
             name = row[5].replace("snap|", "snaph|", 1)
             hedged_values.append(sharpe(net_returns(series[name], TRADE_FEE, common)) if name in series else np.nan)
-        axes.plot(hedged_values, positions, "o", markersize=6.5, color="white", markeredgecolor=COLORS[key],
-                  markeredgewidth=1.5, zorder=3, label=HEDGED_LABEL)
-        axes.legend(loc="upper right", fontsize=8)
+        axes.plot(hedged_values, positions, "o", markersize=5.5, color="white", markeredgecolor=COLORS[key],
+                  markeredgewidth=1.3, zorder=3, label=HEDGED_LABEL)
+        axes.legend(loc="lower right", fontsize=7.5, borderaxespad=0.2)
     axes.set_yticks(positions)
-    axes.set_yticklabels([row[3] for row in ordered], fontsize=8)
+    axes.set_yticklabels([row[3] for row in ordered], fontsize=7.5)
     for tick, row in zip(axes.get_yticklabels(), ordered):
         if not row[0]:
             tick.set_fontweight("bold")
             tick.set_color(INK)
     axes.grid(axis="y", visible=False)
-    axes.set_ylim(-0.7, len(ordered) - 0.3)
+    axes.set_ylim(-0.6, len(ordered) - 0.4)
     values = [row[4] for row in ordered] + [value for value in hedged_values if np.isfinite(value)]
-    axes.set_xlim(min(0.0, min(values) - 0.1), max(1.5, max(values) + 0.05))
-    zero_line(axes, horizontal=False)
+    axes.set_xlim(min(0.3, min(values) - 0.05), max(1.5, max(values) + 0.05))
+    axes.tick_params(axis="x", labelsize=7.5)
     period = dates[start].astype("datetime64[M]").item().strftime("%b %Y")
-    axes.set_xlabel(f"Sharpe ratio with 5bp fees ({period}-2023)")
-    axes.set_title(f"{STRATEGIES[key]}: parameter sensitivity")
+    axes.set_xlabel(f"Sharpe ratio with 5bp fees ({period}-2023)", fontsize=8)
+    axes.set_title(f"{STRATEGIES[key]}: parameter sensitivity", fontsize=9)
     save(figure, f"parameter_sensitivity_{key}")
 
 def draw_k_lines(axes: Axes, key: str, series: dict[str, Series], lines: tuple) -> None:
