@@ -1,0 +1,82 @@
+[
+  {
+    "reason": "Pairs uses PCA loadings, rather than alpha or residual signals.",
+    "before": "The resulting alphas and residuals supply three trading signals:",
+    "after": "PCA loadings, estimated alphas and residuals supply the inputs to three strategies:"
+  },
+  {
+    "reason": "Distinguish variance from standard deviation; the original table reports a variance ratio.",
+    "before": "A three-day sum varies about 5\\% less than the independent-residual scaling assumes.",
+    "after": "The variance of a three-day sum is about 5\\% below the independent-residual approximation."
+  },
+  {
+    "reason": "Make the gross/net convention explicit in the annual comparison.",
+    "before": "Pairs trading is far more stable: profitable in 21 of 22 years,",
+    "after": "Pairs trading is far more stable: profitable in 21 of 22 years before fees and 19 after fees,"
+  },
+  {
+    "reason": "The selected shorter Treynor--Black window also improves holdout performance.",
+    "before": "Unlike for the other two strategies, some choices made on the selection period carried over.",
+    "after": "Some choices made in the selection period carried over."
+  },
+  {
+    "reason": "Match the existing holdout table: TB 0.63 versus 0.40; pairs 0.58 versus 1.15.",
+    "before": "Picking $K$ by its past performance also did not carry over to the holdout for Treynor--Black or pairs trading (Table~\\ref{tab:holdout}).",
+    "after": "Choosing $K$ by past performance gave mixed holdout results: it improved Treynor--Black but weakened pairs trading relative to their defaults (Table~\\ref{tab:holdout})."
+  },
+  {
+    "reason": "Avoid implying exact realized market neutrality.",
+    "before": "Hedging removes the market:",
+    "after": "Hedging removes most market exposure:"
+  },
+  {
+    "reason": "Make appendix C readable without the preceding main-text paragraph.",
+    "before": "Both assumptions can be tested on the residuals themselves",
+    "after": "The zero-mean and serial-independence assumptions can be tested on the residuals themselves"
+  },
+  {
+    "reason": "A near-zero average is not proof of an unbiased model.",
+    "before": "It is not biased: the mean residual",
+    "after": "There is no detectable average bias in this diagnostic: the mean residual"
+  },
+  {
+    "reason": "Use the precise variance comparison in the appendix as well.",
+    "before": "so a three-day sum varies about 5\\% less than $\\sqrt{3}$ assumes.",
+    "after": "so the variance of a three-day sum is about 5\\% below $3\\sigma_i^2$."
+  },
+  {
+    "reason": "Replace a stale directional reference after relocation.",
+    "before": "The hybrids construct both portfolios exactly as above and combine their weights,",
+    "after": "The hybrids construct the two portfolios described in Section~\\ref{sec:snapback} and combine their weights,"
+  },
+  {
+    "reason": "Exclude the higher-performing cumulative-score variants from this comparison.",
+    "before": "The hybrids and the dynamic mix have the highest Sharpe ratios after fees (0.87--0.96)",
+    "after": "Among the original snapback-score variants, the hybrids and dynamic mix have the highest Sharpe ratios after fees (0.87--0.96)"
+  },
+  {
+    "reason": "Point to tables that no longer sit directly above the prose.",
+    "before": "The selection and holdout columns split this period into a selection period (through 2017) and a holdout period (2018--2023); see Section~\\ref{sec:holdout}.",
+    "after": "The appendix tables report results separately for the selection period (through 2017) and the holdout period (2018--2023); see Section~\\ref{sec:holdout}."
+  },
+  {
+    "reason": "Remove an unnecessary transition.",
+    "before": "Finally, we re-run all three strategies",
+    "after": "We re-run all three strategies"
+  },
+  {
+    "reason": "Avoid treating calibration as proof that implementation is the only source of weak performance.",
+    "before": "Because the signal is so well calibrated, the strategy's modest Sharpe ratio comes from how the signal is traded (the market exposure of the long-only version and the heavy turnover), not from the signal itself.",
+    "after": "These signal diagnostics are stronger than the portfolio results: market exposure and heavy turnover limit how much of the predictive relationship becomes risk-adjusted net return."
+  },
+  {
+    "reason": "Remove a repeated main-text paragraph from appendix C.4; all values remain in its table and the main text.",
+    "before": "The long-only default earns 19.1\\% a year, but its Sharpe ratio after fees (0.82) only matches the equal-weight benchmark: most of its return and nearly all of its risk come from the market (beta 1.08). Regressing its daily returns on the market leaves an alpha of 3.6\\% a year with 14.0\\% residual volatility, an information ratio of 0.26. Hedging removes most market exposure: the fully hedged long-short version has beta 0.06 and a market-adjusted alpha of 5.3\\% a year with 8.2\\% residual volatility (information ratio 0.65, close to Treynor--Black's 0.64 and below pairs trading's 1.05). Before fees its Sharpe ratio (1.38) is well above the long-only version's (1.03), but it trades as much as the long-only version on a smaller return, so after fees it falls to 0.76. ",
+    "after": "Table~\\ref{tab:snapback-variants} compares the original score, cumulative score and earlier hedge implementations on the same evaluation period.\n\n"
+  },
+  {
+    "reason": "The walk-forward figure is in the main text, not Appendix B.",
+    "before": "gives the implementation, walk-forward diagrams, numerical benchmarks and fuller discussion.",
+    "after": "gives the implementation details, numerical benchmarks and fuller discussion."
+  }
+]

@@ -1,0 +1,27 @@
+20-PAGE EDITORIAL VERSION
+
+Use: paste main-20page.tex into main.tex and framework-20page.tex into framework.tex. The appendix is embedded in main.tex. Keep the existing figures and paths; no script or extra source file is needed.
+
+Compiled result: 20 main pages (including reference), 25 appendix pages. Main text is 11pt with the original one-inch margins. The previous cleaned draft is unchanged. Exact pagination can vary slightly between TeX installations; the supplied PDF is the verified build.
+
+MAIN / APPENDIX SPLIT
+Main: short PCA motivation and eigenvalue argument; all six original full-width answers and their figures; rolling estimation, timing, fees and limitations; three trading strategies and the cumulative-score extension; cumulative returns, exposure comparison, execution delay, regime summary, parameter plots, costs, calibration plots, historical holdout and factor-count findings; original conclusion with paragraph breaks and a gross-return qualifier.
+Appendix A: full basketball/PCA tutorial, two- and four-stock examples, eigenportfolio explanation and comparison tables.
+Appendix B: implementation structure, full rolling methodology, PCA speed/accuracy experiments and limitations.
+Appendix C: Treynor--Black development, residual diagnostics, hybrid allocation mathematics, full variant table and execution-delay chart.
+Appendix D: annual tables/charts, full parameter grids, fee curves, calibration buckets/slopes, exact holdout comparisons and factor-count grids. Each topic has its own subsection and float boundary.
+
+EDITING APPROACH
+Most strategy/testing paragraphs and the conclusion retain the original wording. The longest residual-diagnostic and hybrid-allocation passages are summarized in the main text and retained in the appendix. The framework is condensed because its detailed implementation is now in Appendix B. The introductory tutorial is moved intact and replaced by a short main introduction. Removed assignment prompts and superseded prose are preserved as source comments where useful, rather than printed as duplicate appendix discussion.
+A few rhetorical openings, repeated claims and phrases such as 'catching falling knives' were simplified. Technical ordering of signal buckets is described directly. Historical-holdout language no longer implies that the broader research process used an untouched sample exactly once. The conclusion clarifies that 21 profitable pairs-trading years refers to returns before fees.
+
+VERIFICATION
+- All six answer bodies, equations and captions match the cleaned version after whitespace normalization.
+- All 63 original figure/table labels remain exactly once across main and appendix: 18 figures and 3 tables in main, 22 figures and 20 tables in appendix.
+- Every original tabular block is identical, including all numeric cells.
+- All references resolve; there are no duplicate labels, missing glyphs or overfull boxes.
+- Main pages and appendix boundary checked in compiled PDF; page layouts visually reviewed.
+- One harmless underfull paragraph warning remains in the original pairs examples.
+- No additional software was installed for this iteration. Existing Tectonic and PDF tools were reused; Tectonic fetched the standard 11pt class/font files into its cache.
+
+The diff records relocation and actual wording changes. Unlike the earlier formatting-only pass, this version deliberately contains some summaries and edits; it is not a claim of verbatim prose identity throughout. The numerical research results were preserved, not independently revalidated.

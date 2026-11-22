@@ -1,0 +1,367 @@
+[
+  {
+    "from": "original-report\\30percentnaive.png",
+    "to": "originals\\original-report\\30percentnaive.png",
+    "sha256": "e33b85a345ecf18494a8e96784017792b9fa8f71156f41fcb0ece3fdba8464c5"
+  },
+  {
+    "from": "original-report\\50percentnaive_50hedged.png",
+    "to": "originals\\original-report\\50percentnaive_50hedged.png",
+    "sha256": "f0e037eea838300b945ec2a79779242271a5157b7d541cfce9b6816114c16afd"
+  },
+  {
+    "from": "original-report\\70percentnaive_30percenthedged.png",
+    "to": "originals\\original-report\\70percentnaive_30percenthedged.png",
+    "sha256": "6023883543dd9316e33a92b840ac15c3fa58db704ccf8d5618eb1b474adcb55d"
+  },
+  {
+    "from": "original-report\\basketball_axes.pdf",
+    "to": "originals\\original-report\\basketball_axes.pdf",
+    "sha256": "6dea870e8eb1eddbe206a3256c40b2a9c5b9bab4d9a9d5d55639bc434ae689de"
+  },
+  {
+    "from": "original-report\\basketball_cloud.pdf",
+    "to": "originals\\original-report\\basketball_cloud.pdf",
+    "sha256": "89734a502cfea4839ee4da812d3d2962a383b84c94566f8863ec82ee11b5830f"
+  },
+  {
+    "from": "original-report\\basketball_recipe.pdf",
+    "to": "originals\\original-report\\basketball_recipe.pdf",
+    "sha256": "61a911c926302ed08e4568e7605c1eeb266d30f14128ec4bdbc2e0db1ef690f5"
+  },
+  {
+    "from": "original-report\\dynamic_volatility.png",
+    "to": "originals\\original-report\\dynamic_volatility.png",
+    "sha256": "b2b75e64ba066c1766cfcdb1567e55e83dd05729c3f44b0f0e600e9b1607f8ca"
+  },
+  {
+    "from": "original-report\\erorrs_mean.png",
+    "to": "originals\\original-report\\erorrs_mean.png",
+    "sha256": "b860eb0006fdc6cad7b98633810fefe1402a0ddb3d33240481cd1f2e05e55640"
+  },
+  {
+    "from": "original-report\\errors.png",
+    "to": "originals\\original-report\\errors.png",
+    "sha256": "917d0421f4e801a83e8788ddb78c77aee7480cc0924251125f887f85d82541ce"
+  },
+  {
+    "from": "original-report\\error_mean_.png",
+    "to": "originals\\original-report\\error_mean_.png",
+    "sha256": "b860eb0006fdc6cad7b98633810fefe1402a0ddb3d33240481cd1f2e05e55640"
+  },
+  {
+    "from": "original-report\\framework.tex",
+    "to": "originals\\original-report\\framework.tex",
+    "sha256": "615a8f7bc91f4159744508a043de9123439863fd3882c935cf70653e0e193e13"
+  },
+  {
+    "from": "original-report\\fully_hedged.png",
+    "to": "originals\\original-report\\fully_hedged.png",
+    "sha256": "72b0c0e845c828846b78b89b5b16272809e364d26d82df62610b6807ff695476"
+  },
+  {
+    "from": "original-report\\fully_hedged_portfolio.png",
+    "to": "originals\\original-report\\fully_hedged_portfolio.png",
+    "sha256": "72b0c0e845c828846b78b89b5b16272809e364d26d82df62610b6807ff695476"
+  },
+  {
+    "from": "original-report\\image.png",
+    "to": "originals\\original-report\\image.png",
+    "sha256": "729ea9c87f34978ea412f6445b700184bd137a1a3792f34c4d7484eba5e91119"
+  },
+  {
+    "from": "original-report\\main.tex",
+    "to": "originals\\original-report\\main.tex",
+    "sha256": "de5b39ffb6f037c80b7119a84427a53e2e72223cfb8effb64f09c4857aeabeea"
+  },
+  {
+    "from": "original-report\\msft_residual.png",
+    "to": "originals\\original-report\\msft_residual.png",
+    "sha256": "9d2e3b68a3bf5ec009442c87552d196e72a72be260610daab145b461a9b1f668"
+  },
+  {
+    "from": "original-report\\msft_residual_reversion.png",
+    "to": "originals\\original-report\\msft_residual_reversion.png",
+    "sha256": "16c6a747a5b4bacbf65f3510cb87d8b5fa04a89d4017224b7eb557b912efd78f"
+  },
+  {
+    "from": "original-report\\naive_snapback.png",
+    "to": "originals\\original-report\\naive_snapback.png",
+    "sha256": "aacac334417183782bf769243d87113a11220eed7f1b45f6efdd6d3175bb0480"
+  },
+  {
+    "from": "original-report\\stricter_cutoff.png",
+    "to": "originals\\original-report\\stricter_cutoff.png",
+    "sha256": "4c0867e26c727e8ddf9b955e13e4e8212549f6d38219271fa3c7e9e8b5aabd29"
+  },
+  {
+    "from": "original-report\\updated_vol_weights.png",
+    "to": "originals\\original-report\\updated_vol_weights.png",
+    "sha256": "854296b7613bfa0b93866ae31cdd662bf973c10e253122cea601cdd9e6eb0597"
+  },
+  {
+    "from": "original-report\\volatility_allocation.png",
+    "to": "originals\\original-report\\volatility_allocation.png",
+    "sha256": "c5d3e3e3a999cfa63b18e66554872d846dd3e776728565d477f34f718b290ab2"
+  },
+  {
+    "from": "original-report\\figures\\annual_returns_pairs.pdf",
+    "to": "originals\\original-report\\figures\\annual_returns_pairs.pdf",
+    "sha256": "8398e3e795bc49153fcc7090488114d1f7fff85bfb2701be9c36dd500d42e770"
+  },
+  {
+    "from": "original-report\\figures\\annual_returns_snap.pdf",
+    "to": "originals\\original-report\\figures\\annual_returns_snap.pdf",
+    "sha256": "86624841ef6641900d4b48086d03550b7cdad2ac7d534ea11015aae588719297"
+  },
+  {
+    "from": "original-report\\figures\\annual_returns_tb.pdf",
+    "to": "originals\\original-report\\figures\\annual_returns_tb.pdf",
+    "sha256": "452bb406e473b36ada9a2a9446874b616cbdf8a2579023b26cbf955598c5350d"
+  },
+  {
+    "from": "original-report\\figures\\calibration_pairs.pdf",
+    "to": "originals\\original-report\\figures\\calibration_pairs.pdf",
+    "sha256": "a31c6ca87cbc4b4b8ec03ecc5a70d7a265ad23e4d9461b9b9e336ad74419e4b5"
+  },
+  {
+    "from": "original-report\\figures\\calibration_slopes.pdf",
+    "to": "originals\\original-report\\figures\\calibration_slopes.pdf",
+    "sha256": "1d18ea939c6981ce1347d982576a97f7f1e6b7c47f6a0286f481c80686b995ae"
+  },
+  {
+    "from": "original-report\\figures\\calibration_snap.pdf",
+    "to": "originals\\original-report\\figures\\calibration_snap.pdf",
+    "sha256": "f7e524f4a113135808333ec6078a7db6047bedd9fd6c67d5223c2de5c6a0b485"
+  },
+  {
+    "from": "original-report\\figures\\calibration_tb.pdf",
+    "to": "originals\\original-report\\figures\\calibration_tb.pdf",
+    "sha256": "1371a1ea52fec3b41e1a75785cb041c277259b9e25faaf20645de8cf6a1c066e"
+  },
+  {
+    "from": "original-report\\figures\\cumulative_returns_pairs.pdf",
+    "to": "originals\\original-report\\figures\\cumulative_returns_pairs.pdf",
+    "sha256": "e7a904fcf72321679e89391bdac18d3e1db7fb396a23913cc45184b2b4845661"
+  },
+  {
+    "from": "original-report\\figures\\cumulative_returns_snap.pdf",
+    "to": "originals\\original-report\\figures\\cumulative_returns_snap.pdf",
+    "sha256": "ad80eedfb66c36f4414bf0af4bd477b9335248d9e650c637b4492322d1968f62"
+  },
+  {
+    "from": "original-report\\figures\\cumulative_returns_tb.pdf",
+    "to": "originals\\original-report\\figures\\cumulative_returns_tb.pdf",
+    "sha256": "0142d5b32761aa2a93155a68656a7088b4e5e6d9dd452b03f920af0a6c66c381"
+  },
+  {
+    "from": "original-report\\figures\\development_tb.pdf",
+    "to": "originals\\original-report\\figures\\development_tb.pdf",
+    "sha256": "6f605762485e973da6e1700a2cf2cc41e49d8553cf17c7bd224b0096a75634c5"
+  },
+  {
+    "from": "original-report\\figures\\execution_delay.pdf",
+    "to": "originals\\original-report\\figures\\execution_delay.pdf",
+    "sha256": "ffd26def1a6e7933b36347552e96c08bed5df3bca1d936d72cbc0dfd6e8ec77f"
+  },
+  {
+    "from": "original-report\\figures\\fee_sensitivity_pairs.pdf",
+    "to": "originals\\original-report\\figures\\fee_sensitivity_pairs.pdf",
+    "sha256": "57b706053f8f995d2eb566a01ec8c6a4412d1b70104f3c34061e974fba33e874"
+  },
+  {
+    "from": "original-report\\figures\\fee_sensitivity_snap.pdf",
+    "to": "originals\\original-report\\figures\\fee_sensitivity_snap.pdf",
+    "sha256": "6cf8043b0d625bb999a980abfcfedf06d1d77f04463952572beaaefa7baafbdf"
+  },
+  {
+    "from": "original-report\\figures\\fee_sensitivity_tb.pdf",
+    "to": "originals\\original-report\\figures\\fee_sensitivity_tb.pdf",
+    "sha256": "5b2334c26afc0e177ba1fa05d84378aabff07e1594c39be439e95939090bc1b7"
+  },
+  {
+    "from": "original-report\\figures\\framework_components.png",
+    "to": "originals\\original-report\\figures\\framework_components.png",
+    "sha256": "d38d8f20c3c03ff192792b5b263f341878de778de1f01c54e32a48b4fec7ca50"
+  },
+  {
+    "from": "original-report\\figures\\framework_walkforward.png",
+    "to": "originals\\original-report\\figures\\framework_walkforward.png",
+    "sha256": "db5b8300d89711de8b69f4e1235ce572c314ad87e179f0813b9c6b6713978918"
+  },
+  {
+    "from": "original-report\\figures\\hedge_allocation.pdf",
+    "to": "originals\\original-report\\figures\\hedge_allocation.pdf",
+    "sha256": "dbb2fbfaff6b2ca86357e57e0dde0b188766c78a83ae7a91c94fd77ef08c7598"
+  },
+  {
+    "from": "original-report\\figures\\holdout.pdf",
+    "to": "originals\\original-report\\figures\\holdout.pdf",
+    "sha256": "b57f8380666f143d71c61de7705dd8a3c09cf4d04f9a8db9a8b8d92c5e53c280"
+  },
+  {
+    "from": "original-report\\figures\\k_sweep_pairs.pdf",
+    "to": "originals\\original-report\\figures\\k_sweep_pairs.pdf",
+    "sha256": "ba5e8781a815d1ca969780cf6513bb781056aa1622c1ea524b8654c4d9758ceb"
+  },
+  {
+    "from": "original-report\\figures\\k_sweep_snap.pdf",
+    "to": "originals\\original-report\\figures\\k_sweep_snap.pdf",
+    "sha256": "b3eaa62ea5ab74e54656e06b8ec402da763c9849a4a0e93c86016fbabd89718c"
+  },
+  {
+    "from": "original-report\\figures\\k_sweep_tb.pdf",
+    "to": "originals\\original-report\\figures\\k_sweep_tb.pdf",
+    "sha256": "f01cb3986ac8fc245026045679fb1de0f1ba09efa1721e604af4948900d71ed7"
+  },
+  {
+    "from": "original-report\\figures\\parameter_sensitivity_pairs.pdf",
+    "to": "originals\\original-report\\figures\\parameter_sensitivity_pairs.pdf",
+    "sha256": "c7371d5f824353445a14290ea08fd8bd4b592a57363cfb39a886b889490fc97f"
+  },
+  {
+    "from": "original-report\\figures\\parameter_sensitivity_snap.pdf",
+    "to": "originals\\original-report\\figures\\parameter_sensitivity_snap.pdf",
+    "sha256": "1292ec8feee367e361d247e7a41cc15b3f864ce2dbd8dcc3f26cd99fb44d0414"
+  },
+  {
+    "from": "original-report\\figures\\parameter_sensitivity_tb.pdf",
+    "to": "originals\\original-report\\figures\\parameter_sensitivity_tb.pdf",
+    "sha256": "2b61e0f50682088b175495387c3ddc2c297d445a2c62727002cfde95cbc0d887"
+  },
+  {
+    "from": "original-report\\figures\\pca_agreement.png",
+    "to": "originals\\original-report\\figures\\pca_agreement.png",
+    "sha256": "cdc61b1eed0e63b2a9de4b21ee6037cb0fafb501a7940f0c07418577a6d6ded9"
+  },
+  {
+    "from": "original-report\\figures\\pca_benchmark.png",
+    "to": "originals\\original-report\\figures\\pca_benchmark.png",
+    "sha256": "f66e425924a9580cabe1610c26e727c60ecf206442c06c9e7c1726c6a0fc0741"
+  },
+  {
+    "from": "original-report\\figures\\primer_two_stocks.pdf",
+    "to": "originals\\original-report\\figures\\primer_two_stocks.pdf",
+    "sha256": "f13f858ff30047f3afa2570c08b73844ad0c9003481031f6d6c7dbf04f64985a"
+  },
+  {
+    "from": "original-report\\figures\\q1_explained_variance.png",
+    "to": "originals\\original-report\\figures\\q1_explained_variance.png",
+    "sha256": "72e16a977b8f0c6ce66ca4ca9ce5e70224e70d60f73017a21389b8c20d94b1ca"
+  },
+  {
+    "from": "original-report\\figures\\q2_eigenportfolios.png",
+    "to": "originals\\original-report\\figures\\q2_eigenportfolios.png",
+    "sha256": "51bace2ff59a65296d3fb212696495e23dba96069c467d45bcff617b827efd76"
+  },
+  {
+    "from": "original-report\\figures\\q3_factor_volatility.png",
+    "to": "originals\\original-report\\figures\\q3_factor_volatility.png",
+    "sha256": "b36c893ec1dc66fc0e925d5230bd3e7feb669ea29007dbcdceee900d5d758166"
+  },
+  {
+    "from": "original-report\\figures\\q4_pc1_market.png",
+    "to": "originals\\original-report\\figures\\q4_pc1_market.png",
+    "sha256": "cc9c067e4d300087fb1cc68ac0a24240d380cfd794d9e7f77cec828b52511a4b"
+  },
+  {
+    "from": "original-report\\figures\\q5_stock_alphas.png",
+    "to": "originals\\original-report\\figures\\q5_stock_alphas.png",
+    "sha256": "0b56e5294c54b021f9a3709a86f937d52152373193435f6c7d9939c6ee5f045f"
+  },
+  {
+    "from": "original-report\\figures\\q6_pca_vs_standard_factors.png",
+    "to": "originals\\original-report\\figures\\q6_pca_vs_standard_factors.png",
+    "sha256": "fe758e7fb03e893f050bb2c2b3d28e3bad517d048865d783eb28236c5ba2949a"
+  },
+  {
+    "from": "original-report\\figures\\regime_stability.pdf",
+    "to": "originals\\original-report\\figures\\regime_stability.pdf",
+    "sha256": "f76d620068c3d0fa1a5e480b0423240ce556b6baba43c282b23c104251fb1bcc"
+  },
+  {
+    "from": "original-report\\figures\\residual_means.pdf",
+    "to": "originals\\original-report\\figures\\residual_means.pdf",
+    "sha256": "c4917d825c22730b86b3055375a93e1c2c5de26496108a9e46e216b162eaeca0"
+  },
+  {
+    "from": "original-report\\figures\\snapback_variants.pdf",
+    "to": "originals\\original-report\\figures\\snapback_variants.pdf",
+    "sha256": "404147254fb72f49e8b57fdd2fcc9a349b0f2ffe6dc925501564254d0eb7c8f1"
+  },
+  {
+    "from": "original-report.pdf",
+    "to": "originals\\original-report.pdf",
+    "sha256": "721d22b99dbe856c2bfb2d2d71c049943c281e8ec51d6d140c594c9c1dd448c5"
+  },
+  {
+    "from": "original-report.zip",
+    "to": "originals\\original-report.zip",
+    "sha256": "bb57e7d1e638d4bbbc93f8740d272642bd54ff66fc659f808de8ebbb236a4b52"
+  },
+  {
+    "from": "main-cleaned.tex",
+    "to": "archive\\formatting-pass\\main-cleaned.tex",
+    "sha256": "5073f81f5486545e77a75e04a04ad9a4183f2cdd2bc87b68b41afd68d9adead4"
+  },
+  {
+    "from": "framework-cleaned.tex",
+    "to": "archive\\formatting-pass\\framework-cleaned.tex",
+    "sha256": "0f496b2f45b852974018226e0e73207a19699769d99a883589d2220891a0eee7"
+  },
+  {
+    "from": "cleaned-report.pdf",
+    "to": "archive\\formatting-pass\\cleaned-report.pdf",
+    "sha256": "cd7977ce506592576d00686441375ad0356eadb88934eb142a978de17d02cb3a"
+  },
+  {
+    "from": "cleanup.diff",
+    "to": "archive\\formatting-pass\\cleanup.diff",
+    "sha256": "1b566daac1ab204211a51f31ed56d66e398a2b340592912789a850d99676447f"
+  },
+  {
+    "from": "cleanup-check.txt",
+    "to": "archive\\formatting-pass\\cleanup-check.txt",
+    "sha256": "dd8aaeeddd18837bbec248453dbb5b6e8689af2f3c4834211f2ea9af9fba246c"
+  },
+  {
+    "from": "main-20page.tex",
+    "to": "archive\\20page-draft\\main-20page.tex",
+    "sha256": "873405d793fa3455672422c9efb5ec69d34f6fc060323f08098131b43e3d097c"
+  },
+  {
+    "from": "framework-20page.tex",
+    "to": "archive\\20page-draft\\framework-20page.tex",
+    "sha256": "505ab2cd3897389444f7eac84796374e66d3c07d78720e203a708317adeb0046"
+  },
+  {
+    "from": "report-20page.pdf",
+    "to": "archive\\20page-draft\\report-20page.pdf",
+    "sha256": "f11fe0af689a366aeccf3c958f4ffe76c4ad29170cf62081095127f5917dbd10"
+  },
+  {
+    "from": "20page-changes.diff",
+    "to": "archive\\20page-draft\\20page-changes.diff",
+    "sha256": "737071bf61efa92b8eab59c4ff8cd678fb8650b1f2477ebc347bc8b30b6f1812"
+  },
+  {
+    "from": "20page-review.txt",
+    "to": "archive\\20page-draft\\20page-review.txt",
+    "sha256": "d4844e457d538d691e291b15fe068977befc9901cf78a4c4651e7e313aac55f5"
+  },
+  {
+    "from": "final\\main.aux",
+    "to": "review\\build\\main.aux",
+    "sha256": "cd14af3691697944c890088d177a9c52d836f045f9329e9928d9c550cb2615fe"
+  },
+  {
+    "from": "final\\main.out",
+    "to": "review\\build\\main.out",
+    "sha256": "0c6db6f9a1965fce69d924d8684c2389ea9fb0a8e90bb47240d3ffeb4f7f0d72"
+  },
+  {
+    "from": "final\\main.log",
+    "to": "review\\build\\main.log",
+    "sha256": "e8a653b6a6080a092598b3ca43ffe2b113e978c393ab727d320d1cb5a0109148"
+  }
+]
